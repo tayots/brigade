@@ -32,15 +32,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="container">
     <h2>Attendance <img src="<?= base_url();?>image/logo.png" width="64px"> Tracker</h2>
     <div>&nbsp;</div>
+    <form class="form-horizontal" role="form" action='<?= base_url();?>index.php/fire/data' method="post">
+    <?php if ($this->session->flashdata('message')){?>
+        <div class="row">
+            <div class="col-lg-12"><div class="alert alert-<?php echo $this->session->flashdata('alert_type'); ?>"><?php echo $this->session->flashdata('message'); ?></div></div>
+        </div>
+    <?php }?>
     <div class="col-lg-7">
         <fieldset>
             <legend style="color: #990000"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span> Fire Data</legend>
-            <?php if ($this->session->flashdata('message')){?>
-                <div class="row">
-                    <div class="col-lg-12"><div class="alert alert-<?php echo $this->session->flashdata('alert_type'); ?>"><?php echo $this->session->flashdata('message'); ?></div></div>
-                </div>
-            <?php }?>
-            <form class="form-horizontal" role="form" action='<?= base_url();?>index.php/main/fire_data' method="post">
                 <div class="form-group">
                     <label for="firstName" class="col-lg-3 control-label">Date of Fire:*</label>
                     <div class="col-lg-4">
@@ -100,65 +100,77 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="form-group">
                     <label for="firstName" class="col-lg-3 control-label">Water Used:*</label>
                     <div class="col-lg-3">
-                        <input type="number" min="0" class="form-control" name="water_used" id="water_used" value="<?php echo ($this->input->post('water_used'))? $this->input->post('water_used'):0;?>">
+                        <input type="number" min="0" class="form-control" name="water_used" id="water_used" placeholder="tons" value="<?php echo ($this->input->post('water_used'))? $this->input->post('water_used'):'';?>">
                     </div>
-                    <label for="firstName" class="col-lg-3 control-label">Status:*</label>
+                    <label for="firstName" class="col-lg-3 control-label">Dispatch?:*</label>
                     <div class="col-lg-3">
-                        <select name="status" class="form-control" >
-                            <option value="Dispatch" <?php echo ($this->input->post('status') == 'Dispatch') ? 'selected':'';?>>Dispatch</option>
-                            <option value="No Dispatch" <?php echo ($this->input->post('status') == 'No Dispatch') ? 'selected':'';?>>No Dispatch</option>
+                        <select name="dispatch" class="form-control" >
+                            <option value="Yes" <?php echo ($this->input->post('status') == 'Dispatch') ? 'selected':'';?>>Yes</option>
+                            <option value="No" <?php echo ($this->input->post('status') == 'No Dispatch') ? 'selected':'';?>>No</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="firstName" class="col-lg-3 control-label">Base Operator:*</label>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <input style="height: 100px;width: 170px;font-size: 50px;text-align: center;" type="text" class="form-control" name="unit" id="unit" min="1" maxlength="10" value="<?=$this->input->post('unit');?>">
+                    </div>
+                    <label for="firstName" class="col-lg-3 control-label">O I C:*</label>
+                    <div class="col-lg-3">
+                        <input style="height: 100px;width: 170px;font-size: 50px;text-align: center;" type="text" class="form-control" name="oic" id="oic" min="1" maxlength="3" value="<?=$this->input->post('oic');?>">
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-lg-3">&nbsp;</div>
-                    <div class="col-lg-4">
-                        <button type="submit" class="btn btn-success">Save</button>
-                        <a href="<?= base_url();?>index.php/main/fire_data" class="btn btn-primary" >Clear</a>
-                        <a href="<?= base_url();?>index.php/main" class="btn btn-info">Home</a>
+                    <label for="firstName" class="col-lg-3 control-label">Proceeding:</label>
+                    <div class="col-lg-9">
+                        <input type="text" class="form-control" name="proceeding" id="proceeding" placeholder="comma separated" value="<?=$this->input->post('proceeding');?>">
                     </div>
                 </div>
-            </form>
+                <div class="form-group">
+                    <label for="firstName" class="col-lg-3 control-label">At Base:</label>
+                    <div class="col-lg-9">
+                        <input type="text" class="form-control" name="at_base" id="at_base"  placeholder="comma separated"  value="<?=$this->input->post('at_base');?>">
+                    </div>
+                </div>
         </fieldset>
     </div>
     <div class="col-lg-5">
         <fieldset>
-            <legend style="color: #990000"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> History</legend>
-            <div style="overflow-y: scroll; height: 230px;font-size:12px;">
+            <legend style="color: #990000"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Fire Apparata Responded</legend>
+            <div style="">
                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                    <tbody>
-                    <?php if (isset($information)) {  $total = 0;?>
-                        <?php foreach ($information as $key => $value) { $total += 1;?>
-                            <tr>
-                                <td><?php echo $value->date_of_fire; ?></td>
-                                <td><?php echo $value->location; ?></td>
-                                <td><?php echo $value->time_received; ?></td>
-                                <td><?php echo $value->time_controlled; ?></td>
-                            </tr>
-                        <?php } ?>
-                    <?php }?>
-                    </tbody>
+                    <thead>
+                        <tr>
+                            <th>ENGINE #</th>
+                            <th>Time Out</th>
+                            <th>FTO</th>
+                            <th>Time In</th>
+                            <th>FTO</th>
+                            <th>On Board</th>
+                        </tr>
+                    </thead>
+                    <?php for ($x=0; $x<=7; $x++) { ?>
+                    <tr>
+                        <td><input type="text" class="form-control col-xs-4" name="engine[<?=$x;?>]" value="<?=isset($_POST['engine'][$x])? $_POST['engine'][$x]:'';?>"></td>
+                        <td><input type="text" class="form-control input-sm" name="time_out[<?=$x;?>]" value="<?=isset($_POST['time_out'][$x])? $_POST['time_out'][$x]:'';?>"></td>
+                        <td><input type="text" class="form-control input-sm" name="fto_out[<?=$x;?>]" value="<?=isset($_POST['fto_out'][$x])? $_POST['fto_out'][$x]:'';?>"></td>
+                        <td><input type="text" class="form-control input-sm" name="time_in[<?=$x;?>]" value="<?=isset($_POST['time_in'][$x])? $_POST['time_in'][$x]:'';?>"></td>
+                        <td><input type="text" class="form-control input-sm" name="fto_in[<?=$x;?>]" value="<?=isset($_POST['fto_in'][$x])? $_POST['fto_in'][$x]:'';?>"></td>
+                        <td><input type="text" class="form-control col-xs-4" name="onboard[<?=$x;?>]" value="<?=isset($_POST['onboard'][$x])? $_POST['onboard'][$x]:'';?>"></td>
+                    </tr>
+                    <?php } ?>
                 </table>
             </div>
-            <div style="margin-top:10px;"><span style="color: #990000" class="glyphicon glyphicon-fire" aria-hidden="true"></span>
-                <u>Total Fire Received:</u><strong> <?=$total;?></strong></div>
-            <br>
-            <div>Summary of dispatched</div>
-            <div class="form-container">
-                <?php if (isset($summary)) {?>
-                    <?php foreach ($summary as $key => $value) {?>
-                        <div><span style="color: #dd4814" class="glyphicon glyphicon-fire" aria-hidden="true"></span> <?=$value->year;?> <?=$value->month;?>: <?=$value->total;?></div>
-                    <?php } ?>
-                <?php }?>
+            <div class="form-group">
+                <div class="col-lg-12" style="text-align: right;">
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <a href="<?= base_url();?>index.php/fire/data" class="btn btn-primary" >Clear</a>
+                    <a href="<?= base_url();?>index.php/main" class="btn btn-info">Home</a>
+                </div>
             </div>
         </fieldset>
     </div>
+    </form>
 </div>
 </body>
 </html>

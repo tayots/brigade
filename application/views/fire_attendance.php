@@ -6,6 +6,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link href="<?= base_url();?>bootstrap/css/bootstrap.css" rel="stylesheet">
     <script src="<?= base_url();?>bootstrap/js/jquery.js"></script>
     <script src="<?= base_url();?>bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        function loadFireLocation() {
+            document.getElementById("fire_attendance_form").submit();
+        }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -19,14 +24,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="col-lg-12"><div class="alert alert-<?php echo $this->session->flashdata('alert_type'); ?>"><?php echo $this->session->flashdata('message'); ?></div></div>
                 </div>
             <?php }?>
-            <form class="form-horizontal" role="form" action='<?= base_url();?>index.php/main/fire_attendance' method="post">
+            <form class="form-horizontal" role="form" id="fire_attendance_form" action='<?= base_url();?>index.php/fire/attendance' method="post">
                 <div class="form-group">
-                    <label for="firstName" class="col-lg-3 control-label">Select 10-70 last 30 days:*</label>
+                    <label for="firstName" class="col-lg-3 control-label">Date of Fire:*</label>
+                    <div class="col-lg-3">
+                        <input type="date" onchange="loadFireLocation();" class="form-control" name="date_of_fire" id="date_of_fire" value="<?php if ($this->input->post('date_of_fire')) { echo $this->input->post('date_of_fire');} else { echo $current_date; }?>" autofocus>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="firstName" class="col-lg-3 control-label">Location:*</label>
                     <div class="col-lg-8">
-                        <select class="form-control" name="title" id="title">
+                        <select class="form-control" name="location" id="location">
                             <option value="">--Select--</option>
                             <?php foreach ($fire_list as $key => $value) { ?>
-                                <option value="<?=$value->id;?>|<?=$value->date_of_fire;?>" <?php echo isset($selected_title)? 'selected':'';?>><?=$value->date_of_fire;?> | <?=$value->location;?></option>
+                                <option value="<?=$value->id;?>" <?php echo ($selected_title == $value->id.'|'.$value->date_of_fire)? 'selected':'';?>><?=date('F d, Y l',strtotime($value->date_of_fire));?> | <?=$value->location;?> @ <?=$value->time_received;?></option>
                             <?php }?>
                         </select>
                     </div>
@@ -37,16 +48,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <input style="height: 100px;width: 150px;font-size: 50px;text-align: center;" type="text" class="form-control" name="unit" id="unit" min="1" maxlength="10" autofocus>
                     </div>
                     <div class="col-lg-5" style="text-align: right;">
-                        <button type="submit" class="btn btn-success" >Save</button>
-                        <a href="<?= base_url();?>index.php/main/add" class="btn btn-primary" >Clear</a>
-                        <a href="<?= base_url();?>index.php/main/fire_data" class="btn btn-danger" > <span class="glyphicon glyphicon-fire"></span> Fire Data</a>
+                        <button type="submit" name="submitbtn" class="btn btn-success" >Save</button>
+                        <a href="<?= base_url();?>index.php/fire/attendance" class="btn btn-primary" >Clear</a>
+                        <a href="<?= base_url();?>index.php/fire/data" class="btn btn-danger" > <span class="glyphicon glyphicon-fire"></span> Fire Data</a>
                         <a href="<?= base_url();?>index.php/main" class="btn btn-info">Home</a>
                     </div>
                 </div>
                 <div class="form-group">
                 </div>
             </form>
-            History: <a href="<?= base_url();?>index.php/main/fire_review_attendance" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> Go to Review Attendance</a>
+            History:
             <?php if (count($information) > 0) {?>
             <div style="overflow-y: scroll; height: 250px;">
                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
@@ -57,7 +68,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <td><?php echo $value->attendance_date; ?></td>
                                 <td style="text-align: center;"><?php echo $value->unit; ?></td>
                                 <td><?php echo $value->location; ?></td>
-                                <td><a href="<?= base_url();?>index.php/main/delete_unit/<?php echo $value->id; ?>/<?php echo $value->attendance_date;?>/add">Delete</a></td>
+                                <td><a href="<?= base_url();?>index.php/fire/delete_attendance/<?php echo $value->id; ?>/<?php echo $value->attendance_date;?>/add">Delete</a></td>
                             </tr>
                             <?php } ?>
                         <?php }?>

@@ -6,10 +6,11 @@
  * Time: 10:53 PM
  * To change this template use File | Settings | File Templates.
  */
-class Main_model extends CI_Model {
+class Fire_model extends CI_Model {
 
     private $fire_attendance = 'fire_attendance';
     private $fire_data = 'fire_data';
+    private $fire_apparata = 'fire_apparata';
 
     public function __construct()
     {
@@ -22,30 +23,12 @@ class Main_model extends CI_Model {
         return $this->db->insert_id();
     }
 
-    public function save_personnel($personnel=NULL)
-    {
-        $this->db->insert('personnel', $personnel);
-        return $this->db->insert_id();
-    }
-
     public function check_fire_attendance($personnel)
     {
         $this->db->where('unit', $personnel['unit']);
         $this->db->where('attendance_date', $personnel['attendance_date']);
         $this->db->where('fire_data_id', $personnel['fire_data_id']);
         $query = $this->db->get($this->fire_attendance);
-        if ($query->num_rows() > 0){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    public function check_personnel($unit_number)
-    {
-        $this->db->where('unit',$unit_number);
-        $query = $this->db->get('personnel');
         if ($query->num_rows() > 0){
             return true;
         }
@@ -84,94 +67,48 @@ class Main_model extends CI_Model {
         return $query->result();
     }
 
-    function get_chart_data() {
-        $query = $this->db->query("select year(attendance_date) as year, count(id) as counter, unit from attendance group by year,unit order by year asc");
-        $results['chart_data'] = $query->result();
-//        $this->db->select_min('performance_year');
-//        $this->db->limit(1);
-//        $query = $this->db->get($this->performance);
-//        $results['min_year'] = $query->row()->performance_year;
-//        $this->db->select_max('performance_year');
-//        $this->db->limit(1);
-//        $query = $this->db->get($this->performance);
-//        $results['max_year'] = $query->row()->performance_year;
-        return $results;
-    }
-
-    function get_fire_attendance($attendance_date)
+    function get_fire_attendance($attendance_date, $location_id=null)
     {
         $this->db->select('fire_attendance.*,fire_data.location');
         $this->db->where('attendance_date', $attendance_date);
+        ($location_id != null) ? $this->db->where('fire_data_id', $location_id) : '';
         $this->db->join('fire_data', 'fire_data.id = fire_attendance.fire_data_id', 'LEFT');
         $this->db->order_by('unit,attendance_date asc');
         $query = $this->db->get($this->fire_attendance);
         return $query->result();
     }
 
-    function get_monthly_summary($category, $month)
+    function get_fire_attendance_location($location_id)
     {
-        $query = $this->db->query("SELECT * FROM attendance WHERE attendance_date = '$attendance_date' order by unit, attendance_date asc;");
+        $this->db->where('fire_data_id', $location_id);
+        $this->db->order_by('unit');
+        $query = $this->db->get($this->fire_attendance);
         return $query->result();
     }
 
-    function get_user_list()
+    function get_fire_data($location_id)
     {
-        $query = $this->db->query("SELECT * FROM personnel order by unit");
+        $this->db->where('id', $location_id);
+        $query = $this->db->get($this->fire_data);
         return $query->result();
     }
 
-    function get_all_units($status)
+    function get_fire_apparata($location_id)
     {
-        $query = $this->db->query("SELECT * FROM personnel where status = '$status' order by unit");
+        $this->db->where('fire_data_id', $location_id);
+        $query = $this->db->get($this->fire_apparata);
         return $query->result();
-    }
-
-    function get_unit_by_category($unit, $cat, $attendance_month)
-    {
-        $from = $attendance_month.'-01';
-        $to = $attendance_month.'-31';
-
-        $query = $this->db->query("
-            SELECT p.unit,count(p.unit) as 'count' FROM attendance a
-            LEFT JOIN personnel p on p.unit = a.unit where category = '$cat'
-            and (attendance_date >= '$from' and attendance_date <= '$to')
-            and p.unit = '$unit'
-            group by p.unit
-            ");
-
-        if ($query->num_rows() > 0){
-            return $query->row()->count;
-        }
-        else{
-            return 0;
-        }
-    }
-
-    function get_unit_by_category_yearly($unit, $cat, $attendance_year)
-    {
-        $from = $attendance_year.'-01-01';
-        $to = $attendance_year.'-12-31';
-
-        $query = $this->db->query("
-            SELECT p.unit,count(p.unit) as 'count' FROM attendance a
-            LEFT JOIN personnel p on p.unit = a.unit where category = '$cat'
-            and (attendance_date >= '$from' and attendance_date <= '$to')
-            and p.unit = '$unit'
-            group by p.unit
-            ");
-
-        if ($query->num_rows() > 0){
-            return $query->row()->count;
-        }
-        else{
-            return 0;
-        }
     }
 
     public function add_fire_data($fire=NULL)
     {
         $this->db->insert($this->fire_data, $fire);
         return $this->db->insert_id();
+    }
+
+    public function add_apparata_responded($data=NULL)
+    {
+        return $this->db->insert_batch($this->fire_apparata, $data);
     }
 
     public function check_fire_data($fire)
@@ -187,16 +124,21 @@ class Main_model extends CI_Model {
         }
     }
 
-    public function get_fire_list()
+    public function get_fire_list($date_of_fire)
     {
+        $this->db->where('date_of_fire',$date_of_fire);
         $this->db->order_by('date_of_fire','desc');
         $query = $this->db->get($this->fire_data);
         return $query->result();
     }
-    public function get_fire_list_range($days=30)
+
+    public function get_fire_list_range($from_date, $to_date)
     {
-        $sql = "SELECT * FROM `fire_data` WHERE status = 'Dispatch' and date_of_fire BETWEEN CURDATE() - INTERVAL $days DAY AND CURDATE()";
-        $query = $this->db->query($sql);
+        $this->db->where('date_of_fire >=',$from_date);
+        $this->db->where('date_of_fire <=',$to_date);
+        $this->db->order_by('date_of_fire','desc');
+        $query = $this->db->get($this->fire_data);
+        //var_dump($this->db->last_query());
         return $query->result();
     }
 

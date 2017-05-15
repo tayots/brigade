@@ -27,7 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="col-lg-12"><div class="alert alert-<?php echo $this->session->flashdata('alert_type'); ?>"><?php echo $this->session->flashdata('message'); ?></div></div>
                 </div>
             <?php }?>
-            <form class="form-horizontal" role="form" action='<?= base_url();?>index.php/main/duty_schedule' method="post">
+            <form class="form-horizontal" role="form" action='<?= base_url();?>index.php/duty/schedule' method="post">
                 <div class="form-group">
                     <label for="firstName" class="col-lg-3 control-label">Select Day:*</label>
                     <div class="col-lg-5">
@@ -52,7 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <label for="firstName" class="col-lg-3 control-label"></label>
                     <div class="col-lg-5">
                         <button type="submit" class="btn btn-success" >Save</button>
-                        <a href="<?= base_url();?>index.php/main/duty_schedule" class="btn btn-primary" >Clear</a>
+                        <a href="<?= base_url();?>index.php/duty/duty_schedule" class="btn btn-primary" >Clear</a>
                         <a href="<?= base_url();?>index.php/main" class="btn btn-info">Home</a>
                     </div>
                 </div>
@@ -61,7 +61,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </div>
     <div class="col-lg-5">
         <fieldset>
-            <legend>Overview</legend>
+            <legend>Schedule Overview</legend>
             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                 <thead>
                     <tr>
@@ -77,25 +77,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <tbody>
                     <tr>
                     <?php if (isset($Monday)) {?><td>
-                        <?php foreach ($Monday as $key => $value) { echo '<a href="'.base_url().'index.php/main/delete_duty_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Monday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                     </td><?php } ?>
                     <?php if (isset($Tuesday)) {?><td>
-                        <?php foreach ($Tuesday as $key => $value) { echo '<a href="'.base_url().'index.php/main/delete_duty_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Tuesday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                     </td><?php } ?>
                     <?php if (isset($Wednesday)) {?><td>
-                        <?php foreach ($Wednesday as $key => $value) { echo '<a href="'.base_url().'index.php/main/delete_duty_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Wednesday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                     </td><?php } ?>
                     <?php if (isset($Thursday)) {?><td>
-                        <?php foreach ($Thursday as $key => $value) { echo '<a href="'.base_url().'index.php/main/delete_duty_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Thursday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                     </td><?php } ?>
                     <?php if (isset($Friday)) {?><td>
-                        <?php foreach ($Friday as $key => $value) { echo '<a href="'.base_url().'index.php/main/delete_duty_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Friday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                     </td><?php } ?>
                     <?php if (isset($Saturday)) {?><td>
-                        <?php foreach ($Saturday as $key => $value) { echo '<a href="'.base_url().'index.php/main/delete_duty_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Saturday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                     </td><?php } ?>
                     <?php if (isset($Sunday)) {?><td>
-                        <?php foreach ($Sunday as $key => $value) { echo '<a href="'.base_url().'index.php/main/delete_duty_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Sunday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                     </td><?php } ?>
                     </tr>
                 </tbody>
