@@ -10,10 +10,23 @@ class Duty_model extends CI_Model {
 
     private $duty_attendance = 'duty_attendance';
     private $duty_schedule = 'duty_schedule';
+    private $personnel = 'personnel';
 
     public function __construct()
     {
         parent::__construct();
+    }
+
+    public function check_unit_exist($unit_number) {
+        $this->db->where('unit',$unit_number);
+        $query = $this->db->get($this->personnel);
+        //var_dump($this->db->last_query());
+        if ($query->num_rows() > 0){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public function check_duty_data($duty)
@@ -35,28 +48,29 @@ class Duty_model extends CI_Model {
         return $this->db->insert($this->duty_attendance, $duty);
     }
 
-    public function get_duties($day, $week)
+    public function get_duties($day)
     {
         $this->db->select('*');
         $this->db->from($this->duty_attendance);
-        $this->db->where('schedule', $day);
-        $this->db->where('WEEK(attendance_date) = '.$week);
+        $this->db->where('attendance_date', $day);
+        $this->db->order_by('time_in');
         $query = $this->db->get();
         //print_r($this->db->last_query());
         return $query->result();
     }
 
-    public function get_total_duties_week($week)
+    public function get_total_duties_week($start, $end)
     {
         $this->db->select('count(*)');
         $this->db->from($this->duty_attendance);
-        $this->db->where('WEEK(attendance_date) = '.$week);
+        $this->db->where('attendance_date >=', $start);
+        $this->db->where('attendance_date <=', $end);
         return $this->db->count_all_results();
     }
 
-    public function get_personel_duties_week($week)
+    public function get_personel_duties_week($start, $end)
     {
-        $query = 'SELECT unit, count(*) as total FROM `duty_attendance` WHERE WEEK(attendance_date) = '.$week.' GROUP BY unit';
+        $query = 'SELECT unit, count(*) as total FROM `duty_attendance` WHERE attendance_date >= "'.$start.'" AND attendance_date <= "'.$end.'" GROUP BY unit';
         return $this->db->query($query);
     }
 

@@ -99,7 +99,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="form-group">
                     <label for="firstName" class="col-lg-3 control-label">Activity:*</label>
                     <div class="col-lg-6">
-                        <input tabindex="0" type="text" class="form-control" name="activity" id="activity" value="<?=$this->input->post('venue');?>">
+                        <input tabindex="0" type="text" class="form-control" name="activity" id="activity" value="<?=$this->input->post('activity');?>">
                     </div>
                 </div>
                 <div class="form-group">

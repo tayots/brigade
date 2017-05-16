@@ -81,10 +81,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </fieldset>
     </div>
 </div>
+<?php if (isset($training_data)) { ?>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <?php if ($value->approved_by == null) {;?>
     <button type="button" class="btn btn-success" onclick="approveBy(<?=$training_id;?>);">Approve</button>
+    <?php } ?>
 </div>
+<?php } ?>
 <script type="text/javascript">
     function approveBy(training_id) {
         var ans = prompt('Key-in your Unit #');

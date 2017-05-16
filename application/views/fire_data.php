@@ -40,7 +40,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <?php }?>
     <div class="col-lg-7">
         <fieldset>
-            <legend style="color: #990000"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span> Fire Data</legend>
+            <legend style="color: red"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span> Fire Data</legend>
                 <div class="form-group">
                     <label for="firstName" class="col-lg-3 control-label">Date of Fire:*</label>
                     <div class="col-lg-4">
@@ -121,22 +121,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="firstName" class="col-lg-3 control-label">Proceeding:</label>
-                    <div class="col-lg-9">
-                        <input type="text" class="form-control" name="proceeding" id="proceeding" placeholder="comma separated" value="<?=$this->input->post('proceeding');?>">
-                    </div>
-                </div>
-                <div class="form-group">
                     <label for="firstName" class="col-lg-3 control-label">At Base:</label>
                     <div class="col-lg-9">
                         <input type="text" class="form-control" name="at_base" id="at_base"  placeholder="comma separated"  value="<?=$this->input->post('at_base');?>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="firstName" class="col-lg-3 control-label">Proceeding:</label>
+                    <div class="col-lg-9">
+                        <input type="text" class="form-control" name="proceeding" id="proceeding" placeholder="comma separated" value="<?=$this->input->post('proceeding');?>">
                     </div>
                 </div>
         </fieldset>
     </div>
     <div class="col-lg-5">
         <fieldset>
-            <legend style="color: #990000"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Fire Apparata Responded</legend>
+            <legend style="color: red"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Fire Apparata Responded</legend>
             <div style="">
                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                     <thead>

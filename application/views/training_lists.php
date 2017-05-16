@@ -26,7 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div>&nbsp;</div>
     <div class="col-lg-12">
         <fieldset>
-            <legend style="color: green;"><span class="glyphicon glyphicon-flag"></span> Browse Trainings</legend>
+            <legend style="color: green;"><span class="glyphicon glyphicon-list"></span> Browse Trainings</legend>
             <form class="form-horizontal" role="form" id="training_review_form" action='<?= base_url();?>index.php/training/lists' method="post">
                 <div class="form-group">
                    <div class="col-lg-1">
@@ -103,7 +103,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <?php } ?>
                         <?php } else {?>
                             <tr>
-                                <td colspan="6">No Results Found. Please select another date range.</td>
+                                <td colspan="8">No Results Found. Please select another date range.</td>
                             </tr>
                         <?php }?>
                     </tbody>
@@ -135,7 +135,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <h4 class="modal-title" id="myModalLabel">Edit Training</h4>
             </div>
             <div class="modal-body">
-                ...
+                You are not allowed to edit the content. Please contact Administrator Unit 94.
+            </div>
+        </div>
+    </div>
+</div>
+<div id="loadingModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Sending.... <img src="<?= base_url();?>image/giphy.gif" width="64px"></h4>
+            </div>
+            <div class="modal-body">
+                Please do not close the browser yet.
             </div>
         </div>
     </div>
@@ -155,13 +168,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     }
                 }
                 var person = { email: p, training_id: training_id };
-
+                $('#loadingModal').modal('show');
                 $.ajax({
                     url: 'training_email',
                     type: 'post',
                     dataType: 'json',
                     success: function (data) {
-                        if (data == 1) alert('Success');
+                        if (data == 1) location.reload();
                     },
                     data: person
                 });

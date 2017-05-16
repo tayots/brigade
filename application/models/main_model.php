@@ -10,6 +10,10 @@ class Main_model extends CI_Model {
 
     private $fire_attendance = 'fire_attendance';
     private $fire_data = 'fire_data';
+    private $personnel = 'personnel';
+    private $duty_schedule = 'duty_schedule';
+    private $duty_attendance = 'duty_attendance';
+    private $training = 'training';
 
     public function __construct()
     {
@@ -126,25 +130,28 @@ class Main_model extends CI_Model {
         return $query->result();
     }
 
-    function get_unit_by_category($unit, $cat, $attendance_month)
+    function get_unit_by_category($unit, $attendance_month)
     {
         $from = $attendance_month.'-01';
         $to = $attendance_month.'-31';
 
         $query = $this->db->query("
-            SELECT p.unit,count(p.unit) as 'count' FROM attendance a
-            LEFT JOIN personnel p on p.unit = a.unit where category = '$cat'
-            and (attendance_date >= '$from' and attendance_date <= '$to')
-            and p.unit = '$unit'
-            group by p.unit
+            SELECT p.unit,
+              count(da.unit) as 'duty',
+              count(t.unit) as 'training',
+              count(s.unit) as 'special',
+              count(m.unit) as 'meeting',
+              count(f.unit) as 'fire'
+            FROM personnel p
+            LEFT JOIN duty_attendance da ON da.unit = p.unit AND (da.attendance_date >= '$from' and da.attendance_date <= '$to')
+            LEFT JOIN training_attendance t ON t.unit = p.unit AND (t.attendance_date >= '$from' and t.attendance_date <= '$to')
+            LEFT JOIN special_activity_attendance s ON s.unit = p.unit AND (s.attendance_date >= '$from' and s.attendance_date <= '$to')
+            LEFT JOIN meeting_attendance m ON m.unit = p.unit AND (m.attendance_date >= '$from' and m.attendance_date <= '$to')
+            LEFT JOIN fire_attendance f ON f.unit = p.unit AND (f.attendance_date >= '$from' and f.attendance_date <= '$to')
+            WHERE p.unit = '$unit'
+            GROUP BY p.unit
             ");
-
-        if ($query->num_rows() > 0){
-            return $query->row()->count;
-        }
-        else{
-            return 0;
-        }
+        return $query->result();
     }
 
     function get_unit_by_category_yearly($unit, $cat, $attendance_year)
@@ -205,6 +212,39 @@ class Main_model extends CI_Model {
         $sql = "SELECT YEAR(date_of_fire) as year, DATE_FORMAT(date_of_fire, '%M') as month, count(id) as total
             FROM `fire_data` WHERE status = 'Dispatch' group by YEAR(date_of_fire), DATE_FORMAT(date_of_fire, '%M')";
         $query = $this->db->query($sql);
+        return $query->result();
+    }
+
+    public function get_count_members($status)
+    {
+        $this->db->from($this->personnel);
+        $this->db->where('status', strtolower($status));
+        return $this->db->count_all_results();
+    }
+
+    public function get_duty_month_percentage($interval)
+    {
+        $this->db->from($this->duty_schedule);
+        $total_schedule = ($this->db->count_all_results())*4;
+
+        $this->db->from($this->duty_attendance);
+        $this->db->where('MONTHNAME(attendance_date)', date('F', strtotime("$interval month")));
+        $rendered = $this->db->count_all_results();
+        //var_dump($this->db->last_query());
+        return round(($rendered / $total_schedule)*100,2) . '%';
+    }
+
+    function get_summary_highest_count($order)
+    {
+        $from = date('Y-01-01');
+        $to = date('Y-12-31');
+        $query = "SELECT date_of_training as 'month',count(ta.training_id) as 'total'
+            FROM ".$this->training."
+            LEFT JOIN training_attendance ta ON ta.training_id = training.id
+            WHERE date_of_training >= '$from' AND date_of_training <= '$to'
+            GROUP BY date_of_training ORDER BY date_of_training $order limit 1";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
         return $query->result();
     }
 

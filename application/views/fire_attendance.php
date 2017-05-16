@@ -28,16 +28,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="form-group">
                     <label for="firstName" class="col-lg-3 control-label">Date of Fire:*</label>
                     <div class="col-lg-3">
-                        <input type="date" onchange="loadFireLocation();" class="form-control" name="date_of_fire" id="date_of_fire" value="<?php if ($this->input->post('date_of_fire')) { echo $this->input->post('date_of_fire');} else { echo $current_date; }?>" autofocus>
+                        <input type="date" onchange="loadFireLocation();" class="form-control" name="date_of_fire" id="date_of_fire" value="<?php if ($this->input->post('date_of_fire')) { echo $this->input->post('date_of_fire');} else { echo $current_date; }?>">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="firstName" class="col-lg-3 control-label">Location:*</label>
                     <div class="col-lg-8">
-                        <select class="form-control" name="location" id="location">
+                        <select class="form-control" name="location" id="location" >
                             <option value="">--Select--</option>
                             <?php foreach ($fire_list as $key => $value) { ?>
-                                <option value="<?=$value->id;?>" <?php echo ($selected_title == $value->id.'|'.$value->date_of_fire)? 'selected':'';?>><?=date('F d, Y l',strtotime($value->date_of_fire));?> | <?=$value->location;?> @ <?=$value->time_received;?></option>
+                                <option value="<?=$value->id;?>" <?php echo ($selected_title == $value->id)? 'selected':'';?>><?=date('F d, Y l',strtotime($value->date_of_fire));?> | <?=$value->location;?> @ <?=$value->time_received;?></option>
                             <?php }?>
                         </select>
                     </div>

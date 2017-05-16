@@ -42,11 +42,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="col-lg-12"><div class="alert alert-<?php echo $this->session->flashdata('alert_type'); ?>"><?php echo $this->session->flashdata('message'); ?></div></div>
                 </div>
             <?php }?>
-            <form class="form-horizontal" role="form" action='<?= base_url();?>index.php/duty/save' method="post">
+            <form class="form-horizontal" role="form" action='<?= base_url();?>index.php/duty/attendance' method="post">
                 <div class="form-group">
                     <label for="firstName" class="col-lg-3 control-label">Date Duty:*</label>
-                    <div class="col-lg-4">
-                        <input type="date" class="form-control" name="date_of_duty" id="date_of_duty" value="<?php if ($this->input->post('date_of_duty')) { echo $this->input->post('date_of_duty');} else { echo $current_date; }?>" autofocus>
+                    <div class="col-lg-5">
+                        <input style="height: 60px;width:350px;font-size: 40px;" height="40px" type="date" class="form-control" name="date_of_duty" id="date_of_duty" value="<?php if ($this->input->post('date_of_duty')) { echo $this->input->post('date_of_duty');} else { echo $current_date; }?>" autofocus>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="firstName" class="col-lg-3 control-label">Unit No.*</label>
+                    <div class="col-lg-3">
+                        <input style="height: 100px;width: 150px;font-size: 50px;text-align: center;" type="text" class="form-control" name="unit" id="unit" min="1" maxlength="3" autofocus>
                     </div>
                 </div>
                 <div class="form-group">
@@ -75,12 +81,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <option value="AM" selected>AM</option>
                             <option value="PM">PM</option>
                         </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="firstName" class="col-lg-3 control-label">Unit No.*</label>
-                    <div class="col-lg-3">
-                        <input style="height: 100px;width: 150px;font-size: 50px;text-align: center;" type="text" class="form-control" name="unit" id="unit" min="1" maxlength="3" autofocus>
                     </div>
                 </div>
                 <div class="form-group">

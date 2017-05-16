@@ -55,7 +55,8 @@ class Training_model extends CI_Model {
         {
             $data[$x] = array(
                 'training_id' => $training_id,
-                'unit' => $post['member'.$x]
+                'unit' => strtoupper($post['member'.$x]),
+                'attendance_date' => $post['date_of_training'],
             );
         }
 
@@ -93,6 +94,38 @@ class Training_model extends CI_Model {
     {
         $this->db->where('id', $training_id);
         $this->db->update($this->training, $data);
+    }
+
+    function get_summary_count($from, $to)
+    {
+        $this->db->select('count(*)');
+        $this->db->from($this->training);
+        $this->db->where('date_of_training >=', $from);
+        $this->db->where('date_of_training <=', $to);
+        return $this->db->count_all_results();
+    }
+
+    function get_summary_count_monthly()
+    {
+        $query = "SELECT monthname(date_of_training) as 'month', count(*)  as 'total'
+            FROM ".$this->training."
+            GROUP BY monthname(date_of_training)
+            ORDER bY MONTH(date_of_training)";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
+    function get_summary_count_last_six()
+    {
+        $query = "SELECT DATE_FORMAT(date_of_training, '%b-%d') as 'month',count(ta.training_id) as 'total'
+            FROM ".$this->training."
+            LEFT JOIN training_attendance ta ON ta.training_id = training.id
+            WHERE date_of_training > DATE_SUB(now(), INTERVAL 6 MONTH)
+            GROUP BY date_of_training ORDER BY date_of_training";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
     }
 
 }

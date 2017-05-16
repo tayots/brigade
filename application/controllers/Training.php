@@ -166,10 +166,47 @@ class Training extends CI_Controller {
     }
 
     public function training_email() {
-        if (isset($_POST['email'])){
-            //Do Email here
-            
-            echo true;
+        if (isset($_POST['email']) && isset($_POST['training_id'])){
+            $training_id = $_POST['training_id'];
+
+            $data = $this->training_model->get_training_data($training_id);
+            $members = $this->training_model->get_training_attendance($training_id);
+            $mem = '';
+            $total = 0;
+            if ($data){
+                foreach ($members as $key => $value2) {
+                    $total += 1;
+                    $mem .= $value2->unit.', ';
+                }
+                //Do Email here
+                $to       = $_POST['email'];
+                $subject  = '[CFCVFB Attendance Tracker] Review Training Attendance on '.$data[0]->date_of_training;
+                $message  = 'Greetings!<br><br>';
+                $message  .= 'You just received an email to review on Training Attendance last '.date('l, M d, Y',strtotime($data[0]->date_of_training));
+                $message  .= '<br><br>Here are the details of the training:';
+                $message  .= '<br><br>Training Activity: '.$data[0]->activity;
+                $message  .= '<br>Venue: '.$data[0]->venue;
+                $message  .= '<br>OIC: '.$data[0]->oic;
+                $message  .= '<br>Members Present: '.$mem.' (Total of '.$total.')';
+                $message  .= '<br>Remarks: '.$data[0]->remarks;
+                $message  .= '<br>Recorded by: '.$data[0]->recorder;
+                $message  .= '<br><br>';
+                $message  .= 'Thank you!';
+                $message  .= '<br><br>';
+                $message  .= '*** Please reply to cfcvfb888@gmail.com. ***';
+                $headers  = 'From: cfcvfb888@gmail.com' . "\r\n" .
+                    'MIME-Version: 1.0' . "\r\n" .
+                    'Content-type: text/html; charset=utf-8';
+                if(mail($to, $subject, $message, $headers)) {
+                    //update Sent field to 1
+                    $data = array('sent' => 1);
+                    $this->training_model->update_training($data, $training_id);
+                    echo true;
+                } else {
+                    echo false;
+                }
+            }
+            else echo false;
         }
         else echo false;
     }

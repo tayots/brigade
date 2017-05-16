@@ -24,11 +24,20 @@ class Main extends CI_Controller {
         $this->load->helper('url');
         $this->load->model('main_model');
         $this->load->library('form_validation');
+
+        $this->activities = array('Duty','Training','Special Activity','Meeting','Fire Response');
     }
 
 	public function index()
 	{
-		$this->load->view('main_index');
+        $data['current_year'] = date('Y');
+        $data['active_members'] = $this->main_model->get_count_members('active');
+        $data['inactive_members'] = $this->main_model->get_count_members('inactive');
+        $data['duty_month'] = $this->main_model->get_duty_month_percentage($interval='+0');
+        $data['duty_previous_month'] = $this->main_model->get_duty_month_percentage($interval='-1');
+        $data['highest_training'] = $this->main_model->get_summary_highest_count('DESC');
+        $data['lowest_training'] = $this->main_model->get_summary_highest_count('ASC');
+        $this->load->view('main_index', $data);
 	}
 
 	public function report()
@@ -52,14 +61,7 @@ class Main extends CI_Controller {
             $all_units = $this->main_model->get_all_units('active');
             $selected_month = (date_format($date=date_create($attendance_month.'-01'),'F Y'));
             foreach ($all_units as $key => $value) {
-                $final[$value->unit] = [
-                    'Duty'=> $this->main_model->get_unit_by_category($value->unit, 'Duty', $attendance_month),
-                    'Fire Response'=> $this->main_model->get_unit_by_category($value->unit, 'Fire Response', $attendance_month),
-                    'Training'=> $this->main_model->get_unit_by_category($value->unit, 'Training', $attendance_month),
-                    'Meeting'=> $this->main_model->get_unit_by_category($value->unit, 'Meeting', $attendance_month),
-                    'Special Activity'=> $this->main_model->get_unit_by_category($value->unit, 'Special Activity', $attendance_month),
-                    'Total'=> 'NA'
-                ];
+                $final[$value->unit] = $this->main_model->get_unit_by_category($value->unit, $attendance_month);
                 $counter += 1;
             }
 
@@ -101,6 +103,62 @@ class Main extends CI_Controller {
         }
 
         $this->load->view('yearly_reports', $data);
+    }
+
+    function get_activities()
+    {
+        $from_date = date('Y-01-01');
+        $to_date = date('Y-12-31');
+
+        $this->load->model('training_model');
+        $this->load->model('fire_model');
+        $this->load->model('special_model');
+        $this->load->model('meeting_model');
+
+        $fire = $this->fire_model->get_summary_count($from_date, $to_date);
+        $training = $this->training_model->get_summary_count($from_date, $to_date);
+        $meeting = $this->meeting_model->get_summary_count($from_date, $to_date);
+        $special = $this->special_model->get_summary_count($from_date, $to_date);
+
+        $whatever = '{
+        "cols": [
+            {"id":"","label":"Activities","pattern":"","type":"string"},
+            {"id":"","label":"Activities","pattern":"","type":"number"}
+          ],
+        "rows": [
+            {"c":[{"v":"Fire Alarms","f":null},{"v":'.$fire.',"f":null}]},
+            {"c":[{"v":"Trainings","f":null},{"v":'.$training.',"f":null}]},
+            {"c":[{"v":"Meetings","f":null},{"v":'.$meeting.',"f":null}]},
+            {"c":[{"v":"Special Activities","f":null},{"v":'.$special.',"f":null}]}
+          ]
+        }';
+        echo $whatever;
+
+    }
+
+    function get_trainings()
+    {
+        $from_date = date('Y-01-01');
+        $to_date = date('Y-12-31');
+
+        $this->load->model('training_model');
+
+        $training = $this->training_model->get_summary_count_last_six();
+        $data = '';
+        foreach($training as $key => $value){
+            $data .= '{"c":[{"v":"'.$value->month.'","f":null},{"v":'.$value->total.',"f":null}]},';
+        }
+        $whatever = '{
+        "cols": [
+            {"id":"","label":"Trainings","pattern":"","type":"string"},
+            {"id":"","label":"Count","pattern":"","type":"number"}
+          ],
+        "rows": [
+            '.$data.'
+          ]
+        }';
+        echo $whatever;
+
     }
 
 }

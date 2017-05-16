@@ -95,11 +95,11 @@ class Fire extends CI_Controller {
         {
             $data[$x] = array(
                 'fire_data_id' => $id,
-                'engine' => $post['engine'][$x],
+                'engine' => strtoupper($post['engine'][$x]),
                 'time_out' => $post['time_out'][$x],
-                'fto_out' => $post['fto_out'][$x],
+                'fto_out' => strtoupper($post['fto_out'][$x]),
                 'time_in' => $post['time_in'][$x],
-                'fto_in' => $post['fto_in'][$x],
+                'fto_in' => strtoupper($post['fto_in'][$x]),
                 'onboard' => $post['onboard'][$x]
             );
         }
@@ -129,22 +129,30 @@ class Fire extends CI_Controller {
                 $this->session->set_flashdata('message', 'Error saving. Please input required field.');
             }
             else {
-                $personnel = array(
-                    'unit' => $this->input->post('unit'),
-                    'fire_data_id' => $this->input->post('location'),
-                    'attendance_date' => $this->input->post('date_of_fire'),
-                    'status' => 'active'
-                );
-
-                if ($this->fire_model->check_fire_attendance($personnel) == true){
+                //check if unit exist
+                if ($this->fire_model->check_unit_exist($this->input->post('unit')) == false) {
                     $this->session->set_flashdata('alert_type', 'danger');
-                    $this->session->set_flashdata('message', "User already existed on said event. Please check ------>  ".$personnel['unit']." on ".$personnel['attendance_date']);
+                    $this->session->set_flashdata('message', "Error! Unit does not exist on database. Please check again." );
                 }
-                else{
-                    $personnelId = $this->fire_model->add_fire_attendance($personnel);
-                    $this->session->set_flashdata('alert_type', 'success');
-                    $this->session->set_flashdata('message', "Successfully added: ".$personnel['unit']." on ".$personnel['attendance_date']);
+                else {
+                    $personnel = array(
+                        'unit' => strtoupper($this->input->post('unit')),
+                        'fire_data_id' => $this->input->post('location'),
+                        'attendance_date' => $this->input->post('date_of_fire'),
+                        'status' => 'active'
+                    );
+
+                    if ($this->fire_model->check_fire_attendance($personnel) == true){
+                        $this->session->set_flashdata('alert_type', 'danger');
+                        $this->session->set_flashdata('message', "User already existed on said event. Please check ------>  ".$personnel['unit']." on ".$personnel['attendance_date']);
+                    }
+                    else{
+                        $personnelId = $this->fire_model->add_fire_attendance($personnel);
+                        $this->session->set_flashdata('alert_type', 'success');
+                        $this->session->set_flashdata('message', "Successfully added: ".$personnel['unit']." on ".$personnel['attendance_date']);
+                    }
                 }
+
             }
             $attendance_date = $this->input->post('date_of_fire');
             $data['current_date'] = $attendance_date;
@@ -229,7 +237,7 @@ class Fire extends CI_Controller {
             }
         }
         else {
-            //$data['fire_list'] = $this->fire_model->get_fire_list($data['current_date']);
+            $data['fire_list'] = $this->fire_model->get_fire_list_range($data['from_date'], $data['to_date']);
         }
 
         $this->load->view('fire_lists', $data);

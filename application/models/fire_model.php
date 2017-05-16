@@ -11,10 +11,23 @@ class Fire_model extends CI_Model {
     private $fire_attendance = 'fire_attendance';
     private $fire_data = 'fire_data';
     private $fire_apparata = 'fire_apparata';
+    private $personnel = 'personnel';
 
     public function __construct()
     {
         parent::__construct();
+    }
+
+    public function check_unit_exist($unit_number) {
+        $this->db->where('unit',$unit_number);
+        $query = $this->db->get($this->personnel);
+        //var_dump($this->db->last_query());
+        if ($query->num_rows() > 0){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public function add_fire_attendance($personnel=NULL)
@@ -148,6 +161,15 @@ class Fire_model extends CI_Model {
             FROM `fire_data` WHERE status = 'Dispatch' group by YEAR(date_of_fire), DATE_FORMAT(date_of_fire, '%M')";
         $query = $this->db->query($sql);
         return $query->result();
+    }
+
+    function get_summary_count($from, $to)
+    {
+        $this->db->select('count(*)');
+        $this->db->from($this->fire_data);
+        $this->db->where('date_of_fire >=', $from);
+        $this->db->where('date_of_fire <=', $to);
+        return $this->db->count_all_results();
     }
 
 }

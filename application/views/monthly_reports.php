@@ -9,7 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <body>
 <div class="container">
-    <h2>Attendance Tracker</h2>
+    <h2>Attendance <img src="<?= base_url();?>image/logo.png" width="64px"> Tracker</h2>
     <div>&nbsp;</div>
     <div class="col-lg-10">
         <fieldset>
@@ -31,10 +31,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div>&nbsp;</div>
             <div class="form-group">
                 <div class="col-lg-7">
-                    <label>Subject: Summary of all Activities for the month of <?=$selected_month;?></label>
+                    Subject: Summary of all Activities for the month of <span style="color:red;"><?=$selected_month;?></span>
                 </div>
             </div>
-            <table class="table table-striped table-bordered table-hover" id="dataTables-example"  style="font-size:11px;">
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example"  style="font-size:14px;">
                 <thead>
                     <tr>
                         <th>UNIT #</th>
@@ -47,12 +47,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </tr>
                 </thead>
                 <tbody>
-                <?php if (isset($monthly)) {  $total = 0;?>
-                    <?php foreach ($monthly as $key => $value) { $total += 1;?>
+                <?php if (isset($monthly)) {?>
+                    <?php foreach ($monthly as $key => $value) { $total = 0;?>
                         <tr>
                             <td><?php echo $key; ?></td>
-                            <?php foreach ($value as $m => $n) {?>
-                            <td><?php echo $n; ?></td>
+                            <?php  if (count($value) > 0) {?>
+                                <?php foreach ($value as $m => $n) {?>
+                                <td><?=$n->duty; $total += $n->duty; ?></td>
+                                <td><?=$n->fire; $total += $n->fire; ?></td>
+                                <td><?=$n->training; $total += $n->training; ?></td>
+                                <td><?=$n->meeting; $total += $n->meeting; ?></td>
+                                <td><?=$n->special; $total += $n->special; ?></td>
+                                <td><?=$total;?></td>
+                                <?php } ?>
+                            <?php } else { $total +=0; ?>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td><?=$total;?></td>
                             <?php } ?>
                         </tr>
                     <?php } ?>

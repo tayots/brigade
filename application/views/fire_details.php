@@ -120,11 +120,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2">
-                    <?php if ($value->dispatch == 'No'){ echo '<span style="color:red">NO DISPATCH</span>'; } else { echo 'Dispatch';} ?>
+                <div class="col-lg-4">
+                    <?php if ($value->dispatch == 'No'){ echo '<span style="color:white;background-color: red;">.:: NO DISPATCH ::.</span>'; } else { echo '<span style="color:white;background-color: green;">.:: ENGINES HAS DISPATCH ::.</span>';} ?>
                     <?php if (isset($fire_apparata)) { ?>
                     <textarea cols="42px" rows="8" style="white-space: pre-line;"><?php foreach ($fire_apparata as $key => $value) {
-                            echo '#'.$value->engine.'('.$value->fto_out.') - OUT:'.$value->time_out.' -> IN:'.$value->time_in.' ('.$value->fto_in.")\n";
+                            echo '#'.$value->engine.'('.$value->fto_out.') - OUT:'.$value->time_out.' -> IN:'.$value->time_in.' ('.$value->fto_in.') ONBOARD:'.$value->onboard."\n";
                         }?>
                     </textarea>
                     <?php } ?>
