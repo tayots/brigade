@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2017 at 08:58 PM
+-- Generation Time: May 24, 2017 at 12:11 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -40,40 +40,6 @@ CREATE TABLE IF NOT EXISTS `duty_attendance` (
   KEY `schedule` (`schedule`),
   KEY `unit_2` (`unit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `duty_attendance`
---
-
-INSERT INTO `duty_attendance` (`unit`, `attendance_date`, `time_in`, `time_out`, `schedule`, `date_created`) VALUES
-('45', '2017-04-30', '07:07 PM', '07:07 AM', 'Sunday', '2017-05-01 23:28:36'),
-('88', '2017-04-28', '08:00 PM', '08:00 AM', 'Friday', '2017-05-02 22:36:57'),
-('88', '2017-05-02', '08:00 PM', '08:00 AM', 'Tuesday', '2017-05-02 22:37:35'),
-('94', '2017-05-01', '08:00 PM', '06:00 AM', 'Monday', '2017-05-02 23:37:48'),
-('90', '2017-05-01', '08:59 PM', '08:08 AM', 'Monday', '2017-05-02 23:40:53'),
-('92', '2017-05-02', '10:02 PM', '08:00 AM', 'Tuesday', '2017-05-02 23:41:07'),
-('83', '2017-05-02', '09:00 PM', '08:00 AM', 'Tuesday', '2017-05-02 23:41:25'),
-('94', '2017-05-14', '08:00 PM', '08:00 AM', 'Sunday', '2017-05-14 21:22:27'),
-('90', '2017-05-14', '09:00 PM', '08:00 AM', 'Sunday', '2017-05-14 21:26:59'),
-('90', '2017-05-15', '07:48 PM', '80:00 AM', 'Monday', '2017-05-16 00:53:49'),
-('92', '2017-05-15', '10:30 PM', '08:08 AM', 'Monday', '2017-05-16 00:55:11'),
-('94', '2017-05-15', '08:00 PM', '08:00 AM', 'Monday', '2017-05-16 01:31:54'),
-('92', '2017-05-01', '10:02 PM', '08:08 AM', 'Monday', '2017-05-16 01:33:20'),
-('83', '2017-05-01', '09:00 PM', '08:00 AM', 'Monday', '2017-05-16 01:34:11'),
-('84', '2017-05-13', '03:30 PM', '10:45 AM', 'Saturday', '2017-05-16 01:36:17'),
-('93', '2017-05-13', '05:37 PM', '03:00 PM', 'Saturday', '2017-05-16 01:37:40'),
-('90', '2017-05-13', '08:00 PM', '01:00 PM', 'Saturday', '2017-05-16 01:38:21'),
-('91', '2017-05-13', '09:04 PM', '10:45 AM', 'Saturday', '2017-05-16 01:38:55'),
-('97', '2017-05-13', '09:15 PM', '12:10 PM', 'Saturday', '2017-05-16 01:39:10'),
-('95', '2017-05-13', '09:25 PM', '10:12 AM', 'Saturday', '2017-05-16 01:39:27'),
-('94', '2017-05-13', '09:46 PM', '10:10 AM', 'Saturday', '2017-05-16 01:39:48'),
-('96', '2017-05-13', '11:46 PM', '09:30 AM', 'Saturday', '2017-05-16 01:40:11'),
-('86', '2017-05-13', '07:00 PM', '12:00 PM', 'Saturday', '2017-05-16 01:40:28'),
-('90', '2017-05-12', '07:52 PM', '08:00 AM', 'Friday', '2017-05-16 01:41:17'),
-('84', '2017-05-12', '08:27 PM', '04:45 AM', 'Friday', '2017-05-16 01:41:36'),
-('88', '2017-05-12', '09:27 PM', '07:04 AM', 'Friday', '2017-05-16 01:41:45'),
-('92', '2017-05-12', '09:00 PM', '08:07 AM', 'Friday', '2017-05-16 01:41:56'),
-('94', '2017-04-09', '08:00 PM', '08:00 AM', 'Sunday', '2017-05-16 17:56:07');
 
 -- --------------------------------------------------------
 
@@ -151,20 +117,6 @@ CREATE TABLE IF NOT EXISTS `fire_apparata` (
   KEY `fire_data_id` (`fire_data_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `fire_apparata`
---
-
-INSERT INTO `fire_apparata` (`fire_data_id`, `engine`, `time_out`, `fto_out`, `time_in`, `fto_in`, `onboard`) VALUES
-(27, 'E20', '9:12', 87, '10:30', 87, '94,90,86'),
-(27, '', '', 0, '', 0, ''),
-(27, '', '', 0, '', 0, ''),
-(27, '', '', 0, '', 0, ''),
-(27, '', '', 0, '', 0, ''),
-(27, '', '', 0, '', 0, ''),
-(27, '', '', 0, '', 0, ''),
-(27, '', '', 0, '', 0, '');
-
 -- --------------------------------------------------------
 
 --
@@ -214,13 +166,6 @@ CREATE TABLE IF NOT EXISTS `fire_data` (
   KEY `date_of_fire` (`date_of_fire`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
 
---
--- Dumping data for table `fire_data`
---
-
-INSERT INTO `fire_data` (`id`, `date_of_fire`, `location`, `classification`, `caller`, `contact_number`, `time_received`, `time_controlled`, `unit`, `oic`, `water_used`, `dispatch`, `proceeding`, `at_base`) VALUES
-(27, '2017-05-15', 'Golden Valley', 'Working Fire', 'direct', '', '09:03 AM', '10:12 AM', 'michelle', 94, 0, 'Yes', '09,45', '92,93,');
-
 -- --------------------------------------------------------
 
 --
@@ -242,13 +187,6 @@ CREATE TABLE IF NOT EXISTS `meeting` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
---
--- Dumping data for table `meeting`
---
-
-INSERT INTO `meeting` (`id`, `date_of_meeting`, `activity`, `venue`, `oic`, `remarks`, `recorder`, `approved_by`, `sent`, `replied`) VALUES
-(6, '2017-04-27', 'GM Meeting', 'bravo', '09', 'dafasdf', '30', NULL, 0, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -262,15 +200,6 @@ CREATE TABLE IF NOT EXISTS `meeting_attendance` (
   `attendance_date` date NOT NULL,
   KEY `training` (`meeting_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `meeting_attendance`
---
-
-INSERT INTO `meeting_attendance` (`meeting_id`, `unit`, `attendance_date`) VALUES
-(6, '50', '2017-04-27'),
-(6, '40', '2017-04-27'),
-(6, '09', '2017-04-27');
 
 -- --------------------------------------------------------
 
@@ -402,13 +331,6 @@ CREATE TABLE IF NOT EXISTS `special_activity` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
---
--- Dumping data for table `special_activity`
---
-
-INSERT INTO `special_activity` (`id`, `date_of_special`, `activity`, `venue`, `oic`, `remarks`, `recorder`, `approved_by`, `sent`, `replied`) VALUES
-(3, '2017-05-11', 'IHAS', 'test', '30', 'teassdf', '30', NULL, 0, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -422,16 +344,6 @@ CREATE TABLE IF NOT EXISTS `special_activity_attendance` (
   `attendance_date` date NOT NULL,
   KEY `training` (`special_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `special_activity_attendance`
---
-
-INSERT INTO `special_activity_attendance` (`special_id`, `unit`, `attendance_date`) VALUES
-(3, '95', '2017-05-11'),
-(3, '96', '2017-05-11'),
-(3, '83', '2017-05-11'),
-(3, '30', '2017-05-11');
 
 -- --------------------------------------------------------
 
@@ -454,17 +366,6 @@ CREATE TABLE IF NOT EXISTS `training` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
---
--- Dumping data for table `training`
---
-
-INSERT INTO `training` (`id`, `date_of_training`, `activity`, `venue`, `oic`, `remarks`, `recorder`, `approved_by`, `sent`, `replied`) VALUES
-(6, '2017-05-14', 'Ground Ladder', 'Braco', '30', 'test', '40', NULL, 0, 0),
-(7, '2017-05-07', 'test', 'test', '22', '22', '22', NULL, 0, 0),
-(8, '2017-04-23', 'test', 'test', '22', '22', '22', NULL, 0, 0),
-(9, '2017-02-12', 'test', 'test', '22', '22', '22', NULL, 0, 0),
-(10, '2017-01-15', 'test', 'test', '22', '22', '22', NULL, 0, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -478,32 +379,6 @@ CREATE TABLE IF NOT EXISTS `training_attendance` (
   `attendance_date` date NOT NULL,
   KEY `training` (`training_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `training_attendance`
---
-
-INSERT INTO `training_attendance` (`training_id`, `unit`, `attendance_date`) VALUES
-(6, '90', '2017-05-14'),
-(6, '92', '2017-05-14'),
-(6, '94', '2017-05-14'),
-(6, '95', '2017-05-14'),
-(6, '96', '2017-05-14'),
-(6, '30', '2017-05-14'),
-(7, '50', '2017-05-07'),
-(7, '13', '2017-05-07'),
-(7, '45', '2017-05-07'),
-(8, '50', '2017-04-23'),
-(8, '13', '2017-04-23'),
-(8, '45', '2017-04-23'),
-(9, '50', '2017-02-12'),
-(9, '13', '2017-02-12'),
-(9, '45', '2017-02-12'),
-(10, '50', '2017-01-15'),
-(10, '13', '2017-01-15'),
-(10, '45', '2017-01-15'),
-(10, '55', '2017-01-15'),
-(10, '72', '2017-01-15');
 
 --
 -- Constraints for dumped tables
