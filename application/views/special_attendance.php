@@ -68,7 +68,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     }
                 }
 
-                if (confirm('Are you sure you want to save the ff data? \n\n'+t+'\n'+m+'\n\nKindly check if everything is correct.\nOtherwise, click \'Ok\' to procceed.')){
+                if (confirm('Are you sure you want to save the ff data? \n\n'+t+'\n'+m+' ( Total:'+x+' )\n\nKindly check if everything is correct.\nOtherwise, click \'Ok\' to procceed.')){
                     return true
                 }
                 else return false
@@ -158,8 +158,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
                 <div class="form-group">
                     <label for="firstName" class="col-lg-3 control-label">Recorded by:*</label>
-                    <div class="col-lg-1">
-                        <input style="text-align: center;" type="text" class="form-control" name="recorder" id="recorder" min="2" maxlength="3" value="<?=$this->input->post('recorder');?>">
+                    <div class="col-lg-2">
+                        <input style="text-align: center;" type="text" class="form-control" name="recorder" id="recorder" value="<?=$this->input->post('recorder');?>">
                     </div>
                 </div>
                 <div class="form-group">

@@ -31,6 +31,7 @@ class Special_model extends CI_Model {
 
     public function check_special_exist($data) {
         $this->db->where('date_of_special',$data['date_of_special']);
+        $this->db->where('activity',$data['activity']);
         $this->db->where('oic',$data['oic']);
         $this->db->where('recorder',$data['recorder']);
         $query = $this->db->get($this->special_activity);

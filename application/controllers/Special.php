@@ -35,7 +35,7 @@ class Special extends CI_Controller {
             $this->form_validation->set_rules('activity', 'activity', 'required');
             $this->form_validation->set_rules('venue', 'venue', 'required');
             $this->form_validation->set_rules('oic', 'oic', 'required|numeric|min_length[2]|max_length[3]');
-            $this->form_validation->set_rules('recorder', 'recorder', 'required|numeric|min_length[2]|max_length[3]');
+            $this->form_validation->set_rules('recorder', 'recorder', 'required');
             $this->form_validation->set_rules('remarks', 'remarks', 'required');
 
             if ($this->form_validation->run() == false){
@@ -75,11 +75,11 @@ class Special extends CI_Controller {
                             $this->session->set_flashdata('message', 'Error. Chief Officer not found. Please check unit number.');
                         }
                         else {
-                            if ($this->special_model->check_unit_exist($data['recorder']) == false){
-                                $this->session->set_flashdata('alert_type', 'danger');
-                                $this->session->set_flashdata('message', 'Error. Recorder not found. Please check unit number.');
-                            }
-                            else {
+                            //if ($this->special_model->check_unit_exist($data['recorder']) == false){
+                            //    $this->session->set_flashdata('alert_type', 'danger');
+                            //    $this->session->set_flashdata('message', 'Error. Recorder not found. Please check unit number.');
+                            //}
+                            //else {
                                 //save special activity
                                 if ($this->special_model->check_special_exist($data) == false){
                                     $special_id = $this->special_model->save_special($data);
@@ -93,7 +93,7 @@ class Special extends CI_Controller {
                                     $this->session->set_flashdata('alert_type', 'danger');
                                     $this->session->set_flashdata('message', 'Error. Special Activity already exist on db. Please check your data.');
                                 }
-                            }
+                            //}
                         }
                     }
                 }
