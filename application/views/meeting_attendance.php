@@ -75,7 +75,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     }
                 }
 
-                if (confirm('Are you sure you want to save the ff data? \n\n'+t+'\n'+m+'\n\nKindly check if everything is correct.\nOtherwise, click \'Ok\' to procceed.')){
+                if (confirm('Are you sure you want to save the ff data? \n\n'+t+'\n'+m+' ( Total:'+x+' )\n\nKindly check if everything is correct.\nOtherwise, click \'Ok\' to procceed.')){
                     return true
                 }
                 else return false
