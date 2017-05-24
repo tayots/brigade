@@ -115,6 +115,7 @@ class Meeting extends CI_Controller {
         $d = new DateTime( date('Y-m-d') );
         $data['to_date'] = $d->format( 'Y-m-t' );
         $data['meeting_list'] = [];
+        $data['meeting_count'] = 0;
 
         if ($_POST) {
             if (isset($_POST['prev'])) {
@@ -137,10 +138,12 @@ class Meeting extends CI_Controller {
 
             if ($this->form_validation->run() != false){
                 $data['meeting_list'] = $this->meeting_model->get_meeting_list_range($data['from_date'], $data['to_date']);
+                $data['meeting_count'] = count($data['meeting_list']);
             }
         }
         else {
             $data['meeting_list'] = $this->meeting_model->get_meeting_list_range($data['from_date'], $data['to_date']);
+            $data['meeting_count'] = count($data['meeting_list']);
         }
 
         $this->load->view('meeting_lists', $data);

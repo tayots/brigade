@@ -60,7 +60,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
             </form>
             <br>
-            Results:
+            Results: <span style="font-weight: bold;">TOTAL: <span style="font-size: 18px;"><?=$special_count;?></span></span>
             <div >
                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                     <thead>

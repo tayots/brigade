@@ -117,6 +117,7 @@ class Special extends CI_Controller {
         $d = new DateTime( date('Y-m-d') );
         $data['to_date'] = $d->format( 'Y-m-t' );
         $data['special_list'] = [];
+        $data['special_count'] = 0;
 
         if ($_POST) {
             if (isset($_POST['prev'])) {
@@ -139,10 +140,12 @@ class Special extends CI_Controller {
 
             if ($this->form_validation->run() != false){
                 $data['special_list'] = $this->special_model->get_special_list_range($data['from_date'], $data['to_date']);
+                $data['special_count'] = count($data['special_list']);
             }
         }
         else {
             $data['special_list'] = $this->special_model->get_special_list_range($data['from_date'], $data['to_date']);
+            $data['special_count'] = count($data['special_list']);
         }
 
         $this->load->view('special_lists', $data);
