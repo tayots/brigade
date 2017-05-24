@@ -88,6 +88,7 @@ class Special extends CI_Controller {
 
                                     $this->session->set_flashdata('alert_type', 'success');
                                     $this->session->set_flashdata('message', 'Successfully Saved Activity on '.$this->input->post('date_of_special').' with Total members attended: '.$this->input->post('member_counter'));
+                                    redirect("special/attendance", 'refresh');
                                 }
                                 else {
                                     $this->session->set_flashdata('alert_type', 'danger');
