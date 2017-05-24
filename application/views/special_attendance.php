@@ -7,6 +7,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?= base_url();?>bootstrap/js/jquery-3.2.1.min.js"></script>
     <script src="<?= base_url();?>bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript">
+        function add_new_row(e){
+            var code = (e.keyCode ? e.keyCode : e.which);
+            if(code == 13) { //Enter keycode
+                $("#add_row").click();
+            }
+        }
+
         $(document).ready(function(){
             var i=getlatestAddr();
 
@@ -14,7 +21,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 //check duplicate
                 if (checkduplicate(i) == true) { return false; }
 
-                $('#addr'+i).html("<td>"+ (i+1) +"</td><td><input id='member"+i+"' name='member"+i+"' type='text' placeholder='Unit Number' class='form-control input-md' maxlength='3'/> </td>");
+                $('#addr'+i).html("<td>"+ (i+1) +"</td><td><input id='member"+i+"' name='member"+i+"' type='text' placeholder='Unit Number' class='form-control input-md' maxlength='3' onkeypress='add_new_row(event)' /> </td>");
 
                 $('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
                 $('#member'+i).focus();
@@ -121,7 +128,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <?=$x+1?>
                                         </td>
                                         <td>
-                                            <input tabindex="0" type="text" id='member<?=$x;?>' name='member<?=$x;?>'  placeholder='Unit Number' class="form-control" maxlength="3" value="<?=$_POST['member'.$x];?>"/>
+                                            <input tabindex="0" type="text" id='member<?=$x;?>' name='member<?=$x;?>'  placeholder='Unit Number' class="form-control" maxlength="3" value="<?=$_POST['member'.$x];?>" onkeypress="add_new_row(event)"/>
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -134,7 +141,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     1
                                 </td>
                                 <td>
-                                    <input tabindex="0" type="text" id='member0' name='member0'  placeholder='Unit Number' class="form-control" maxlength="3"/>
+                                    <input tabindex="0" type="text" id='member0' name='member0'  placeholder='Unit Number' class="form-control" maxlength="3" onkeypress="add_new_row(event)"/>
                                 </td>
                             </tr>
                             <tr id='addr1'></tr>
