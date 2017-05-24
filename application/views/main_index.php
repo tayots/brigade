@@ -121,8 +121,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div style="margin-left:20px;">Duty Efficiency in <?=date('F');?>: <?=$duty_month;?></div>
         <div style="margin-left:20px;">Previous month : <?=$duty_previous_month;?></div>
         <div>&nbsp;</div>
-        <div style="margin-left:20px;"><span style="color: green;"><?=date('Y')?> Highest Training attendance : <?=$highest_training[0]->total;?></span></div>
-        <div style="margin-left:20px;"><span style="color: red;">Lowest : <?=$lowest_training[0]->total;?></span></div>
+        <div style="margin-left:20px;"><span style="color: green;"><?=date('Y')?> Highest Training attendance : <?php if (isset($highest_training[0]->total)) echo $highest_training[0]->total; else echo '--';?></span></div>
+        <div style="margin-left:20px;"><span style="color: red;">Lowest : <?php if (isset($lowest_training[0]->total)) echo $lowest_training[0]->total; else echo '--';?></span></div>
     </div>
 </div>
 </body>

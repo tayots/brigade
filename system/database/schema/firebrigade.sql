@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 24, 2017 at 12:11 PM
+-- Generation Time: May 24, 2017 at 03:47 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -56,48 +56,7 @@ CREATE TABLE IF NOT EXISTS `duty_schedule` (
   PRIMARY KEY (`id`),
   KEY `unit` (`unit`),
   KEY `schedule` (`schedule`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=44 ;
-
---
--- Dumping data for table `duty_schedule`
---
-
-INSERT INTO `duty_schedule` (`id`, `unit`, `schedule`, `date_created`) VALUES
-(1, '94', 'Monday', '2017-01-17 16:31:42'),
-(2, '94', 'Tuesday', '2017-01-17 16:32:11'),
-(3, '88', 'Tuesday', '2017-01-17 16:32:32'),
-(10, '91', 'Sunday', '2017-01-17 16:51:51'),
-(11, '88', 'Wednesday', '2017-01-17 17:00:09'),
-(12, '92', 'Monday', '2017-01-17 17:01:23'),
-(13, '91', 'Saturday', '2017-01-17 17:01:50'),
-(15, '92', 'Friday', '2017-01-17 17:02:03'),
-(16, '90', 'Monday', '2017-01-17 17:02:54'),
-(17, '85', 'Monday', '2017-01-17 17:02:59'),
-(18, '86', 'Monday', '2017-01-17 17:03:03'),
-(19, '83', 'Monday', '2017-01-17 17:03:07'),
-(20, '85', 'Tuesday', '2017-01-17 17:03:15'),
-(21, '95', 'Tuesday', '2017-01-17 17:03:24'),
-(22, '96', 'Tuesday', '2017-01-17 17:03:29'),
-(24, '98', 'Tuesday', '2017-01-17 17:03:43'),
-(25, '86', 'Wednesday', '2017-01-17 17:03:56'),
-(26, '85', 'Wednesday', '2017-01-17 17:04:00'),
-(27, '92', 'Wednesday', '2017-01-17 17:04:05'),
-(28, '97', 'Wednesday', '2017-01-17 17:04:19'),
-(29, '90', 'Wednesday', '2017-01-17 17:04:27'),
-(30, '89', 'Thursday', '2017-01-17 17:04:34'),
-(31, '83', 'Thursday', '2017-01-17 17:04:40'),
-(32, '90', 'Thursday', '2017-01-17 17:04:44'),
-(33, '93', 'Thursday', '2017-01-17 17:04:50'),
-(34, '98', 'Thursday', '2017-01-17 17:04:56'),
-(35, '88', 'Friday', '2017-01-17 17:05:12'),
-(36, '93', 'Friday', '2017-01-17 17:05:21'),
-(37, '95', 'Friday', '2017-01-17 17:05:24'),
-(38, '96', 'Friday', '2017-01-17 17:05:28'),
-(39, '93', 'Saturday', '2017-01-17 17:05:39'),
-(40, '89', 'Saturday', '2017-01-17 17:05:45'),
-(41, '83', 'Sunday', '2017-01-17 17:05:54'),
-(42, '94', 'Sunday', '2017-01-17 17:05:59'),
-(43, '96', 'Sunday', '2017-01-17 17:06:04');
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=68 ;
 
 -- --------------------------------------------------------
 
@@ -107,15 +66,17 @@ INSERT INTO `duty_schedule` (`id`, `unit`, `schedule`, `date_created`) VALUES
 
 DROP TABLE IF EXISTS `fire_apparata`;
 CREATE TABLE IF NOT EXISTS `fire_apparata` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT,
   `fire_data_id` bigint(10) NOT NULL,
   `engine` varchar(10) DEFAULT NULL,
   `time_out` varchar(11) DEFAULT NULL,
-  `fto_out` int(11) DEFAULT NULL,
+  `fto_out` varchar(11) DEFAULT NULL,
   `time_in` varchar(11) DEFAULT NULL,
-  `fto_in` int(11) DEFAULT NULL,
+  `fto_in` varchar(11) DEFAULT NULL,
   `onboard` text,
+  PRIMARY KEY (`id`),
   KEY `fire_data_id` (`fire_data_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=237 ;
 
 -- --------------------------------------------------------
 
@@ -137,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `fire_attendance` (
   KEY `unit_2` (`unit`),
   KEY `unit_3` (`unit`,`fire_data_id`,`attendance_date`),
   KEY `fire_data_id` (`fire_data_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=147 ;
 
 -- --------------------------------------------------------
 
@@ -164,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `fire_data` (
   PRIMARY KEY (`id`),
   KEY `unit` (`unit`),
   KEY `date_of_fire` (`date_of_fire`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=57 ;
 
 -- --------------------------------------------------------
 
@@ -185,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `meeting` (
   `sent` tinyint(1) DEFAULT '0',
   `replied` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 -- --------------------------------------------------------
 
@@ -220,59 +181,6 @@ CREATE TABLE IF NOT EXISTS `personnel` (
   KEY `unit_2` (`unit`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=52 ;
 
---
--- Dumping data for table `personnel`
---
-
-INSERT INTO `personnel` (`id`, `first_name`, `last_name`, `unit`, `status`) VALUES
-(4, 'Cesar', 'Tiu', '13', 'active'),
-(5, 'Johnny', 'Chik', '18', 'active'),
-(6, 'Tirso', 'Aberia', '22', 'active'),
-(7, 'Alexander', 'Sia', '27', 'active'),
-(8, 'Mark Anthony', 'Rañola', '29', 'active'),
-(9, 'Ronnie', 'Gocuan', '30', 'active'),
-(10, 'Maxwell', 'Ahyong', '35', 'inactive'),
-(11, 'Jason', 'Dy', '38', 'active'),
-(12, 'Micheal', 'Dy', '40', 'active'),
-(13, 'Joubert', 'Lim', '42', 'active'),
-(14, 'Alfred', 'Chu', '43', 'active'),
-(15, 'Philip', 'Po', '45', 'active'),
-(16, 'Wilton', 'Uykingtian', '48', 'active'),
-(17, 'Leonardo', 'Angeles Jr.', '50', 'active'),
-(18, 'Dick Nathan', 'Co', '55', 'active'),
-(19, 'Roberto', 'Labadan', '56', 'active'),
-(20, 'Benjamin', 'Go', '62', 'active'),
-(21, 'Bronson', 'Peña', '63', 'active'),
-(22, 'Jepher', 'Racuya', '68', 'active'),
-(23, 'Dennis', 'Cuenco', '72', 'active'),
-(24, 'Micheal', 'Tan', '75', 'active'),
-(25, 'Kimhe', 'Chan', '77', 'active'),
-(26, 'Jeffrey', 'So', '79', 'active'),
-(27, 'Alexander', 'Tanchan', '80', 'active'),
-(28, 'Mark', 'Uy', '82', 'active'),
-(29, 'Neil', 'Tan', '83', 'active'),
-(30, 'Russel', 'Gocuan', '84', 'active'),
-(31, 'Frey Angelo', 'Blanco', '85', 'active'),
-(32, 'Joseph', 'Baluyos', '86', 'active'),
-(33, 'Micheal', 'Lim', '87', 'active'),
-(34, 'Louie', 'Aberia', '88', 'active'),
-(35, 'Alex', 'Acusar', '89', 'active'),
-(36, 'Erwin', 'Batucan', '90', 'active'),
-(37, 'Phoenix Mckenzie', 'Gocuan', '91', 'active'),
-(38, 'Ace Mark', 'Lao', '92', 'active'),
-(39, 'Charles Kevin', 'Lim', '93', 'active'),
-(40, 'Jeremy', 'Ling', '94', 'active'),
-(41, 'Jonathan', 'Suarez', '95', 'active'),
-(42, 'Jacob', 'Tanco', '96', 'active'),
-(43, 'Rey', 'Tacder', '97', 'active'),
-(44, 'Justin', 'Tieng', '98', 'active'),
-(46, 'Leonardo', 'Sylianco Jr.', '09', 'active'),
-(47, 'Rey', 'R1', 'R1', 'active'),
-(48, 'Bebot', 'R2', 'R2', 'active'),
-(49, 'Rodel', 'R3', 'R3', 'active'),
-(50, 'Rensy', 'D1', 'D1', 'active'),
-(51, 'Casiano', 'D2', 'D2', 'active');
-
 -- --------------------------------------------------------
 
 --
@@ -302,14 +210,6 @@ CREATE TABLE IF NOT EXISTS `rank` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
---
--- Dumping data for table `rank`
---
-
-INSERT INTO `rank` (`id`, `name`, `status`) VALUES
-(1, 'FTO', 'active'),
-(2, 'Firefighter', 'active');
-
 -- --------------------------------------------------------
 
 --
@@ -329,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `special_activity` (
   `sent` tinyint(1) DEFAULT '0',
   `replied` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
 
 -- --------------------------------------------------------
 
@@ -364,7 +264,7 @@ CREATE TABLE IF NOT EXISTS `training` (
   `sent` tinyint(1) DEFAULT '0',
   `replied` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 -- --------------------------------------------------------
 

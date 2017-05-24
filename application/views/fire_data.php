@@ -138,6 +138,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <fieldset>
             <legend style="color: red"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Fire Apparata Responded</legend>
             <div style="">
+                <span style="float:right;">** please don't skip the row when entering data.</span>
                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                     <thead>
                         <tr>

@@ -88,20 +88,56 @@ class Fire extends CI_Controller {
         $this->load->view('fire_data', $data);
     }
 
+    function update_data() {
+        $data = array();
+
+        if ($_POST) {
+            $this->form_validation->set_rules('water_used', 'water_used', 'required|numeric');
+            $this->form_validation->set_rules('unit', 'unit', 'required');
+            $this->form_validation->set_rules('oic', 'oic', 'required');
+
+            $fire = array(
+                'water_used' => $this->input->post('water_used'),
+                'unit' => $this->input->post('unit'),
+                'oic' => $this->input->post('oic'),
+                'proceeding' => $this->input->post('proceeding'),
+                'at_base' => $this->input->post('at_base')
+            );
+
+            if ($this->form_validation->run() == false){
+                $this->session->set_flashdata('alert_type2', 'danger');
+                $this->session->set_flashdata('message2', 'Error saving. Please input required field.');
+                redirect("/fire/lists", 'refresh');
+            }
+            else {
+                if ($_POST['fire_data_id']){
+                    $fireId = $this->fire_model->update_fire_data($fire, $_POST['fire_data_id']);
+
+                    $this->session->set_flashdata('alert_type', 'success');
+                    $this->session->set_flashdata('message', 'Successfully Updated !');
+                    redirect("/fire/lists", 'refresh');
+                }
+            }
+        }
+    }
+
     private function save_fire_apparata($id, $post)
     {
         $data = [];
         for($x=0; $x<count($post['engine']); $x++)
         {
-            $data[$x] = array(
-                'fire_data_id' => $id,
-                'engine' => strtoupper($post['engine'][$x]),
-                'time_out' => $post['time_out'][$x],
-                'fto_out' => strtoupper($post['fto_out'][$x]),
-                'time_in' => $post['time_in'][$x],
-                'fto_in' => strtoupper($post['fto_in'][$x]),
-                'onboard' => $post['onboard'][$x]
-            );
+            if ($post['engine'][$x] != '' && $post['fto_out'][$x] != '')
+            {
+                $data[$x] = array(
+                    'fire_data_id' => $id,
+                    'engine' => strtoupper($post['engine'][$x]),
+                    'time_out' => $post['time_out'][$x],
+                    'fto_out' => strtoupper($post['fto_out'][$x]),
+                    'time_in' => $post['time_in'][$x],
+                    'fto_in' => strtoupper($post['fto_in'][$x]),
+                    'onboard' => $post['onboard'][$x]
+                );
+            }
         }
 
         return $this->fire_model->add_apparata_responded($data);
@@ -212,6 +248,8 @@ class Fire extends CI_Controller {
         $d = new DateTime( date('Y-m-d') );
         $data['to_date'] = $d->format( 'Y-m-t' );
         $data['fire_list'] = [];
+        $data['dispatch_count'] = 0;
+        $data['no_dispatch_count'] = 0;
 
         if ($_POST) {
             if (isset($_POST['prev'])) {
@@ -234,10 +272,19 @@ class Fire extends CI_Controller {
 
             if ($this->form_validation->run() != false){
                 $data['fire_list'] = $this->fire_model->get_fire_list_range($data['from_date'], $data['to_date']);
+
             }
         }
         else {
             $data['fire_list'] = $this->fire_model->get_fire_list_range($data['from_date'], $data['to_date']);
+        }
+
+        if (count($data['fire_list']) > 0) {
+
+            foreach($data['fire_list'] as $val){
+                if ($val->dispatch == 'No') $data['no_dispatch_count'] += 1;
+                else $data['dispatch_count'] += 1;
+            }
         }
 
         $this->load->view('fire_lists', $data);

@@ -172,4 +172,10 @@ class Fire_model extends CI_Model {
         return $this->db->count_all_results();
     }
 
+    function update_fire_data($data, $fire_data_id)
+    {
+        $this->db->where('id', $fire_data_id);
+        $this->db->update($this->fire_data, $data);
+    }
+
 }

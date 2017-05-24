@@ -31,6 +31,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="col-lg-12">
         <fieldset>
             <legend style="color: red;"><span class="glyphicon glyphicon-fire"></span> Browse Fire Alarms</legend>
+            <?php if ($this->session->flashdata('message')){?>
+                <div class="row">
+                    <div class="col-lg-12"><div class="alert alert-<?php echo $this->session->flashdata('alert_type'); ?>"><?php echo $this->session->flashdata('message'); ?></div></div>
+                </div>
+            <?php }?>
             <form class="form-horizontal" role="form" id="fire_review_form" action='<?= base_url();?>index.php/fire/lists' method="post">
                 <div class="form-group">
                    <div class="col-lg-1">
@@ -45,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="col-lg-2">
                         <input type="date" onchange="loadFireLocation();" class="form-control" name="to_date" id="to_date" value="<?=$to_date;?>" autofocus>
                     </div>
-                   <div class="col-lg-4">
+                   <div class="col-lg-6">
                         <div class="bs-example" data-example-id="single-button-dropdown">
                            <div class="btn-group">
                                <button type="submit" class="btn btn-default" name="prev" value=""><span class="glyphicon glyphicon-chevron-left"></span> Prev</button>
@@ -59,12 +64,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <div class="btn-group">
                                 <a href="<?= base_url();?>index.php/main" class="btn btn-info" >Home</a>
                             </div>
+                            <div class="btn-group">
+                                <a href="<?= base_url();?>index.php/fire/attendance" class="btn btn-warning"><span class="glyphicon glyphicon-fire"></span> Log Fire Responses</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </form>
             <br>
-            Results:
+            Results: <span style="color:red">NO DISPATCH</span>: <span style="font-size: 18px;"><?=$no_dispatch_count;?></span> ---- <span style="color:green">DISPATCHED</span>: <span style="font-size: 18px;"><?=$dispatch_count;?></span> ---- <span style="font-weight: bold;">TOTAL: <span style="font-size: 18px;"><?=$no_dispatch_count+$dispatch_count;?></span></span>
             <div >
                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                     <thead>
