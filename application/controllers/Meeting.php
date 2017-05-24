@@ -32,8 +32,6 @@ class Meeting extends CI_Controller {
 
         if ($_POST) {
             $this->form_validation->set_rules('date_of_meeting', 'date_of_meeting', 'required');
-            $this->form_validation->set_rules('activity', 'activity', 'required');
-            $this->form_validation->set_rules('venue', 'venue', 'required');
             $this->form_validation->set_rules('oic', 'oic', 'required|numeric|min_length[2]|max_length[3]');
             $this->form_validation->set_rules('recorder', 'recorder', 'required|numeric|min_length[2]|max_length[3]');
             $this->form_validation->set_rules('remarks', 'remarks', 'required');
@@ -47,8 +45,8 @@ class Meeting extends CI_Controller {
                 //Process Members attended
                 $data = array(
                     'date_of_meeting' => $this->input->post('date_of_meeting'),
-                    'activity' => $this->input->post('activity'),
-                    'venue' => $this->input->post('venue'),
+                    'activity' => 'GM MEETING',
+                    'venue' => 'BRAVO',
                     'oic' => $this->input->post('oic'),
                     'recorder' => $this->input->post('recorder'),
                     'remarks' => $this->input->post('remarks'),
