@@ -112,7 +112,7 @@ class Special_model extends CI_Model {
                 FROM ".$this->special_activity_attendance." ta
                 WHERE attendance_date >= '$from_date' AND attendance_date <= '$to_date'
                 GROUP BY ta.unit
-                ORDER BY total dESC";
+                ORDER BY total dESC LIMIT 20";
         $query = $this->db->query($query);
         //var_dump($this->db->last_query());
         return $query->result();

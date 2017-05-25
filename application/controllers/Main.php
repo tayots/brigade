@@ -167,6 +167,11 @@ class Main extends CI_Controller {
         $data['from_date'] = date('Y-m-01');
         $d = new DateTime( date('Y-m-d') );
         $data['to_date'] = $d->format( 'Y-m-t' );
+        $data['training'] = [];
+        $data['fire'] = [];
+        $data['duty'] = [];
+        $data['meeting'] = [];
+        $data['special'] = [];
 
         if ($_POST) {
             $from_date = $data['from_date'] = $this->input->post('from_date');
