@@ -139,8 +139,9 @@ class Fire extends CI_Controller {
                 );
             }
         }
-
-        return $this->fire_model->add_apparata_responded($data);
+        if (count($data) > 0)
+            return $this->fire_model->add_apparata_responded($data);
+        return false;
     }
 
     public function attendance()
