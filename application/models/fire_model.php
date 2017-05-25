@@ -178,4 +178,16 @@ class Fire_model extends CI_Model {
         $this->db->update($this->fire_data, $data);
     }
 
+    function get_top_20($from_date, $to_date)
+    {
+        $query = "SELECT ta.unit, count(*) as total
+                FROM ".$this->fire_attendance." ta
+                WHERE attendance_date >= '$from_date' AND attendance_date <= '$to_date'
+                GROUP BY ta.unit
+                ORDER BY total dESC";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
 }

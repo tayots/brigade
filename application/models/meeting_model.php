@@ -105,4 +105,16 @@ class Meeting_model extends CI_Model {
         return $this->db->count_all_results();
     }
 
+    function get_top_20($from_date, $to_date)
+    {
+        $query = "SELECT ta.unit, count(*) as total
+                FROM ".$this->meeting_attendance." ta
+                WHERE attendance_date >= '$from_date' AND attendance_date <= '$to_date'
+                GROUP BY ta.unit
+                ORDER BY total dESC";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
 }

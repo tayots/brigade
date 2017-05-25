@@ -161,4 +161,31 @@ class Main extends CI_Controller {
 
     }
 
+    function category_reports()
+    {
+        $data = [];
+        $data['from_date'] = date('Y-m-01');
+        $d = new DateTime( date('Y-m-d') );
+        $data['to_date'] = $d->format( 'Y-m-t' );
+
+        if ($_POST) {
+            $from_date = $data['from_date'] = $this->input->post('from_date');
+            $to_date = $data['to_date'] = $this->input->post('to_date');
+
+            $this->load->model('training_model');
+            $this->load->model('fire_model');
+            $this->load->model('meeting_model');
+            $this->load->model('duty_model');
+            $this->load->model('special_model');
+
+            $data['training'] = $this->training_model->get_top_20($from_date, $to_date);
+            $data['fire'] = $this->fire_model->get_top_20($from_date, $to_date);
+            $data['duty'] = $this->duty_model->get_top_20($from_date, $to_date);
+            $data['meeting'] = $this->meeting_model->get_top_20($from_date, $to_date);
+            $data['special'] = $this->special_model->get_top_20($from_date, $to_date);
+        }
+
+        $this->load->view('category_reports', $data);
+    }
+
 }
