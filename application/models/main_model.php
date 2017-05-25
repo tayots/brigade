@@ -242,9 +242,9 @@ class Main_model extends CI_Model {
             FROM ".$this->training."
             LEFT JOIN training_attendance ta ON ta.training_id = training.id
             WHERE date_of_training >= '$from' AND date_of_training <= '$to'
-            GROUP BY date_of_training ORDER BY date_of_training $order limit 1";
+            GROUP BY date_of_training ORDER BY total $order limit 1";
         $query = $this->db->query($query);
-        //var_dump($this->db->last_query());
+        var_dump($this->db->last_query());
         return $query->result();
     }
 
