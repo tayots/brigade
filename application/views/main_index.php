@@ -56,7 +56,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <body>
 <div class="container">
-    <h2>Attendance <img src="<?= base_url();?>image/logo.png" width="64px"> Tracker</h2>
+    <?php include 'base.inc'; ?>
     <div>&nbsp;</div>
     <div class="col-lg-6">
         <fieldset>
@@ -72,27 +72,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <a href="<?= base_url();?>index.php/training/attendance" class="btn btn-success"><span class="glyphicon glyphicon-flag"></span> Log Training</a>
         </fieldset>
         <div>&nbsp;</div>
-        <fieldset>
-            <legend></legend>
             <a href="<?= base_url();?>index.php/special/attendance" class="btn btn-info"><span class="glyphicon glyphicon-star"></span> Log Special Activity</a>
             <a href="<?= base_url();?>index.php/meeting/attendance" class="btn btn-primary"><span class="glyphicon glyphicon-book"></span> Log GM Meeting</a>
-        </fieldset>
+        <div>&nbsp;</div>
         <div>&nbsp;</div>
     </div>
     <div class="col-lg-6">
         <fieldset>
             <legend>Datas:</legend>
             <a href="<?= base_url();?>index.php/duty/review" class="btn btn-primary"><span class="glyphicon glyphicon-list"></span> Duties Data</a>
+            <a href="<?= base_url();?>index.php/duty/unit_review" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Duty per Unit</a>
             <a href="<?= base_url();?>index.php/fire/lists" class="btn btn-danger"><span class="glyphicon glyphicon-list"></span> Fire Alarms</a>
             <a href="<?= base_url();?>index.php/training/lists" class="btn btn-success"><span class="glyphicon glyphicon-list"></span> Training Data</a>
 <!--            <a href="--><?//= base_url();?><!--index.php/fire/review_attendance" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> Fire Attendance</a>-->
         </fieldset>
         <div>&nbsp;</div>
-        <fieldset>
-            <legend></legend>
             <a href="<?= base_url();?>index.php/special/lists" class="btn btn-info"><span class="glyphicon glyphicon-list"></span> Special Activity Data</a>
             <a href="<?= base_url();?>index.php/meeting/lists" class="btn btn-primary"><span class="glyphicon glyphicon-list"></span> Meeting Data</a>
-        </fieldset>
+        <div>&nbsp;</div>
         <div>&nbsp;</div>
     </div>
     <div class="col-lg-6">
@@ -126,5 +123,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div style="margin-left:20px;"><span style="color: red;">Lowest : <?php if (isset($lowest_training[0]->total)) echo $lowest_training[0]->total; else echo '--';?></span></div>
     </div>
 </div>
+<div style="float: right;font-size:10px;">All rights reserved. Copyright &copy; Jeremy Ling &nbsp;</div>
 </body>
 </html>

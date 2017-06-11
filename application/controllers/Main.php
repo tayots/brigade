@@ -49,24 +49,39 @@ class Main extends CI_Controller {
 
     function monthly_reports($action=NULL)
     {
-        $attendance_month= ($this->input->post('attendance_month'));
+        $this->load->model('personnel_model');
+
+        $data['unit_list'] = $this->personnel_model->get_user_list();
+        $data['selected_unit'] = 'all';
         $final = array();
         $data['monthly'] = array();
         $data['summary'] = '';
-        $data['attendance_month'] = $attendance_month;
         $counter = 0;
-        $data['selected_month'] = '';
+        $data['selected_from'] = date('Y-m-d');
+        $data['selected_to'] = date('Y-m-d');
+        $temp = [];
 
-        if ($attendance_month){
-            $all_units = $this->main_model->get_all_units('active');
-            $selected_month = (date_format($date=date_create($attendance_month.'-01'),'F Y'));
+        if ($_POST){
+            $selected_from = $this->input->post('select_from');
+            $selected_to = $this->input->post('select_to');
+
+            if ($this->input->post('unit') == 'all') {
+                $all_units = $this->main_model->get_all_units('active');
+            }
+            else {
+                $temp['unit'] = $this->input->post('unit');
+                $all_units[] = (object) $temp;
+            }
+
             foreach ($all_units as $key => $value) {
-                $final[$value->unit] = $this->main_model->get_unit_by_category($value->unit, $attendance_month);
+                $final[$value->unit] = $this->main_model->get_unit_by_category($value->unit, $selected_from, $selected_to);
                 $counter += 1;
             }
 
             $data['monthly']= $final;
-            $data['selected_month']= $selected_month;
+            $data['selected_unit'] = $this->input->post('unit');
+            $data['selected_from'] = $selected_from;
+            $data['selected_to'] = $selected_to;
 
         }
 

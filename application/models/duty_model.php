@@ -10,6 +10,7 @@ class Duty_model extends CI_Model {
 
     private $duty_attendance = 'duty_attendance';
     private $duty_schedule = 'duty_schedule';
+    private $duty_version = 'duty_version';
     private $personnel = 'personnel';
 
     public function __construct()
@@ -33,6 +34,7 @@ class Duty_model extends CI_Model {
     {
         $this->db->where('attendance_date',$duty['attendance_date']);
         $this->db->where('unit',$duty['unit']);
+        $this->db->where('duty_version',$duty['duty_version']);
         $this->db->where('schedule',$duty['schedule']);
         $query = $this->db->get($this->duty_attendance);
         if ($query->num_rows() > 0){
@@ -54,6 +56,15 @@ class Duty_model extends CI_Model {
         $this->db->from($this->duty_attendance);
         $this->db->where('attendance_date', $day);
         $this->db->order_by('time_in');
+        $query = $this->db->get();
+        //print_r($this->db->last_query());
+        return $query->result();
+    }
+
+    public function get_duty_versions()
+    {
+        $this->db->select('*');
+        $this->db->from($this->duty_version);
         $query = $this->db->get();
         //print_r($this->db->last_query());
         return $query->result();
@@ -92,11 +103,12 @@ class Duty_model extends CI_Model {
         return $this->db->insert_id();
     }
 
-    public function get_duty_schedule($schedule)
+    public function get_duty_schedule($schedule, $version)
     {
         $this->db->select('*');
         $this->db->from($this->duty_schedule);
         $this->db->where('schedule', $schedule);
+        $this->db->where('version', $version);
         $query = $this->db->get();
         return $query->result();
     }
@@ -108,6 +120,24 @@ class Duty_model extends CI_Model {
                 WHERE attendance_date >= '$from_date' AND attendance_date <= '$to_date'
                 GROUP BY ta.unit
                 ORDER BY total dESC LIMIT 20";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
+    function get_unit_duties($data)
+    {
+        $query = "SELECT da.*,
+                IF(ds.schedule IS NULL,'ADD','DUTY') aS 'remarks',
+                dv.name as 'version_name'
+                FROM `duty_attendance` da
+                LEFT JOIN `duty_schedule` ds
+                ON ds.unit = da.unit AND ds.schedule = da.schedule and ds.version = da.duty_version
+                LEFT JOIN `duty_version` dv ON dv.id = da.duty_version
+                WHERE da.`unit` = '".$data['unit']."'
+                AND da.`attendance_date` >= '".$data['select_from']."'
+                AND da.`attendance_date` <= '".$data['select_to']."'
+                ORDER BY da.`attendance_date` ASC";
         $query = $this->db->query($query);
         //var_dump($this->db->last_query());
         return $query->result();

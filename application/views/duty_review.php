@@ -14,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <body>
 <div class="container">
-    <h2>Attendance <img src="<?= base_url();?>image/logo.png" width="64px"> Tracker</h2>
+    <?php include 'base.inc'; ?>
     <div>&nbsp;</div>
     <div class="col-lg-11">
         <fieldset>
@@ -75,25 +75,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <tbody>
                 <tr style="font-size: 18px;">
                     <?php if (isset($Monday)) {?><td>
-                        <?php foreach ($Monday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_duty/'.$value->unit.'/'.$value->attendance_date.'/'.$value->schedule.'">'.$value->time_in.' - '.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Monday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_duty/'.$value->unit.'/'.$value->attendance_date.'/'.$value->schedule.'/'.$value->duty_version.'">'.$value->time_in.' - '.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                         </td><?php } ?>
                     <?php if (isset($Tuesday)) {?><td>
-                        <?php foreach ($Tuesday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_duty/'.$value->unit.'/'.$value->attendance_date.'/'.$value->schedule.'">'.$value->time_in.' - '.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Tuesday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_duty/'.$value->unit.'/'.$value->attendance_date.'/'.$value->schedule.'/'.$value->duty_version.'">'.$value->time_in.' - '.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                         </td><?php } ?>
                     <?php if (isset($Wednesday)) {?><td>
-                        <?php foreach ($Wednesday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_duty/'.$value->unit.'/'.$value->attendance_date.'/'.$value->schedule.'">'.$value->time_in.' - '.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Wednesday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_duty/'.$value->unit.'/'.$value->attendance_date.'/'.$value->schedule.'/'.$value->duty_version.'">'.$value->time_in.' - '.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                         </td><?php } ?>
                     <?php if (isset($Thursday)) {?><td>
-                        <?php foreach ($Thursday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_duty/'.$value->unit.'/'.$value->attendance_date.'/'.$value->schedule.'">'.$value->time_in.' - '.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Thursday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_duty/'.$value->unit.'/'.$value->attendance_date.'/'.$value->schedule.'/'.$value->duty_version.'">'.$value->time_in.' - '.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                         </td><?php } ?>
                     <?php if (isset($Friday)) {?><td>
-                        <?php foreach ($Friday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_duty/'.$value->unit.'/'.$value->attendance_date.'/'.$value->schedule.'">'.$value->time_in.' - '.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Friday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_duty/'.$value->unit.'/'.$value->attendance_date.'/'.$value->schedule.'/'.$value->duty_version.'">'.$value->time_in.' - '.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                         </td><?php } ?>
                     <?php if (isset($Saturday)) {?><td>
-                        <?php foreach ($Saturday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_duty/'.$value->unit.'/'.$value->attendance_date.'/'.$value->schedule.'">'.$value->time_in.' - '.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Saturday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_duty/'.$value->unit.'/'.$value->attendance_date.'/'.$value->schedule.'/'.$value->duty_version.'">'.$value->time_in.' - '.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                         </td><?php } ?>
                     <?php if (isset($Sunday)) {?><td>
-                        <?php foreach ($Sunday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_duty/'.$value->unit.'/'.$value->attendance_date.'/'.$value->schedule.'">'.$value->time_in.' - '.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Sunday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_duty/'.$value->unit.'/'.$value->attendance_date.'/'.$value->schedule.'/'.$value->duty_version.'">'.$value->time_in.' - '.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                         </td><?php } ?>
                 </tr>
                 </tbody>

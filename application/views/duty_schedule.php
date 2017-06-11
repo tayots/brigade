@@ -13,11 +13,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             }
             return false;
         }
+
+        function showScheduleVersion(){
+            document.getElementById("schedule_form").submit();
+        }
     </script>
 </head>
 <body>
 <div class="container">
-    <h2>Attendance <img src="<?= base_url();?>image/logo.png" width="64px"> Tracker</h2>
+    <?php include 'base.inc'; ?>
     <div>&nbsp;</div>
     <div class="col-lg-6">
         <fieldset>
@@ -62,6 +66,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="col-lg-5">
         <fieldset>
             <legend>Schedule Overview</legend>
+            <form id="schedule_form"  action='<?= base_url();?>index.php/duty/schedule' method="post">
+            Show as: <select class="form-control" name="duty_version" id="duty_version" onchange="showScheduleVersion()" >
+                <option value="">--Select--</option>
+                <?php foreach ($version as $key => $value) { ?>
+                    <option value="<?=$value->id;?>" <?php echo ($selected_version == $value->id)? 'selected':'';?>><?=$value->name;?></option>
+                <?php }?>
+            </select>
+            <div>&nbsp;</div>
+            </form>
             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                 <thead>
                     <tr>
@@ -77,25 +90,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <tbody>
                     <tr>
                     <?php if (isset($Monday)) {?><td>
-                        <?php foreach ($Monday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Monday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'/'.$value->version.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                     </td><?php } ?>
                     <?php if (isset($Tuesday)) {?><td>
-                        <?php foreach ($Tuesday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Tuesday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'/'.$value->version.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                     </td><?php } ?>
                     <?php if (isset($Wednesday)) {?><td>
-                        <?php foreach ($Wednesday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Wednesday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'/'.$value->version.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                     </td><?php } ?>
                     <?php if (isset($Thursday)) {?><td>
-                        <?php foreach ($Thursday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Thursday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'/'.$value->version.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                     </td><?php } ?>
                     <?php if (isset($Friday)) {?><td>
-                        <?php foreach ($Friday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Friday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'/'.$value->version.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                     </td><?php } ?>
                     <?php if (isset($Saturday)) {?><td>
-                        <?php foreach ($Saturday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Saturday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'/'.$value->version.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                     </td><?php } ?>
                     <?php if (isset($Sunday)) {?><td>
-                        <?php foreach ($Sunday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
+                        <?php foreach ($Sunday as $key => $value) { echo '<a href="'.base_url().'index.php/duty/delete_schedule/'.$value->unit.'/'.$value->schedule.'/'.$value->version.'">'.$value->unit.' <span class="glyphicon glyphicon-remove"></span></a><br>'; }?>
                     </td><?php } ?>
                     </tr>
                 </tbody>

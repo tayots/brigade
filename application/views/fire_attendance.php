@@ -14,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <body>
 <div class="container">
-    <h2>Attendance Tracker</h2>
+    <?php include 'base.inc'; ?>
     <div>&nbsp;</div>
     <div class="col-lg-10">
         <fieldset>

@@ -30,7 +30,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <body>
 <div class="container">
-    <h2>Attendance <img src="<?= base_url();?>image/logo.png" width="64px"> Tracker</h2>
+    <?php include 'base.inc'; ?>
     <div>&nbsp;</div>
     <form class="form-horizontal" role="form" action='<?= base_url();?>index.php/fire/data' method="post">
     <?php if ($this->session->flashdata('message')){?>

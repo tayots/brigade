@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 24, 2017 at 03:47 PM
+-- Generation Time: Jun 11, 2017 at 10:05 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `duty_attendance` (
   `time_out` varchar(10) NOT NULL,
   `schedule` varchar(10) NOT NULL,
   `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `duty_version` int(11) NOT NULL,
   KEY `unit` (`unit`),
   KEY `schedule` (`schedule`),
   KEY `unit_2` (`unit`)
@@ -53,10 +54,25 @@ CREATE TABLE IF NOT EXISTS `duty_schedule` (
   `unit` varchar(10) NOT NULL,
   `schedule` varchar(10) NOT NULL,
   `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `version` int(5) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `unit` (`unit`),
   KEY `schedule` (`schedule`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=68 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `duty_version`
+--
+
+DROP TABLE IF EXISTS `duty_version`;
+CREATE TABLE IF NOT EXISTS `duty_version` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -76,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `fire_apparata` (
   `onboard` text,
   PRIMARY KEY (`id`),
   KEY `fire_data_id` (`fire_data_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=237 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=310 ;
 
 -- --------------------------------------------------------
 
@@ -98,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `fire_attendance` (
   KEY `unit_2` (`unit`),
   KEY `unit_3` (`unit`,`fire_data_id`,`attendance_date`),
   KEY `fire_data_id` (`fire_data_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=147 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=467 ;
 
 -- --------------------------------------------------------
 
@@ -125,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `fire_data` (
   PRIMARY KEY (`id`),
   KEY `unit` (`unit`),
   KEY `date_of_fire` (`date_of_fire`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=57 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=146 ;
 
 -- --------------------------------------------------------
 
@@ -146,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `meeting` (
   `sent` tinyint(1) DEFAULT '0',
   `replied` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
 
 -- --------------------------------------------------------
 
@@ -229,7 +245,7 @@ CREATE TABLE IF NOT EXISTS `special_activity` (
   `sent` tinyint(1) DEFAULT '0',
   `replied` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=59 ;
 
 -- --------------------------------------------------------
 
@@ -264,7 +280,7 @@ CREATE TABLE IF NOT EXISTS `training` (
   `sent` tinyint(1) DEFAULT '0',
   `replied` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
 
 -- --------------------------------------------------------
 

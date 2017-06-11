@@ -32,7 +32,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <body>
 <div class="container">
-    <h2>Attendance <img src="<?= base_url();?>image/logo.png" width="64px"> Tracker</h2>
+    <?php include 'base.inc'; ?>
     <div>&nbsp;</div>
     <div class="col-lg-10">
         <fieldset>
@@ -47,6 +47,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <label for="firstName" class="col-lg-3 control-label">Date Duty:*</label>
                     <div class="col-lg-5">
                         <input style="height: 60px;width:350px;font-size: 40px;" height="40px" type="date" class="form-control" name="date_of_duty" id="date_of_duty" value="<?php if ($this->input->post('date_of_duty')) { echo $this->input->post('date_of_duty');} else { echo $current_date; }?>" autofocus>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="firstName" class="col-lg-3 control-label">Use Schcdule:*</label>
+                    <div class="col-lg-3">
+                        <select class="form-control" name="duty_version" id="duty_version">
+                            <option value="">--Select--</option>
+                            <?php foreach ($duty_version as $key => $value) { ?>
+                                <option value="<?=$value->id;?>" <?php echo ($selected_version == $value->id)? 'selected':'';?>><?=$value->name;?></option>
+                            <?php }?>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">

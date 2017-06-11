@@ -9,29 +9,49 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <body>
 <div class="container">
-    <h2>Attendance <img src="<?= base_url();?>image/logo.png" width="64px"> Tracker</h2>
+    <?php include 'base.inc'; ?>
     <div>&nbsp;</div>
-    <div class="col-lg-10">
+    <div class="col-lg-11">
         <fieldset>
             <legend>Monthly Report Options</legend>
             <form class="form-horizontal" role="form" action='<?= base_url();?>index.php/main/monthly_reports' method="post">
                 <div class="form-group">
                     <div class="col-lg-2">
-                        <label for="title" class="control-label">Select Month:*</label>
+                        <label for="title" class="control-label">Select Unit:*</label>
                     </div>
-                    <div class="col-lg-3">
-                        <input type="month" class="form-control" name="attendance_month" id="attendance_month" value="<?php echo isset($attendance_month) ? $attendance_month:'';?>">
+                    <div class="col-lg-2">
+                        <select class="form-control" name="unit" id="unit" >
+                            <option value="all">All</option>
+                            <?php foreach ($unit_list as $key => $value) { ?>
+                                <option value="<?=$value->unit;?>" <?php echo ($selected_unit == $value->unit)? 'selected':'';?>><?=$value->unit.' '.$value->first_name[0].$value->last_name[0];?></option>
+                            <?php }?>
+                        </select>
                     </div>
-                    <div class="col-lg-3">
-                        <button type="submit" class="btn btn-success" >Search</button>
-                        <a href="<?= base_url();?>index.php/main" class="btn btn-info" >Home</a>
+                    <div class="bs-example" data-example-id="single-button-dropdown">
+                        <label for="title" class="control-label">From:*</label>
+                        <div class="btn-group">
+                            <input type="date" class="form-control" name="select_from" id="select_from" value="<?php echo $selected_from;?>" >
+                        </div>
+                        <label for="title" class="control-label">To:*</label>
+                        <div class="btn-group">
+                            <input type="date" class="form-control" name="select_to" id="select_to" value="<?php echo $selected_to;?>">
+                        </div>
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-success" >Search</button>
+                        </div>
+                        <div class="btn-group">
+                            <a href="<?= base_url();?>index.php/main/monthly_reports" class="btn btn-default" >Clear</a>
+                        </div>
+                        <div class="btn-group">
+                            <a href="<?= base_url();?>index.php/main" class="btn btn-info" >Home</a>
+                        </div>
                     </div>
                 </div>
             </form>
             <div>&nbsp;</div>
             <div class="form-group">
                 <div class="col-lg-7">
-                    Subject: Summary of all Activities for the month of <span style="color:red;"><?=$selected_month;?></span>
+                    Subject: Summary of all Activities From <span style="color:red;"><?=$selected_from;?></span> To <span style="color:red;"><?=$selected_to;?></span>
                 </div>
             </div>
             <table class="table table-striped table-bordered table-hover" id="dataTables-example"  style="font-size:14px;">
@@ -47,19 +67,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </tr>
                 </thead>
                 <tbody>
-                <?php if (isset($monthly)) {?>
-                    <?php foreach ($monthly as $key => $value) { $total = 0;?>
+                <?php if (isset($monthly)) {
+                    $t_total = 0;
+                    $t_duty = 0;
+                    $t_fire = 0;
+                    $t_training = 0;
+                    $t_meeting = 0;
+                    $t_special = 0;?>
+                    <?php foreach ($monthly as $key => $n) { $total = 0;?>
                         <tr>
                             <td><?php echo $key; ?></td>
-                            <?php  if (count($value) > 0) {?>
-                                <?php foreach ($value as $m => $n) {?>
-                                <td><?=$n->duty; $total += $n->duty; ?></td>
-                                <td><?=$n->fire; $total += $n->fire; ?></td>
-                                <td><?=$n->training; $total += $n->training; ?></td>
-                                <td><?=$n->meeting; $total += $n->meeting; ?></td>
-                                <td><?=$n->special; $total += $n->special; ?></td>
-                                <td><?=$total;?></td>
-                                <?php } ?>
+                            <?php  if (count($n) > 0) {?>
+                                <td><?=$n[0]; $total += $n[0]; $t_duty += $n[0]; ?></td>
+                                <td><?=$n[1]; $total += $n[1]; $t_fire += $n[1]; ?></td>
+                                <td><?=$n[2]; $total += $n[2]; $t_training += $n[2]; ?></td>
+                                <td><?=$n[3]; $total += $n[3]; $t_meeting += $n[3]; ?></td>
+                                <td><?=$n[4]; $total += $n[4]; $t_special += $n[4]; ?></td>
+                                <td><?=$total; $t_total+=$total;?></td>
                             <?php } else { $total +=0; ?>
                                 <td>0</td>
                                 <td>0</td>
@@ -71,6 +95,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </tr>
                     <?php } ?>
                 <?php }?>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td><strong><?=$t_duty;?></strong></td>
+                    <td><strong><?=$t_fire;?></strong></td>
+                    <td><strong><?=$t_training;?></strong></td>
+                    <td><strong><?=$t_meeting;?></strong></td>
+                    <td><strong><?=$t_special;?></strong></td>
+                    <td><strong><?=$t_total;?></strong></td>
+                </tr>
                 </tbody>
             </table>
         </fieldset>

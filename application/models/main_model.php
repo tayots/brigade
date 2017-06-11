@@ -130,28 +130,59 @@ class Main_model extends CI_Model {
         return $query->result();
     }
 
-    function get_unit_by_category($unit, $attendance_month)
+    function get_unit_by_category($unit, $from, $to)
     {
-        $from = $attendance_month.'-01';
-        $to = $attendance_month.'-31';
 
         $query = $this->db->query("
             SELECT p.unit,
-              count(da.unit) as 'duty',
-              count(t.unit) as 'training',
-              count(s.unit) as 'special',
-              count(m.unit) as 'meeting',
-              count(f.unit) as 'fire'
+              count(da.unit) as 'count'
             FROM personnel p
             LEFT JOIN duty_attendance da ON da.unit = p.unit AND (da.attendance_date >= '$from' and da.attendance_date <= '$to')
-            LEFT JOIN training_attendance t ON t.unit = p.unit AND (t.attendance_date >= '$from' and t.attendance_date <= '$to')
-            LEFT JOIN special_activity_attendance s ON s.unit = p.unit AND (s.attendance_date >= '$from' and s.attendance_date <= '$to')
-            LEFT JOIN meeting_attendance m ON m.unit = p.unit AND (m.attendance_date >= '$from' and m.attendance_date <= '$to')
+            WHERE p.unit = '$unit'
+            GROUP BY p.unit
+
+            UNION ALL
+
+            SELECT p.unit,
+              count(f.unit) as 'count'
+            FROM personnel p
             LEFT JOIN fire_attendance f ON f.unit = p.unit AND (f.attendance_date >= '$from' and f.attendance_date <= '$to')
             WHERE p.unit = '$unit'
             GROUP BY p.unit
+
+            UNION ALL
+
+            SELECT p.unit,
+              count(t.unit) as 'count'
+            FROM personnel p
+            LEFT JOIN training_attendance t ON t.unit = p.unit AND (t.attendance_date >= '$from' and t.attendance_date <= '$to')
+            WHERE p.unit = '$unit'
+            GROUP BY p.unit
+
+            UNION ALL
+
+            SELECT p.unit,
+              count(m.unit) as 'count'
+            FROM personnel p
+            LEFT JOIN meeting_attendance m ON m.unit = p.unit AND (m.attendance_date >= '$from' and m.attendance_date <= '$to')
+            WHERE p.unit = '$unit'
+            GROUP BY p.unit
+
+            UNION ALL
+
+            SELECT p.unit,
+              count(s.unit) as 'count'
+            FROM personnel p
+            LEFT JOIN special_activity_attendance s ON s.unit = p.unit AND (s.attendance_date >= '$from' and s.attendance_date <= '$to')
+            WHERE p.unit = '$unit'
+            GROUP BY p.unit
             ");
-        return $query->result();
+        $data = [];
+        foreach ($query->result() as $row)
+        {
+            $data[] = $row->count;
+        };
+        return $data;
     }
 
     function get_unit_by_category_yearly($unit, $cat, $attendance_year)
@@ -244,7 +275,6 @@ class Main_model extends CI_Model {
             WHERE date_of_training >= '$from' AND date_of_training <= '$to'
             GROUP BY date_of_training ORDER BY total $order limit 1";
         $query = $this->db->query($query);
-        var_dump($this->db->last_query());
         return $query->result();
     }
 
