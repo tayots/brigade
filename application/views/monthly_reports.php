@@ -106,6 +106,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </tr>
                 </tbody>
             </table>
+            <table style="font-size:14px;">
+                <tr>
+                    <td><strong>Summary:</strong></td>
+                </tr>
+                <tr>
+                    <td width="150px">Fire Responses:</td>
+                    <td><?=$fire_summary;?></td>
+                </tr>
+                <tr>
+                    <td>Training:</td>
+                    <td><?=$training_summary;?></td>
+                </tr>
+                <tr>
+                    <td>Meeting:</td>
+                    <td><?=$meeting_summary;?></td>
+                </tr>
+                <tr>
+                    <td>Special Activity:</td>
+                    <td><?=$special_summary;?></td>
+                </tr>
+            </table>
         </fieldset>
     </div>
 </div>

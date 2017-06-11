@@ -122,6 +122,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div style="margin-left:20px;"><span style="color: red;">Lowest : <?php if (isset($lowest_training[0]->total)) echo $lowest_training[0]->total; else echo '--';?></span></div>
     </div>
 </div>
-<div style="float: right;font-size:10px;">All rights reserved. Copyright &copy; Jeremy Ling &nbsp;</div>
+<div style="clear: both">&nbsp;</div>
+<div style="text-align: center;font-size:10px;">All rights reserved. Copyright &copy; Jeremy Ling &nbsp;</div>
 </body>
 </html>

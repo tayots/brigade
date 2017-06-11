@@ -61,6 +61,12 @@ class Main extends CI_Controller {
         $data['selected_to'] = date('Y-m-d');
         $temp = [];
 
+        $data['fire_summary'] = 0;
+        $data['training_summary'] = 0;
+        $data['meeting_summary'] = 0;
+        $data['special_summary'] = 0;
+        $data['duty_summary'] = 0;
+
         if ($_POST){
             $selected_from = $this->input->post('select_from');
             $selected_to = $this->input->post('select_to');
@@ -83,6 +89,10 @@ class Main extends CI_Controller {
             $data['selected_from'] = $selected_from;
             $data['selected_to'] = $selected_to;
 
+            $data['fire_summary'] = $this->main_model->get_summary_count_category('fire_data', 'date_of_fire', $selected_from, $selected_to);
+            $data['training_summary'] = $this->main_model->get_summary_count_category('training', 'date_of_training', $selected_from, $selected_to);
+            $data['meeting_summary'] = $this->main_model->get_summary_count_category('meeting', 'date_of_meeting', $selected_from, $selected_to);
+            $data['special_summary'] = $this->main_model->get_summary_count_category('special_activity', 'date_of_special', $selected_from, $selected_to);
         }
 
         $this->load->view('monthly_reports', $data);

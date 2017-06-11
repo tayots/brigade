@@ -278,4 +278,14 @@ class Main_model extends CI_Model {
         return $query->result();
     }
 
+    function get_summary_count_category($table, $field, $from, $to)
+    {
+        $this->db->from($table);
+        $this->db->where($field.' >=', $from);
+        $this->db->where($field.' <=', $to);
+
+        if ($table == 'fire_data') $this->db->where('dispatch','Yes');
+        return $this->db->count_all_results();
+    }
+
 }
