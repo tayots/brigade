@@ -7,6 +7,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?= base_url();?>bootstrap/js/jquery-3.2.1.min.js"></script>
     <script src="<?= base_url();?>bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript">
+        function messagePrompt(){
+            if(confirm('Are you sure you want to delete?')){
+                return true;
+            }
+            return false;
+        }
+
+        //Edit SL: more universal
+        $(document).on('hidden.bs.modal', function (e) {
+            $(e.target).removeData('bs.modal');
+        });
     </script>
 </head>
 <body>
@@ -77,7 +88,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         else echo '<span style="color:grey">'.$value->remarks.'</span>' ;?>
                             </td>
                             <td><?php echo $value->version_name;?></td>
-                            <td><a href="<?=base_url();?>index.php/duty/delete_unit_duty/<?=$value->unit;?>/<?=$value->attendance_date;?>/<?=$value->schedule;?>/<?=$value->duty_version;?>"><span class="glyphicon glyphicon-remove"></span></a></td>
+                            <td>
+                                <a href="<?=base_url();?>index.php/duty/delete_unit_duty/<?=$value->unit;?>/<?=$value->attendance_date;?>/<?=$value->schedule;?>/<?=$value->duty_version;?>" onclick="return messagePrompt()"><span class="glyphicon glyphicon-remove"></span></a> |
+                                <a data-toggle="modal" data-target=".bs-example-modal-md"
+                                   href="<?=base_url();?>index.php/duty/duty_unit_edit/<?=$value->unit;?>/<?=$value->attendance_date;?>/<?=$value->schedule;?>/<?=$value->duty_version;?>/<?=$selected_unit;?>/<?=$selected_from;?>/<?=$selected_to;?>">Edit</a>
+                            </td>
                         </tr>
                     <?php }?>
                     <tr>
@@ -86,6 +101,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </tbody>
             </table>
         </fieldset>
+    </div>
+</div>
+<!-- Modal -->
+<div id="myDutyModalLabel" class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="myDutyModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Duty Details</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+        </div>
     </div>
 </div>
 </body>

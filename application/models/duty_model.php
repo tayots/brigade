@@ -143,4 +143,26 @@ class Duty_model extends CI_Model {
         return $query->result();
     }
 
+    function get_duty_unit_detail($unit, $attendance_date, $schedule, $version)
+    {
+        $this->db->from($this->duty_attendance);
+        $this->db->where('unit', $unit);
+        $this->db->where('attendance_date', $attendance_date);
+        $this->db->where('schedule', $schedule);
+        $this->db->where('duty_version', $version);
+        $this->db->limit(1);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    function update_duty_attendance($data, $original)
+    {
+        $this->db->where('unit', $original[0]);
+        $this->db->where('attendance_date', $original[1]);
+        $this->db->where('schedule', $original[2]);
+        $this->db->where('duty_version', $original[3]);
+        unset($data['unit']);
+        return $this->db->update($this->duty_attendance, $data);
+    }
+
 }

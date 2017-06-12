@@ -36,13 +36,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <label for="firstName" class="col-lg-3 control-label">Select Day:*</label>
                     <div class="col-lg-5">
                         <select class="form-control" name="schedule" id="schedule">
-                            <option value="Monday">Monday</option>
-                            <option value="Tuesday">Tuesday</option>
-                            <option value="Wednesday">Wednesday</option>
-                            <option value="Thursday">Thursday</option>
-                            <option value="Friday">Friday</option>
-                            <option value="Saturday">Saturday</option>
-                            <option value="Sunday">Sunday</option>
+                            <option value="Monday" <?php echo ($select_schedule == "Monday")? 'selected':'';?>>Monday</option>
+                            <option value="Tuesday" <?php echo ($select_schedule == "Tuesday")? 'selected':'';?>>Tuesday</option>
+                            <option value="Wednesday" <?php echo ($select_schedule == "Wednesday")? 'selected':'';?>>Wednesday</option>
+                            <option value="Thursday" <?php echo ($select_schedule == "Thursday")? 'selected':'';?>>Thursday</option>
+                            <option value="Friday" <?php echo ($select_schedule == "Friday")? 'selected':'';?>>Friday</option>
+                            <option value="Saturday" <?php echo ($select_schedule == "Saturday")? 'selected':'';?>>Saturday</option>
+                            <option value="Sunday" <?php echo ($select_schedule == "Sunday")? 'selected':'';?>>Sunday</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="firstName" class="col-lg-3 control-label">Unit No.*</label>
+                    <div class="col-lg-4">
+                        <select class="form-control" name="select_duty_version" id="select_duty_version">
+                            <option value="">--Select--</option>
+                            <?php foreach ($version as $key => $value) { ?>
+                                <option value="<?=$value->id;?>" <?php echo ($select_duty_version == $value->id)? 'selected':'';?>><?=$value->name;?></option>
+                            <?php }?>
                         </select>
                     </div>
                 </div>
