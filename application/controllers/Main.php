@@ -57,8 +57,9 @@ class Main extends CI_Controller {
         $data['monthly'] = array();
         $data['summary'] = '';
         $counter = 0;
-        $data['selected_from'] = date('Y-m-d');
-        $data['selected_to'] = date('Y-m-d');
+        $data['selected_from'] = date('Y-m-01');
+        $d = new DateTime( date('Y-m-d') );
+        $data['selected_to'] = $d->format( 'Y-m-t' );
         $temp = [];
 
         $data['fire_summary'] = 0;
@@ -96,38 +97,6 @@ class Main extends CI_Controller {
         }
 
         $this->load->view('monthly_reports', $data);
-    }
-
-    function yearly_reports($action=NULL)
-    {
-        $attendance_year = ($this->input->post('attendance_year'));
-        $final = array();
-        $data['yearly'] = array();
-        $data['summary'] = '';
-        $data['attendance_year'] = $attendance_year;
-        $counter = 0;
-        $data['selected_year'] = '';
-
-        if ($attendance_year){
-            $all_units = $this->main_model->get_all_units('active');
-            $selected_year = (date_format($date=date_create($attendance_year.'-01-01'),'Y'));
-            foreach ($all_units as $key => $value) {
-                $final[$value->unit] = [
-                    'Duty'=> $this->main_model->get_unit_by_category_yearly($value->unit, 'Duty', $attendance_year),
-                    'Fire Response'=> $this->main_model->get_unit_by_category_yearly($value->unit, 'Fire Response', $attendance_year),
-                    'Training'=> $this->main_model->get_unit_by_category_yearly($value->unit, 'Training', $attendance_year),
-                    'Meeting'=> $this->main_model->get_unit_by_category_yearly($value->unit, 'Meeting', $attendance_year),
-                    'Special Activity'=> $this->main_model->get_unit_by_category_yearly($value->unit, 'Special Activity', $attendance_year),
-                    'Total'=> 'NA'
-                ];
-                $counter += 1;
-            }
-
-            $data['yearly']= $final;
-            $data['selected_year']= $selected_year;
-        }
-
-        $this->load->view('yearly_reports', $data);
     }
 
     function get_activities()
@@ -186,7 +155,7 @@ class Main extends CI_Controller {
 
     }
 
-    function category_reports()
+    function top_reports()
     {
         $data = [];
         $data['from_date'] = date('Y-m-01');
@@ -197,10 +166,18 @@ class Main extends CI_Controller {
         $data['duty'] = [];
         $data['meeting'] = [];
         $data['special'] = [];
+        $data['top_limit'] = 10;
+
+        $data['fire_summary'] = 0;
+        $data['training_summary'] = 0;
+        $data['meeting_summary'] = 0;
+        $data['special_summary'] = 0;
+        $data['duty_summary'] = 0;
 
         if ($_POST) {
             $from_date = $data['from_date'] = $this->input->post('from_date');
             $to_date = $data['to_date'] = $this->input->post('to_date');
+            $top_limit = $this->input->post('top_limit');
 
             $this->load->model('training_model');
             $this->load->model('fire_model');
@@ -208,14 +185,19 @@ class Main extends CI_Controller {
             $this->load->model('duty_model');
             $this->load->model('special_model');
 
-            $data['training'] = $this->training_model->get_top_20($from_date, $to_date);
-            $data['fire'] = $this->fire_model->get_top_20($from_date, $to_date);
-            $data['duty'] = $this->duty_model->get_top_20($from_date, $to_date);
-            $data['meeting'] = $this->meeting_model->get_top_20($from_date, $to_date);
-            $data['special'] = $this->special_model->get_top_20($from_date, $to_date);
+            $data['training'] = $this->training_model->get_top($from_date, $to_date, $top_limit);
+            $data['fire'] = $this->fire_model->get_top($from_date, $to_date, $top_limit);
+            $data['duty'] = $this->duty_model->get_top($from_date, $to_date, $top_limit);
+            $data['meeting'] = $this->meeting_model->get_top($from_date, $to_date, $top_limit);
+            $data['special'] = $this->special_model->get_top($from_date, $to_date, $top_limit);
+
+            $data['fire_summary'] = $this->main_model->get_summary_count_category('fire_data', 'date_of_fire', $from_date, $to_date);
+            $data['training_summary'] = $this->main_model->get_summary_count_category('training', 'date_of_training', $from_date, $to_date);
+            $data['meeting_summary'] = $this->main_model->get_summary_count_category('meeting', 'date_of_meeting', $from_date, $to_date);
+            $data['special_summary'] = $this->main_model->get_summary_count_category('special_activity', 'date_of_special', $from_date, $to_date);
         }
 
-        $this->load->view('category_reports', $data);
+        $this->load->view('top_reports', $data);
     }
 
 }

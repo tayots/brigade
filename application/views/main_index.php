@@ -96,7 +96,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <fieldset>
             <legend>Reports:</legend>
             <a href="<?= base_url();?>index.php/main/monthly_reports" class="btn btn-info"><span class="glyphicon glyphicon-file"></span> Monthly Report Table</a>
-            <a href="<?= base_url();?>index.php/main/category_reports" class="btn btn-info"><span class="glyphicon glyphicon-th-large"></span> By Category Reports</a>
+            <a href="<?= base_url();?>index.php/main/top_reports" class="btn btn-info"><span class="glyphicon glyphicon-th-large"></span> Show Top Reports</a>
         </fieldset>
     </div>
 </div>

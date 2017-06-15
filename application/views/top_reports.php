@@ -9,12 +9,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <body>
 <div class="container">
-    <h2>Attendance <img src="<?= base_url();?>image/logo.png" width="64px"> Tracker</h2>
+    <?php include 'base.inc'; ?>
     <div>&nbsp;</div>
     <div class="col-lg-12">
         <fieldset>
-            <legend>Category Reports</legend>
-            <form class="form-horizontal" role="form" id="special_review_form" action='<?= base_url();?>index.php/main/category_reports' method="post">
+            <legend>Top XX Reports by Category</legend>
+            <form class="form-horizontal" role="form" id="special_review_form" action='<?= base_url();?>index.php/main/top_reports' method="post">
                 <div class="form-group">
                    <div class="col-lg-1">
                        <label for="title" class="control-label">From:*</label>
@@ -28,7 +28,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="col-lg-2">
                         <input type="date" class="form-control" name="to_date" id="to_date" value="<?=$to_date;?>" autofocus>
                     </div>
-                   <div class="col-lg-4">
+                    <div class="col-lg-2">
+                        <label for="title" class="control-label">Top (e.g 10, 20):</label>
+                    </div>
+                    <div class="col-lg-1">
+                        <input type="text" class="form-control" name="top_limit" id="top_limit" value="<?=$top_limit;?>" placeholder="optional" autofocus>
+                    </div>
+                   <div class="col-lg-2">
                         <div class="bs-example" data-example-id="single-button-dropdown">
                             <div class="btn-group">
                                 <button type="submit" class="btn btn-success" >Search</button>
@@ -42,7 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </form>
             <div>&nbsp;</div>
             <div class="form-group">
-                Top 20 Results From <strong><?=$from_date;?></strong> To <strong><?=$to_date;?></strong>
+                Top <?=$top_limit;?> Results From <strong><?=$from_date;?></strong> To <strong><?=$to_date;?></strong>
             </div>
             <table class="table table-striped table-bordered table-hover" id="dataTables-example"  style="font-size:15px;">
                 <tbody>
@@ -81,6 +87,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </td>
                     </tr>
                 </tbody>
+            </table>
+            <table style="font-size:14px;">
+                <tr>
+                    <td><strong>Summary:</strong></td>
+                </tr>
+                <tr>
+                    <td width="150px">Fire Responses:</td>
+                    <td><?=$fire_summary;?></td>
+                </tr>
+                <tr>
+                    <td>Training:</td>
+                    <td><?=$training_summary;?></td>
+                </tr>
+                <tr>
+                    <td>Meeting:</td>
+                    <td><?=$meeting_summary;?></td>
+                </tr>
+                <tr>
+                    <td>Special Activity:</td>
+                    <td><?=$special_summary;?></td>
+                </tr>
             </table>
         </fieldset>
     </div>

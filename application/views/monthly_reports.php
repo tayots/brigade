@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div>&nbsp;</div>
     <div class="col-lg-11">
         <fieldset>
-            <legend>Monthly Report Options</legend>
+            <legend>Top 20 Reports Options</legend>
             <form class="form-horizontal" role="form" action='<?= base_url();?>index.php/main/monthly_reports' method="post">
                 <div class="form-group">
                     <div class="col-lg-2">
