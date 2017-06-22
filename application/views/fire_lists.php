@@ -77,7 +77,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                     <thead>
                         <tr>
-                            <th colspan="6" style="text-align: right"><strong>Total Water Used:</strong></th>
+                            <th colspan="6" style="text-align: right"><strong>Total Water Used (TONS):</strong></th>
                             <th style="text-align:center"><?php $water = 0.0; if (count($fire_list) > 0) {  foreach ($fire_list as $key => $value) { $water += $value->water_used;}; }; echo number_format($water,1);?></th>
                         </tr>
                     </thead>
@@ -114,7 +114,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="6" align="right"><strong>Total Water Used:</strong></td>
+                            <td colspan="6" align="right"><strong>Total Water Used (TONS):</strong></td>
                             <td align="center"><?=number_format($water,1);?></td>
                         </tr>
                     </tfoot>
