@@ -154,19 +154,23 @@ class Duty extends CI_Controller {
     function review() {
         $data['current_date'] = date('Y-m-d');
         $data['selected_week'] = $selected_week = date('W');
-
+        $year = date('Y');
         if ($_POST){
-            if ($_POST['date_of_duty'] != '') { $data['selected_week'] = $selected_week = date('W',strtotime($_POST['date_of_duty'])); }
+            if ($_POST['date_of_duty'] != '') {
+                $ddate = new DateTime($_POST['date_of_duty']);
+                $data['selected_week'] = $selected_week = $ddate->format("W");
+                $data['current_date'] = $_POST['date_of_duty'];
+                $year = date('Y', strtotime($_POST['date_of_duty']));
+            }
             if (isset($_POST['prev'])) $data['selected_week'] = $selected_week = $_POST['prev'];
             if (isset($_POST['next'])) $data['selected_week'] = $selected_week = $_POST['next'];
         }
-
+        //print $year."-W".$selected_week;
         $dt = new DateTime(strtotime($selected_week));
         // create DateTime object with current time
-        $dt->setISODate($dt->format('o'),$selected_week);
+        $dt->setISODate($year,$selected_week);
         $periods = new DatePeriod($dt, new DateInterval('P1D'), 6);
         $days = iterator_to_array($periods);
-        // convert DatePeriod object to array
 
         $data['Monday'] = $this->duty_model->get_duties($days[0]->format('Y-m-d'));
         $data['Tuesday'] = $this->duty_model->get_duties($days[1]->format('Y-m-d'));
