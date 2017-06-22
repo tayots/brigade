@@ -71,21 +71,9 @@ class Main extends CI_Controller {
         if ($_POST){
             $selected_from = $this->input->post('select_from');
             $selected_to = $this->input->post('select_to');
+            $selected_unit = $this->input->post('unit');
 
-            if ($this->input->post('unit') == 'all') {
-                $all_units = $this->main_model->get_all_units('active');
-            }
-            else {
-                $temp['unit'] = $this->input->post('unit');
-                $all_units[] = (object) $temp;
-            }
-
-            foreach ($all_units as $key => $value) {
-                $final[$value->unit] = $this->main_model->get_unit_by_category($value->unit, $selected_from, $selected_to);
-                $counter += 1;
-            }
-
-            $data['monthly']= $final;
+            $data['monthly']= $this->main_model->get_unit_by_category($selected_unit, $selected_from, $selected_to);
             $data['selected_unit'] = $this->input->post('unit');
             $data['selected_from'] = $selected_from;
             $data['selected_to'] = $selected_to;

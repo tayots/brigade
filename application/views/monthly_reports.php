@@ -76,13 +76,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     $t_special = 0;?>
                     <?php foreach ($monthly as $key => $n) { $total = 0;?>
                         <tr>
-                            <td><?php echo $key; ?></td>
+                            <td><?php echo $n->unit; ?></td>
                             <?php  if (count($n) > 0) {?>
-                                <td><?=$n[0]; $total += $n[0]; $t_duty += $n[0]; ?></td>
-                                <td><?=$n[1]; $total += $n[1]; $t_fire += $n[1]; ?></td>
-                                <td><?=$n[2]; $total += $n[2]; $t_training += $n[2]; ?></td>
-                                <td><?=$n[3]; $total += $n[3]; $t_meeting += $n[3]; ?></td>
-                                <td><?=$n[4]; $total += $n[4]; $t_special += $n[4]; ?></td>
+                                <td><?=$n->duty; $total += $n->duty; $t_duty += $n->duty; ?></td>
+                                <td><?=$n->fire; $total += $n->fire; $t_fire += $n->fire; ?></td>
+                                <td><?=$n->training; $total += $n->training; $t_training += $n->training; ?></td>
+                                <td><?=$n->meeting; $total += $n->meeting; $t_meeting += $n->meeting; ?></td>
+                                <td><?=$n->special; $total += $n->special; $t_special += $n->special; ?></td>
                                 <td><?=$total; $t_total+=$total;?></td>
                             <?php } else { $total +=0; ?>
                                 <td>0</td>

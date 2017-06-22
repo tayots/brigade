@@ -132,57 +132,42 @@ class Main_model extends CI_Model {
 
     function get_unit_by_category($unit, $from, $to)
     {
+        if ($unit == 'all') $unit = '';
+        else $unit = " AND p.unit = '".$unit."'";
 
         $query = $this->db->query("
-            SELECT p.unit,
-              count(da.unit) as 'count'
+            SELECT
+            p.unit,
+            COALESCE(d1.duty,0,d1.duty) as 'duty',
+            COALESCE(d2.fire,0,d2.fire) as 'fire',
+            COALESCE(d3.training,0,d3.training) as 'training',
+            COALESCE(d4.meeting,0,d4.meeting) as 'meeting',
+            COALESCE(d5.special,0,d5.special) as 'special'
             FROM personnel p
-            LEFT JOIN duty_attendance da ON da.unit = p.unit AND (da.attendance_date >= '$from' and da.attendance_date <= '$to')
-            WHERE p.unit = '$unit'
-            GROUP BY p.unit
 
-            UNION ALL
+            LEFT JOIN (SELECT da.unit, count(da.unit) as 'duty'
+            FROM duty_attendance da WHERE da.attendance_date >= '$from' and da.attendance_date <= '$to' GROUP BY da.unit) d1 ON d1.unit = p.unit
 
-            SELECT p.unit,
-              count(f.unit) as 'count'
-            FROM personnel p
-            LEFT JOIN fire_attendance f ON f.unit = p.unit AND (f.attendance_date >= '$from' and f.attendance_date <= '$to')
-            WHERE p.unit = '$unit'
-            GROUP BY p.unit
+            LEFT JOIN (SELECT da.unit, count(da.unit) as 'fire'
+            FROM fire_attendance da
+            LEFT JOIN fire_data fd ON fd.id = da.fire_data_id
+            WHERE da.attendance_date >= '$from' and da.attendance_date <= '$to'
+            AND fd.dispatch = 'Yes' GROUP BY da.unit) d2 ON d2.unit = p.unit
 
-            UNION ALL
+            LEFT JOIN (SELECT da.unit, count(da.unit) as 'training'
+            FROM training_attendance da WHERE da.attendance_date >= '$from' and da.attendance_date <= '$to' GROUP BY da.unit) d3 ON d3.unit = p.unit
 
-            SELECT p.unit,
-              count(t.unit) as 'count'
-            FROM personnel p
-            LEFT JOIN training_attendance t ON t.unit = p.unit AND (t.attendance_date >= '$from' and t.attendance_date <= '$to')
-            WHERE p.unit = '$unit'
-            GROUP BY p.unit
+            LEFT JOIN (SELECT da.unit, count(da.unit) as 'meeting'
+            FROM meeting_attendance da WHERE da.attendance_date >= '$from' and da.attendance_date <= '$to' GROUP BY da.unit) d4 ON d4.unit = p.unit
 
-            UNION ALL
+            LEFT JOIN (SELECT da.unit, count(da.unit) as 'special'
+            FROM special_activity_attendance da WHERE da.attendance_date >= '$from' and da.attendance_date <= '$to' GROUP BY da.unit) d5 ON d5.unit = p.unit
 
-            SELECT p.unit,
-              count(m.unit) as 'count'
-            FROM personnel p
-            LEFT JOIN meeting_attendance m ON m.unit = p.unit AND (m.attendance_date >= '$from' and m.attendance_date <= '$to')
-            WHERE p.unit = '$unit'
-            GROUP BY p.unit
-
-            UNION ALL
-
-            SELECT p.unit,
-              count(s.unit) as 'count'
-            FROM personnel p
-            LEFT JOIN special_activity_attendance s ON s.unit = p.unit AND (s.attendance_date >= '$from' and s.attendance_date <= '$to')
-            WHERE p.unit = '$unit'
-            GROUP BY p.unit
+            WHERE p.status = 'active'
+            $unit
+            order by p.unit
             ");
-        $data = [];
-        foreach ($query->result() as $row)
-        {
-            $data[] = $row->count;
-        };
-        return $data;
+        return $query->result();
     }
 
     function get_unit_by_category_yearly($unit, $cat, $attendance_year)
