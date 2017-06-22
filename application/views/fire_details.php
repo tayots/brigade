@@ -127,7 +127,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                 </div>
                 <div class="col-lg-4">
-                    <?php if ($value->dispatch == 'No'){ echo '<span style="color:white;background-color: red;">.:: NO DISPATCH ::.</span>'; } else { echo '<span style="color:white;background-color: green;">.:: ENGINES HAS DISPATCH ::.</span>';} ?>
+                    <?php if ($value->dispatch == 'No'){ echo '<span style="color:white;background-color: red;">.:: NO RESPOND ::.</span> <a href="'.base_url().'index.php/fire/set_status/Yes/'.$fire_data_id.'/'.$from_date.'/'.$to_date.'">Set to Yes?</a>'; } else { echo '<span style="color:white;background-color: green;">.:: RESPONDED ::.</span> <a href="'.base_url().'index.php/fire/set_status/No/'.$fire_data_id.'/'.$from_date.'/'.$to_date.'">Set to No?</a>';} ?>
                     <?php if (isset($fire_apparata)) { ?>
                     <textarea disabled="disabled" cols="42px" rows="8" style="white-space: pre-line;"><?php foreach ($fire_apparata as $key => $value) {
                             echo '#'.$value->engine.'('.$value->fto_out.') - OUT:'.$value->time_out.' -> IN:'.$value->time_in.' ('.$value->fto_in.') ONBOARD:'.$value->onboard."\n";

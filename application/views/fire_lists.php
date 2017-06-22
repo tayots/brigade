@@ -89,11 +89,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <?php if (count($fire_list) > 0) {?>
                             <?php foreach ($fire_list as $key => $value) {?>
                             <tr>
-                                <td title="show details"><a href="fire_details/<?=$value->id;?>" data-toggle="modal" data-target=".bs-example-modal-lg"><?php echo date('l, M d, Y',strtotime($value->date_of_fire)); ?> <span class="glyphicon glyphicon-share"></span></a></td>
+                                <td title="show details"><a href="<?=base_url();?>/index.php/fire/fire_details/<?=$value->id;?>/<?=$from_date;?>/<?=$to_date;?>" data-toggle="modal" data-target=".bs-example-modal-lg"><?php echo date('l, M d, Y',strtotime($value->date_of_fire)); ?> <span class="glyphicon glyphicon-share"></span></a></td>
                                 <td style="text-align: center;"><?php echo $value->time_received; ?></td>
                                 <td style="text-align: center;"><?php echo $value->time_controlled; ?></td>
-                                <td title="show details"><a href="fire_details/<?=$value->id;?>" data-toggle="modal" data-target=".bs-example-modal-lg"><?php echo $value->location; ?> <span class="glyphicon glyphicon-share"></span></a> <?php if ($value->dispatch == 'No'){ echo '<span style="color:red">NO DISPATCH</span>'; } ?></td>
-                                <td title="show details"><a href="fire_details/<?=$value->id;?>" data-toggle="modal" data-target=".bs-example-modal-lg"><?php echo $value->classification; ?> <span class="glyphicon glyphicon-share"></span></a></td>
+                                <td title="show details"><a href="<?=base_url();?>/index.php/fire/fire_details/<?=$value->id;?>/<?=$from_date;?>/<?=$to_date;?>" data-toggle="modal" data-target=".bs-example-modal-lg"><?php echo $value->location; ?> <span class="glyphicon glyphicon-share"></span></a> <?php if ($value->dispatch == 'No'){ echo '<span style="color:red">NO DISPATCH</span>'; } ?></td>
+                                <td title="show details"><a href="<?=base_url();?>/index.php/fire/fire_details/<?=$value->id;?>/<?=$from_date;?>/<?=$to_date;?>" data-toggle="modal" data-target=".bs-example-modal-lg"><?php echo $value->classification; ?> <span class="glyphicon glyphicon-share"></span></a></td>
                                 <td style="text-align: center;"><?php echo $value->oic; ?></td>
 
                             </tr>

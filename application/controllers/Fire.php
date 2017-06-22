@@ -79,7 +79,8 @@ class Fire extends CI_Controller {
                     $this->save_fire_apparata($fireId, $_POST);
 
                     $this->session->set_flashdata('alert_type', 'success');
-                    $this->session->set_flashdata('message', '10-70 Successfully Saved ! '.$fire['date_of_fire'].'@'.$fire['location']);
+                    $dispatch = ($this->input->post('dispatch') == 'Yes') ? 'RESPONDED':'<span style="color:red">NO RESPOND</span>';
+                    $this->session->set_flashdata('message', '10-70 Successfully Saved ! '.$fire['date_of_fire'].'@'.$fire['location'].' ----- STATUS: '.$dispatch);
                     redirect("/fire/data", 'refresh');
                 }
             }
@@ -234,15 +235,17 @@ class Fire extends CI_Controller {
 		$this->load->view('fire_review_attendance', $data);
 	}
 
-    public function fire_details($location_id)
+    public function fire_details($location_id, $from, $to)
 	{
         $data['information'] = $this->fire_model->get_fire_attendance_location($location_id);
         $data['fire_apparata'] = $this->fire_model->get_fire_apparata($location_id);
         $data['fire_data'] = $this->fire_model->get_fire_data($location_id);
+        $data['from_date'] = $from;
+        $data['to_date'] = $to;
         $this->load->view('fire_details', $data);
 	}
 
-    public function lists()
+    public function lists($from=null,$to=null)
     {
         $data['selected_title'] = '';
         $data['from_date'] = date('Y-m-01');
@@ -251,6 +254,11 @@ class Fire extends CI_Controller {
         $data['fire_list'] = [];
         $data['dispatch_count'] = 0;
         $data['no_dispatch_count'] = 0;
+
+        if ($from && $to) {
+            $data['from_date'] = $from;
+            $data['to_date'] = $to;
+        }
 
         if ($_POST) {
             if (isset($_POST['prev'])) {
@@ -348,6 +356,13 @@ class Fire extends CI_Controller {
 
         $data['information'] = $this->fire_model->userInformation($attendance_date);
         $this->load->view('main_add', $data);
+    }
+
+    public function set_status($status, $fireId, $from, $to)
+    {
+        $fire = array( 'dispatch' => $status);
+        $this->fire_model->update_fire_data($fire, $fireId);
+        redirect("/fire/lists/$from/$to", 'refresh');
     }
 
 
