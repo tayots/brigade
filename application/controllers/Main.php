@@ -283,13 +283,35 @@ class Main extends CI_Controller {
             $whatever = '{
                 "cols": [
                     {"id":"","label":"Trainings","pattern":"","type":"string"},
-                    {"id":"","label":"Fires","pattern":"","type":"number"}
+                    {"id":"","label":"No Discharge","pattern":"","type":"number"}
                   ],
                 "rows": [
                     '.$data.'
                   ]
                 }';
             echo $whatever;
+        }
+    }
+
+    function get_fires()
+    {
+        if ($_POST){
+            $from_date = $this->input->post('select_from');
+            $to_date = $this->input->post('select_to');
+
+            $this->load->model('fire_model');
+
+            $training = $this->fire_model->get_graph_fires($from_date, $to_date);
+            $training2 = $this->fire_model->get_graph_fires_previous($from_date, $to_date);
+
+            $data = [];
+            array_push($data,['Months','This Year Fires', 'Last Year Fires']);
+            foreach($training as $key => $value){
+                if (isset($training2[$key])) array_push($data,[$value->month,$value->fire*1, $training2[$key]->fire*1]);
+                else array_push($data,[$value->month,$value->fire*1, 0*1]);
+            }
+            echo json_encode($data);
+            exit;
         }
     }
 

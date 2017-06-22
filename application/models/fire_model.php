@@ -249,4 +249,26 @@ class Fire_model extends CI_Model {
         return $query->result();
     }
 
+    function get_graph_fires($from, $to)
+    {
+        $query = "SELECT DATE_FORMAT(date_of_fire, '%b-%Y') as 'month', count(id) as 'fire'
+            FROM ".$this->fire_data."
+            WHERE date_of_fire >= '$from' AND date_of_fire <= '$to'
+            GROUP BY month ORDER BY date_of_fire";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
+    function get_graph_fires_previous($from, $to)
+    {
+        $query = "SELECT DATE_FORMAT(date_of_fire, '%b-%Y') as 'month', count(id) as 'fire'
+            FROM ".$this->fire_data."
+            WHERE date_of_fire >= DATE_SUB('$from',INTERVAL 1 YEAR) AND date_of_fire <= DATE_SUB('$to',INTERVAL 1 YEAR)
+            GROUP BY month ORDER BY date_of_fire";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
 }

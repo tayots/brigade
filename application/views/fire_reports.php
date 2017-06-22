@@ -17,6 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         google.charts.setOnLoadCallback(drawFireRespond);
         google.charts.setOnLoadCallback(drawWaterUsed);
         google.charts.setOnLoadCallback(drawNoUsed);
+        google.charts.setOnLoadCallback(drawFires);
 
         function drawFireRespond() {
             var select_from = $('#select_from').val();
@@ -58,7 +59,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             var data = new google.visualization.DataTable(jsonData);
 
             var chart = new google.visualization.ColumnChart(document.getElementById('water_used_div'));
-            chart.draw(data, {width: 700, height: 200});
+            chart.draw(data, {width: 1000, height: 220});
         }
 
         function drawNoUsed() {
@@ -80,6 +81,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
             var chart = new google.visualization.ColumnChart(document.getElementById('no_used_div'));
             chart.draw(data, {width: 700, height: 200, colors: ['purple']});
+        }
+
+        function drawFires() {
+            var select_from = $('#select_from').val();
+            var select_to = $('#select_to').val();
+            var jsonData = $.ajax({
+                type: 'POST',
+                url: "<?php echo base_url() . 'index.php/main/get_fires' ?>",
+                dataType: "json",
+                async: false,
+                data: {
+                    'select_from': select_from,
+                    'select_to': select_to
+                }
+            }).responseText;
+
+            // Create our data table out of JSON data loaded from server.
+            var data = new google.visualization.arrayToDataTable(JSON.parse(jsonData));
+
+            var chart = new google.visualization.LineChart(document.getElementById('fires_div'));
+            chart.draw(data, {width: 700, height: 200, colors: ['red','blue']});
         }
     </script>
 </head>
@@ -110,6 +132,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="btn-group">
                             <a href="<?= base_url();?>index.php/main" class="btn btn-info" >Home</a>
                         </div>
+                        <div class="btn-group" style="margin-left: 20px;">
+                            Shown From <span style="color:red;font-size:16px;"><?=date('M d, Y',strtotime($selected_from)); ;?></span> -- <span style="color:red;font-size:16px;"><?=date('M d, Y',strtotime($selected_to)); ;?></span>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -120,8 +145,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div id="fire_respond_div">Loading...</div>
                 </div>
                 <div class="col-lg-8">
-                    <strong>Water Used Vs. Fire Responded:</strong>
-                    <div id="water_used_div">Loading...</div>
+                    <strong>Monthly Fires:</strong>
+                    <div id="fires_div">Loading...</div>
                 </div>
             </div>
             <div class="form-group">
@@ -159,6 +184,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="col-lg-4" style="margin-top:10px;">
                     <strong>Responded but no water used:</strong>
                     <div id="no_used_div">Loading...</div>
+                </div>
+                <div class="col-lg-12">
+                    <strong>Water Used Vs. Fire Responded:</strong>
+                    <div id="water_used_div">Loading...</div>
                 </div>
             </div>
         </fieldset>
