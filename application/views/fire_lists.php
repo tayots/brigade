@@ -77,17 +77,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                     <thead>
                         <tr>
+                            <th colspan="6" style="text-align: right"><strong>Total Water Used:</strong></th>
+                            <th style="text-align:center"><?php $water = 0.0; if (count($fire_list) > 0) {  foreach ($fire_list as $key => $value) { $water += $value->water_used;}; }; echo number_format($water,1);?></th>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
                             <th>Date of Fire</th>
                             <th style="text-align: center;">Received</th>
                             <th style="text-align: center;">Controlled</th>
                             <th>Location</th>
                             <th>Classification</th>
                             <th style="text-align: center;">OIC</th>
+                            <th style="text-align: center;">Water Used</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (count($fire_list) > 0) {?>
-                            <?php foreach ($fire_list as $key => $value) {?>
+                        <?php $water = 0.0; if (count($fire_list) > 0) { ?>
+                            <?php foreach ($fire_list as $key => $value) { $water += $value->water_used; ?>
                             <tr>
                                 <td title="show details"><a href="<?=base_url();?>/index.php/fire/fire_details/<?=$value->id;?>/<?=$from_date;?>/<?=$to_date;?>" data-toggle="modal" data-target=".bs-example-modal-lg"><?php echo date('l, M d, Y',strtotime($value->date_of_fire)); ?> <span class="glyphicon glyphicon-share"></span></a></td>
                                 <td style="text-align: center;"><?php echo $value->time_received; ?></td>
@@ -95,15 +102,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <td title="show details"><a href="<?=base_url();?>/index.php/fire/fire_details/<?=$value->id;?>/<?=$from_date;?>/<?=$to_date;?>" data-toggle="modal" data-target=".bs-example-modal-lg"><?php echo $value->location; ?> <span class="glyphicon glyphicon-share"></span></a> <?php if ($value->dispatch == 'No'){ echo '<span style="color:red">NO DISPATCH</span>'; } ?></td>
                                 <td title="show details"><a href="<?=base_url();?>/index.php/fire/fire_details/<?=$value->id;?>/<?=$from_date;?>/<?=$to_date;?>" data-toggle="modal" data-target=".bs-example-modal-lg"><?php echo $value->classification; ?> <span class="glyphicon glyphicon-share"></span></a></td>
                                 <td style="text-align: center;"><?php echo $value->oic; ?></td>
+                                <td style="text-align: center;"><?php echo $value->water_used; ?></td>
 
                             </tr>
                             <?php } ?>
                         <?php } else {?>
                             <tr>
-                                <td colspan="6">No Results Found. Please select another date range.</td>
+                                <td colspan="7">No Results Found. Please select another date range.</td>
                             </tr>
                         <?php }?>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6" align="right"><strong>Total Water Used:</strong></td>
+                            <td align="center"><?=number_format($water,1);?></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </fieldset>
