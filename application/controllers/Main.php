@@ -188,4 +188,109 @@ class Main extends CI_Controller {
         $this->load->view('top_reports', $data);
     }
 
+    public function fire_reports()
+    {
+        $this->load->model('fire_model');
+
+        $data['selected_from'] = date('Y-01-01');
+        $d = new DateTime( date('Y-m-d') );
+        $data['selected_to'] = $d->format( 'Y-m-t' );
+
+        if ($_POST){
+            $data['selected_from'] = $this->input->post('select_from');
+            $data['selected_to'] = $this->input->post('select_to');
+        }
+
+        $data['responded'] = $this->fire_model->get_summary_count_by_dispatch($data['selected_from'], $data['selected_to'], 'Yes');
+        $data['no_respond'] = $this->fire_model->get_summary_count_by_dispatch($data['selected_from'], $data['selected_to'], 'No');
+        $data['total_water'] = $this->fire_model->get_summary_water_used($data['selected_from'], $data['selected_to'])[0]->water_used.' TONS';
+        $data['total_fires'] = $data['responded'] + $data['no_respond'];
+
+        $am_fires = $this->fire_model->get_summary_fire_occurs($data['selected_from'], $data['selected_to'], 'AM')[0]->count;
+        $pm_fires = $this->fire_model->get_summary_fire_occurs($data['selected_from'], $data['selected_to'], 'PM')[0]->count;
+        $data['am_fires'] = number_format(($am_fires / $data['total_fires'])*100,2);
+        $data['pm_fires'] = number_format(($pm_fires / $data['total_fires'])*100,2);
+
+        $this->load->view('fire_reports', $data);
+    }
+
+    public function get_fire_respond()
+    {
+        if ($_POST){
+            $from_date = $this->input->post('select_from');
+            $to_date = $this->input->post('select_to');
+
+            $this->load->model('fire_model');
+
+            $responded = $this->fire_model->get_summary_count_by_dispatch($from_date, $to_date, 'Yes');
+            $no_responded = $this->fire_model->get_summary_count_by_dispatch($from_date, $to_date, 'No');
+
+            $whatever = '{
+                "cols": [
+                    {"id":"","label":"Activities","pattern":"","type":"string"},
+                    {"id":"","label":"Activities","pattern":"","type":"number"}
+                  ],
+                "rows": [
+                    {"c":[{"v":"Responded","f":null},{"v":'.$responded.',"f":null}]},
+                    {"c":[{"v":"No Respond","f":null},{"v":'.$no_responded.',"f":null}]}
+                  ]
+                }';
+
+            echo $whatever;
+        }
+    }
+
+    function get_water_used()
+    {
+        if ($_POST){
+            $from_date = $this->input->post('select_from');
+            $to_date = $this->input->post('select_to');
+
+            $this->load->model('fire_model');
+
+            $training = $this->fire_model->get_graph_water_used($from_date, $to_date);
+            $data = '';
+            foreach($training as $key => $value){
+                $data .= '{"c":[{"v":"'.$value->month.'","f":null},{"v":'.$value->water_used.',"f":null},{"v":'.$value->fire.',"f":null}]},';
+            }
+            $whatever = '{
+                "cols": [
+                    {"id":"","label":"Trainings","pattern":"","type":"string"},
+                    {"id":"","label":"Water Used","pattern":"","type":"number"},
+                    {"id":"","label":"Fires Responded","pattern":"","type":"number"}
+                  ],
+                "rows": [
+                    '.$data.'
+                  ]
+                }';
+            echo $whatever;
+        }
+    }
+
+    function get_no_used()
+    {
+        if ($_POST){
+            $from_date = $this->input->post('select_from');
+            $to_date = $this->input->post('select_to');
+
+            $this->load->model('fire_model');
+
+            $training = $this->fire_model->get_graph_no_used($from_date, $to_date);
+            $data = '';
+            foreach($training as $key => $value){
+                $data .= '{"c":[{"v":"'.$value->month.'","f":null},{"v":'.$value->fire.',"f":null}]},';
+            }
+            $whatever = '{
+                "cols": [
+                    {"id":"","label":"Trainings","pattern":"","type":"string"},
+                    {"id":"","label":"Fires","pattern":"","type":"number"}
+                  ],
+                "rows": [
+                    '.$data.'
+                  ]
+                }';
+            echo $whatever;
+        }
+    }
+
 }

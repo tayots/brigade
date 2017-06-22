@@ -254,6 +254,7 @@ class Fire extends CI_Controller {
         $data['fire_list'] = [];
         $data['dispatch_count'] = 0;
         $data['no_dispatch_count'] = 0;
+        $data['selected_dispatch'] = 'all';
 
         if ($from && $to) {
             $data['from_date'] = $from;
@@ -278,14 +279,16 @@ class Fire extends CI_Controller {
 
             $this->form_validation->set_rules('from_date', 'from_date', 'required');
             $this->form_validation->set_rules('to_date', 'to_date', 'required');
+            $this->form_validation->set_rules('dispatch', 'dispatch', 'required');
+
+            $data['selected_dispatch'] = $this->input->post('dispatch');
 
             if ($this->form_validation->run() != false){
-                $data['fire_list'] = $this->fire_model->get_fire_list_range($data['from_date'], $data['to_date']);
-
+                $data['fire_list'] = $this->fire_model->get_fire_list_range($data['from_date'], $data['to_date'], $data['selected_dispatch']);
             }
         }
         else {
-            $data['fire_list'] = $this->fire_model->get_fire_list_range($data['from_date'], $data['to_date']);
+            $data['fire_list'] = $this->fire_model->get_fire_list_range($data['from_date'], $data['to_date'], $data['selected_dispatch']);
         }
 
         if (count($data['fire_list']) > 0) {

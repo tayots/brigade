@@ -145,10 +145,12 @@ class Fire_model extends CI_Model {
         return $query->result();
     }
 
-    public function get_fire_list_range($from_date, $to_date)
+    public function get_fire_list_range($from_date, $to_date, $dispatch)
     {
         $this->db->where('date_of_fire >=',$from_date);
         $this->db->where('date_of_fire <=',$to_date);
+        if ($dispatch == 'No') $this->db->where('dispatch',$dispatch);
+        if ($dispatch == 'Yes') $this->db->where('dispatch',$dispatch);
         $this->db->order_by('date_of_fire','desc');
         $query = $this->db->get($this->fire_data);
         //var_dump($this->db->last_query());
@@ -185,6 +187,63 @@ class Fire_model extends CI_Model {
                 WHERE attendance_date >= '$from_date' AND attendance_date <= '$to_date'
                 GROUP BY ta.unit
                 ORDER BY total dESC LIMIT $top_limit";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
+    function get_summary_count_by_dispatch($from, $to, $dispatch)
+    {
+        $this->db->select('count(*)');
+        $this->db->from($this->fire_data);
+        $this->db->where('date_of_fire >=', $from);
+        $this->db->where('date_of_fire <=', $to);
+        $this->db->where('dispatch', $dispatch);
+        return $this->db->count_all_results();
+    }
+
+    function get_summary_water_used($from, $to)
+    {
+        $query = "SELECT SUM(water_used) as 'water_used'
+            FROM ".$this->fire_data."
+            WHERE date_of_fire >= '$from' AND date_of_fire <= '$to'
+            AND dispatch = 'Yes'";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
+    function get_summary_fire_occurs($from, $to, $ampm)
+    {
+        $query = "SELECT COUNT(*) as 'count'
+            FROM ".$this->fire_data."
+            WHERE date_of_fire >= '$from' AND date_of_fire <= '$to'
+            AND time_received like '%".$ampm."%'";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
+    function get_graph_water_used($from, $to)
+    {
+        $query = "SELECT DATE_FORMAT(date_of_fire, '%b-%Y') as 'month',SUM(water_used) as 'water_used', count(id) as 'fire'
+            FROM ".$this->fire_data."
+            WHERE date_of_fire >= '$from' AND date_of_fire <= '$to'
+            AND dispatch = 'Yes'
+            GROUP BY month ORDER BY date_of_fire";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
+    function get_graph_no_used($from, $to)
+    {
+        $query = "SELECT DATE_FORMAT(date_of_fire, '%b-%Y') as 'month', count(id) as 'fire'
+            FROM ".$this->fire_data."
+            WHERE date_of_fire >= '$from' AND date_of_fire <= '$to'
+            AND dispatch = 'Yes'
+            AND water_used <= 0
+            GROUP BY month ORDER BY date_of_fire";
         $query = $this->db->query($query);
         //var_dump($this->db->last_query());
         return $query->result();
