@@ -315,4 +315,24 @@ class Main extends CI_Controller {
         }
     }
 
+    public function duty_reports()
+    {
+        $this->load->model('duty_model');
+
+        $data['selected_from'] = date('Y-m-01');
+        $d = new DateTime( date('Y-m-d') );
+        $data['selected_to'] = $d->format( 'Y-m-t' );
+        $data['sort_by'] = 0; //default by Unit
+
+        if ($_POST){
+            $data['selected_from'] = $this->input->post('select_from');
+            $data['selected_to'] = $this->input->post('select_to');
+            $data['sort_by'] = $this->input->post('sort_by');
+
+            $data['duties'] = $this->duty_model->get_duties_summary($data['selected_from'], $data['selected_to'], $data['sort_by']);
+        }
+
+        $this->load->view('duty_reports', $data);
+    }
+
 }

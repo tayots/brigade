@@ -165,4 +165,69 @@ class Duty_model extends CI_Model {
         return $this->db->update($this->duty_attendance, $data);
     }
 
+    function get_duties_summary($from, $to, $sort)
+    {
+        if ($sort == 1) $sortby =' total_rendered DESC';
+        elseif ($sort == 2) $sortby =' total_add_late DESC';
+        elseif ($sort == 3) $sortby =' total_duty_late DESC';
+        elseif ($sort == 4) $sortby =' total_rendered ASC';
+        elseif ($sort == 5) $sortby =' total_add_late ASC';
+        elseif ($sort == 6) $sortby =' total_duty_late ASC';
+        else $sortby = ' d.unit ASC';
+
+        $query = "SELECT
+            d.unit,
+            COALESCE(f.total_rendered,0,f.total_rendered) as total_rendered,
+            COALESCE(g.total_add,0,g.total_add) as total_add,
+            COALESCE(j.total_late,0,j.total_late) as total_add_late,
+            COALESCE(h.total_duty,0,h.total_duty) as total_duty,
+            COALESCE(i.total_late,0,i.total_late) as total_duty_late
+            FROM `duty_attendance` d
+            LEFT JOiN (SELECT count(*) AS total_rendered,unit
+            FROM duty_attendance where attendance_date >= '$from' AND attendance_date <= '$to' GROUP BY unit) as f ON f.unit = d.unit
+            LEFT JOIN (SELECT da.unit,count(*) as total_add
+                            FROM `duty_attendance` da
+                            LEFT JOIN `duty_schedule` ds
+                            ON ds.unit = da.unit AND ds.schedule = da.schedule and ds.version = da.duty_version
+                            LEFT JOIN `duty_version` dv ON dv.id = da.duty_version
+                            WHERE da.`attendance_date` >= '$from'
+                            AND da.`attendance_date` <= '$to'
+                            AND ds.schedule IS NULL
+                            GROUP BY da.unit,ds.schedule IS NULL) g ON g.unit = d.unit
+            LEFT JOIN (SELECT da.unit,count(*) as total_duty
+                            FROM `duty_attendance` da
+                            LEFT JOIN `duty_schedule` ds
+                            ON ds.unit = da.unit AND ds.schedule = da.schedule and ds.version = da.duty_version
+                            LEFT JOIN `duty_version` dv ON dv.id = da.duty_version
+                            WHERE da.`attendance_date` >= '$from'
+                            AND da.`attendance_date` <= '$to'
+                            AND ds.schedule IS NOT NULL
+                            GROUP BY da.unit,ds.schedule IS NOT NULL) h ON h.unit = d.unit
+            LEFT JOIN (SELECT da.unit,count(*) as total_late
+                            FROM `duty_attendance` da
+                            LEFT JOIN `duty_schedule` ds
+                            ON ds.unit = da.unit AND ds.schedule = da.schedule and ds.version = da.duty_version
+                            LEFT JOIN `duty_version` dv ON dv.id = da.duty_version
+                            WHERE da.`attendance_date` >= '$from'
+                            AND da.`attendance_date` <= '$to'
+                            AND ds.schedule IS NOT NULL
+                            AND time_in > '09:30 PM'
+                            GROUP BY da.unit,ds.schedule IS NOT NULL) i ON i.unit = d.unit
+            LEFT JOIN (SELECT da.unit,count(*) as total_late
+                            FROM `duty_attendance` da
+                            LEFT JOIN `duty_schedule` ds
+                            ON ds.unit = da.unit AND ds.schedule = da.schedule and ds.version = da.duty_version
+                            LEFT JOIN `duty_version` dv ON dv.id = da.duty_version
+                            WHERE da.`attendance_date` >= '$from'
+                            AND da.`attendance_date` <= '$to'
+                            AND ds.schedule IS NULL
+                            AND time_in > '09:30 PM'
+                            GROUP BY da.unit,ds.schedule IS NULL) j ON j.unit = d.unit
+            group by d.unit
+            order by $sortby";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
 }

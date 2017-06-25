@@ -78,14 +78,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </tr>
                 </thead>
                 <tbody>
-                    <?php $total = 0; foreach($duty_list as $value) { ?>
+                    <?php $total = 0; $total_duty=0;$total_add=0; foreach($duty_list as $value) { ?>
                         <tr>
                             <td><?php echo $total+=1;?></td>
                             <td><?php echo $value->unit;?></td>
                             <td><?php echo date('M d, Y - l |',strtotime($value->attendance_date)). ' '. $value->time_in. ' - ' .$value->time_out;?></td>
                             <td>
-                                    <?php if ($value->remarks == 'DUTY') echo '<strong>'.$value->remarks.'</strong>' ;
-                                        else echo '<span style="color:grey">'.$value->remarks.'</span>' ;?>
+                                    <?php if ($value->remarks == 'DUTY') { echo '<strong>'.$value->remarks.'</strong>'; $total_duty += 1;}
+                                        else { echo '<span style="color:grey">'.$value->remarks.'</span>'; $total_add+=1;}?>
                             </td>
                             <td><?php echo $value->version_name;?></td>
                             <td>
@@ -96,7 +96,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </tr>
                     <?php }?>
                     <tr>
-                        <td colspan="6">Total: <?=$total;?></td>
+                        <td colspan="6"><strong>Total:</strong> <?=$total;?> | <strong>DUTY:</strong> <?=$total_duty;?> | <strong>ADD:</strong> <?=$total_add;?> </td>
                     </tr>
                 </tbody>
             </table>

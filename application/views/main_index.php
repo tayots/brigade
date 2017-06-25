@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?= base_url();?>bootstrap/js/jquery-3.2.1.min.js"></script>
     <script src="<?= base_url();?>bootstrap/js/bootstrap.min.js"></script>
     <!--Load the AJAX API-->
-    <script type="text/javascript" src="<?= base_url();?>bootstrap/js/google_loader.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
 
         // Load the Visualization API and the piechart package.
@@ -98,6 +98,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <a href="<?= base_url();?>index.php/main/monthly_reports" class="btn btn-info"><span class="glyphicon glyphicon-file"></span> Monthly Report Table</a>
             <a href="<?= base_url();?>index.php/main/top_reports" class="btn btn-info"><span class="glyphicon glyphicon-th-large"></span> Show Top Reports</a>
             <a href="<?= base_url();?>index.php/main/fire_reports" class="btn btn-danger"><span class="glyphicon glyphicon-info-sign"></span> Show Fire Reports</a>
+        </fieldset>
+        <div>&nbsp;</div>
+        <a href="<?= base_url();?>index.php/main/duty_reports" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Duty Reports</a>
         </fieldset>
     </div>
 </div>
