@@ -68,7 +68,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <label for="title" class="control-label">Water Used:</label>
                         </div>
                         <div class="col-lg-2">
-                            <input tabindex="0" type="text" class="form-control input-sm" style="width:80px" name="water_used" id="water_used" value="<?php echo $value->water_used; ?>" placeholder="Tons">
+                            <input tabindex="0" type="number" min="0" step="any" class="form-control input-sm" style="width:80px" name="water_used" id="water_used" value="<?php echo $value->water_used; ?>" placeholder="Tons">
                         </div>
                     </div>
                     <div class="container">

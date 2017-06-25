@@ -100,7 +100,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="form-group">
                     <label for="firstName" class="col-lg-3 control-label">Water Used:*</label>
                     <div class="col-lg-3">
-                        <input type="number" min="0" class="form-control" name="water_used" id="water_used" placeholder="tons" value="<?php echo ($this->input->post('water_used'))? $this->input->post('water_used'):'';?>">
+                        <input type="number" min="0" class="form-control" name="water_used" id="water_used" placeholder="tons" value="<?php echo ($this->input->post('water_used'))? $this->input->post('water_used'):'';?>" step="any">
                     </div>
                     <label for="firstName" class="col-lg-3 control-label">Dispatch?:*</label>
                     <div class="col-lg-3">
