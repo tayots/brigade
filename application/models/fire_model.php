@@ -88,7 +88,7 @@ class Fire_model extends CI_Model {
         $this->db->join('fire_data', 'fire_data.id = fire_attendance.fire_data_id', 'LEFT');
         $this->db->order_by('location,unit,attendance_date asc');
         $query = $this->db->get($this->fire_attendance);
-        var_dump($this->db->last_query());
+        //var_dump($this->db->last_query());
         return $query->result();
     }
 
