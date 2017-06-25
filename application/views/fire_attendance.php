@@ -62,9 +62,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div style="overflow-y: scroll; height: 250px;">
                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                     <tbody>
-                        <?php if (isset($information)) {  $total = 0;?>
+                        <?php if (isset($information)) $ctr=0;$old_loc='';{  $total = 0;?>
                             <?php foreach ($information as $key => $value) { $total += 1;?>
                             <tr>
+                                <td>
+                                    <?php if ($old_loc == '') { echo $ctr+=1; $old_loc = $value->location; ?>
+                                    <?php } elseif ($old_loc == $value->location) { echo $ctr+=1; $old_loc = $value->location;?>
+                                    <?php }else { echo $ctr=1;$old_loc = $value->location;}?>
+                                </td>
                                 <td><?php echo $value->attendance_date; ?></td>
                                 <td style="text-align: center;"><?php echo $value->unit; ?></td>
                                 <td><?php echo $value->location; ?></td>
