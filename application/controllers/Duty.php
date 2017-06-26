@@ -185,7 +185,7 @@ class Duty extends CI_Controller {
         $dt->setISODate($year,$selected_week);
         $periods = new DatePeriod($dt, new DateInterval('P1D'), 6);
         $days = iterator_to_array($periods);
-        
+
         $data['Monday'] = $this->duty_model->get_duties($days[0]->format('Y-m-d'));
         $data['Tuesday'] = $this->duty_model->get_duties($days[1]->format('Y-m-d'));
         $data['Wednesday'] = $this->duty_model->get_duties($days[2]->format('Y-m-d'));
