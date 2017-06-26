@@ -34,7 +34,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <button type="submit" class="btn btn-default" name="prev" value="<?php echo $selected_week-1;?>"><span class="glyphicon glyphicon-chevron-left"></span> Prev</button>
                         </div>
                         <div class="btn-group">
-                            <input type="date" class="form-control" name="date_of_duty" id="date_of_duty" value="<?php echo $current_date;?>" autofocus onchange="submitDate(this);">
+                            <input type="week" class="form-control" name="date_of_duty" id="date_of_duty" value="<?php echo $current_date;?>" autofocus onchange="submitDate(this);">
                         </div>
                         <div class="btn-group">
                             <input type="text" class="form-control" style="width: 45px;" name="selected_week" id="selected_week" value="<?php echo $selected_week;?>" readonly="readonly">
