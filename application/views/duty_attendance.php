@@ -123,6 +123,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <th>#</th>
                         <th>Unit</th>
                         <th>Date & Time</th>
+                        <th>Remarks</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -131,12 +132,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <tr>
                             <td><?=$key+1;?></td>
                             <td><?=$value->unit;?></td>
-                            <td><?=date('M d, Y - l ',strtotime($value->attendance_date));?> (<?=$value->time_in;?> - <?=$value->time_out;?>)</td>
+                            <td><?=date('M d, Y - l ',strtotime($value->attendance_date));?> <br>(<?=$value->time_in;?> - <?=$value->time_out;?>)</td>
+                            <td><?=$value->remarks;?></td>
                         </tr>
                         <?php endforeach;?>
                     <?php } else {?>
                         <tr>
-                            <td colspan="3">No record yet.</td>
+                            <td colspan="4">No record yet.</td>
                         </tr>
                     <?php }?>
                 </tbody>

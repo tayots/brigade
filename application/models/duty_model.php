@@ -281,4 +281,21 @@ class Duty_model extends CI_Model {
         return $query->result();
     }
 
+    public function get_duties_details($date_)
+    {
+        $query = "SELECT da.*,
+                IF(ds.schedule IS NULL,'ADD','DUTY') aS 'remarks',
+                dv.name as 'version_name'
+                FROM `duty_attendance` da
+                LEFT JOIN `duty_schedule` ds
+                ON ds.unit = da.unit AND ds.schedule = da.schedule and ds.version = da.duty_version
+                LEFT JOIN `duty_version` dv ON dv.id = da.duty_version
+                WHERE da.`attendance_date` >= '".$date_."'
+                AND da.`attendance_date` <= '".$date_."'
+                ORDER BY da.`attendance_date` ASC";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
 }
