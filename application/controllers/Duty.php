@@ -142,7 +142,7 @@ class Duty extends CI_Controller {
                         $_POST['time_r_min'] = '';
                         $_POST['time_r_period'] = 'PM';
                         $this->session->set_flashdata('alert_type', 'success');
-                        $this->session->set_flashdata('message', 'Successfully Saved ! '.$duty['attendance_date'].' ('.$duty['time_in'].' TO '.$duty['time_out'].') of '.$duty['unit']);
+                        $this->session->set_flashdata('message', 'Successfully Saved ! ------> '.date('M d, Y - l ',strtotime($duty['attendance_date'])).' ('.$duty['time_in'].' TO '.$duty['time_out'].') of '.$duty['unit']);
                     }
                 }
 
