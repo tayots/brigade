@@ -138,6 +138,9 @@ class Duty extends CI_Controller {
                     }
                     else {
                         $dutyRes = $this->duty_model->add_duty_attendance($duty);
+                        $_POST['time_r_hour'] = '';
+                        $_POST['time_r_min'] = '';
+                        $_POST['time_r_period'] = 'PM';
                         $this->session->set_flashdata('alert_type', 'success');
                         $this->session->set_flashdata('message', 'Successfully Saved ! '.$duty['attendance_date'].' ('.$duty['time_in'].' TO '.$duty['time_out'].') of '.$duty['unit']);
                     }
