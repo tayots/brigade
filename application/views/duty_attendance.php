@@ -28,13 +28,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             document.getElementById('time_c_period').value = el.value;
         }
 
+        function promptStatus(){
+            if (confirm('Are you sure you want to clear?')){
+                return true;
+            }
+            return false;
+        }
+
     </script>
 </head>
 <body>
 <div class="container">
     <?php include 'base.inc'; ?>
     <div>&nbsp;</div>
-    <div class="col-lg-10">
+    <div class="col-lg-7">
         <fieldset>
             <legend style="color: #337ab7;"><span class="glyphicon glyphicon-user"></span> Log Duties</legend>
             <?php if ($this->session->flashdata('message')){?>
@@ -42,17 +49,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="col-lg-12"><div class="alert alert-<?php echo $this->session->flashdata('alert_type'); ?>"><?php echo $this->session->flashdata('message'); ?></div></div>
                 </div>
             <?php }?>
-            <form class="form-horizontal" role="form" action='<?= base_url();?>index.php/duty/attendance' method="post">
+            <form class="form-horizontal" role="form" id="duty_attendance_form" action='<?= base_url();?>index.php/duty/attendance' method="post">
                 <div class="form-group">
-                    <label for="firstName" class="col-lg-3 control-label">Date Duty:*</label>
+                    <label for="firstName" class="col-lg-4 control-label">Date Duty:*</label>
                     <div class="col-lg-5">
-                        <input style="height: 60px;width:350px;font-size: 40px;" height="40px" type="date" class="form-control" name="date_of_duty" id="date_of_duty" value="<?php if ($this->input->post('date_of_duty')) { echo $this->input->post('date_of_duty');} else { echo $current_date; }?>">
+                        <input style="height: 60px;width:350px;font-size: 40px;" height="40px" type="date" class="form-control" name="date_of_duty" id="date_of_duty" value="<?php if ($this->input->post('date_of_duty')) { echo $this->input->post('date_of_duty');} else { echo $current_date; }?>" onchange="document.getElementById('duty_attendance_form').submit();">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="firstName" class="col-lg-3 control-label">Use Schcdule:*</label>
-                    <div class="col-lg-3">
-                        <select class="form-control" name="duty_version" id="duty_version">
+                    <label for="firstName" class="col-lg-4 control-label">Use Schcdule:*</label>
+                    <div class="col-lg-4">
+                        <select class="form-control" name="duty_version" id="duty_version" style="height: 50px;width:250px;font-size: 20px;">
                             <option value="">--Select--</option>
                             <?php foreach ($duty_version as $key => $value) { ?>
                                 <option value="<?=$value->id;?>" <?php echo ($selected_version == $value->id)? 'selected':'';?>><?=$value->name;?></option>
@@ -61,13 +68,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="firstName" class="col-lg-3 control-label">Unit No.*</label>
+                    <label for="firstName" class="col-lg-4 control-label">Unit No.*</label>
                     <div class="col-lg-3">
                         <input style="height: 100px;width: 150px;font-size: 50px;text-align: center;" type="text" class="form-control" name="unit" id="unit" min="1" maxlength="3" autofocus>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="lastName" class="col-lg-3 control-label">Time-In:*</label>
+                    <label for="lastName" class="col-lg-4 control-label">Time-In:*</label>
                     <div class="col-lg-1">
                         <input onkeyup="validate_digit(this, 'time_r_min');" onblur="max_two_digit(this);" style="padding:0;height: 40px;width: 60px;font-size: 25px;text-align: center;" type="number" class="form-control" name="time_r_hour" id="time_r_hour" min="0" maxlength="2" value="<?=$this->input->post('time_r_hour');?>">
                     </div>
@@ -80,7 +87,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <option value="PM" selected>PM</option>
                         </select>
                     </div>
-                    <label for="lastName" class="col-lg-2 control-label">Time-Out:*</label>
+                </div>
+                <div class="form-group">
+                    <label for="lastName" class="col-lg-4 control-label">Time-Out:*</label>
                     <div class="col-lg-1">
                         <input onkeyup="validate_digit(this, 'time_c_min');" onblur="max_two_digit(this);" style="padding:0;height: 40px;width: 60px;font-size: 25px;text-align: center;" type="number" class="form-control" name="time_c_hour" id="time_c_hour" min="0" maxlength="2" value="08">
                     </div>
@@ -95,14 +104,43 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-lg-3">&nbsp;</div>
-                    <div class="col-lg-3" style="text-align: right;">
+                    <div class="col-lg-4">&nbsp;</div>
+                    <div class="col-lg-4" style="text-align: right;">
                         <button type="submit" class="btn btn-success" >Save</button>
-                        <a href="<?= base_url();?>index.php/duty/attendance" class="btn btn-primary" >Clear</a>
+                        <a href="<?= base_url();?>index.php/duty/attendance" class="btn btn-primary" onclick="return promptStatus();">Clear</a>
                         <a href="<?= base_url();?>index.php/main" class="btn btn-info">Home</a>
                     </div>
                 </div>
             </form>
+        </fieldset>
+    </div>
+    <div class="col-lg-5">
+        <fieldset>
+            <legend>History:</legend>
+            <table class="table table-striped table-bordered table-hover" >
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Unit</th>
+                        <th>Date & Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (isset($duties)){?>
+                        <?php foreach($duties as $key => $value):?>
+                        <tr>
+                            <td><?=$key+1;?></td>
+                            <td><?=$value->unit;?></td>
+                            <td><?=date('M d, Y - l ',strtotime($value->attendance_date));?> (<?=$value->time_in;?> - <?=$value->time_out;?>)</td>
+                        </tr>
+                        <?php endforeach;?>
+                    <?php } else {?>
+                        <tr>
+                            <td colspan="3">No record yet.</td>
+                        </tr>
+                    <?php }?>
+                </tbody>
+            </table>
         </fieldset>
     </div>
 </div>

@@ -147,10 +147,11 @@ class Duty extends CI_Controller {
                 }
 
             }
-
+            $data['duties'] = $this->duty_model->get_duties($this->input->post('date_of_duty'));
             $data['current_date'] = $this->input->post('date_of_duty');
             $data['selected_version'] = $this->input->post('duty_version');
         }
+
         $this->load->view('duty_attendance', $data);
     }
 
