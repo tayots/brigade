@@ -292,7 +292,7 @@ class Duty_model extends CI_Model {
                 LEFT JOIN `duty_version` dv ON dv.id = da.duty_version
                 WHERE da.`attendance_date` >= '".$date_."'
                 AND da.`attendance_date` <= '".$date_."'
-                ORDER BY da.`attendance_date` ASC";
+                ORDER BY da.`attendance_date`,da.time_in ASC";
         $query = $this->db->query($query);
         //var_dump($this->db->last_query());
         return $query->result();
