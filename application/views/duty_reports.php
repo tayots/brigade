@@ -16,14 +16,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <legend>Duty Reports Options</legend>
             <form class="form-horizontal" role="form" action='<?= base_url();?>index.php/main/duty_reports' method="post">
                 <div class="form-group">
-                    <div class="bs-example" data-example-id="single-button-dropdown">
+                    <div class="bs-example" data-example-id="single-button-dropdown" style="margin-left: 15px;">
                         <label for="title" class="control-label">From:*</label>
                         <div class="btn-group">
-                            <input type="date" class="form-control" name="select_from" id="select_from" value="<?php echo $selected_from;?>" >
+                            <input type="date" class="form-control" name="select_from" id="select_from" value="<?php echo $select_from;?>" >
                         </div>
                         <label for="title" class="control-label">To:*</label>
                         <div class="btn-group">
-                            <input type="date" class="form-control" name="select_to" id="select_to" value="<?php echo $selected_to;?>">
+                            <input type="date" class="form-control" name="select_to" id="select_to" value="<?php echo $select_to;?>">
                         </div>
                         <label for="title" class="control-label">Sort By:*</label>
                         <div class="btn-group">
@@ -50,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
             </form>
             <div>&nbsp;</div>
-            Shown From <span style="color:red;font-size:16px;"><?=date('M d, Y',strtotime($selected_from)); ;?></span> -- <span style="color:red;font-size:16px;"><?=date('M d, Y',strtotime($selected_to)); ;?></span>
+            Shown From <span style="color:red;font-size:16px;"><?=date('M d, Y',strtotime($select_from)); ;?></span> -- <span style="color:red;font-size:16px;"><?=date('M d, Y',strtotime($select_to)); ;?></span>
             <table class="table table-striped table-bordered table-hover" id="dataTables-example"  style="font-size:14px;">
                 <thead>
                 <tr>
@@ -60,6 +60,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <th>Total Add</th>
                     <th>Lates on Add</th>
                     <th>Total Rendered</th>
+                    <th>Total Required</th>
+                    <th>Total Absences</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -72,10 +74,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <td><?php echo $n->total_add; ?></td>
                             <td><?php echo $n->total_add_late; ?></td>
                             <td><?php echo $n->total_rendered; ?></td>
+                            <td><?php echo $n->total_required; ?></td>
+                            <td><?php echo $n->total_absences; ?></td>
                         </tr>
                     <?php } ?>
-                <?php }?>
+                <?php } else {
+                    echo '<tr><td colspan="9">No records found.</td></tr>';
+                }?>
                 </tbody>
+                <tr   style="background-color: white;">
+                    <td colspan="8"><span style="font-style: italic;color:grey;font-size:12px;">** Red color is at > 75%<br>
+                                ** Absences may be due to selected date range that is not being rendered by them yet. <br>
+                                ** Recent duties might not yet been recorded vs. the required duties. <br>
+                                Please mind the date when querying. </span></td>
+                </tr>
             </table>
         </fieldset>
     </div>

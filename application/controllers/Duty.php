@@ -24,6 +24,8 @@ class Duty extends CI_Controller {
         $this->load->helper('url');
         $this->load->model('duty_model');
         $this->load->library('form_validation');
+
+        $this->schedule_version = $this->duty_model->get_active_duty_version(); //change this everytime new schedule is added
     }
 
     public function schedule()
@@ -207,11 +209,12 @@ class Duty extends CI_Controller {
     function unit_review($s_unit='', $from='', $to='') {
         $this->load->model('personnel_model');
 
-        $data['selected_from'] = date('Y-m-d');
+        $data['selected_from'] = date('Y-m-01');
         $data['selected_to'] = date('Y-m-d');
         $data['selected_unit'] = '';
         $data['unit_list'] = $this->personnel_model->get_user_list();
         $data['duty_list'] = [];
+        $data['required_duty'] = 0;
 
         if ($_POST){
             $this->form_validation->set_rules('unit', 'unit', 'required');
@@ -233,6 +236,7 @@ class Duty extends CI_Controller {
                     'unit' => strtoupper($this->input->post('unit'))
                 );
                 $data['duty_list'] = $this->duty_model->get_unit_duties($duty);
+                $data['required_duty'] = $this->duty_model->get_required_duties($duty, $this->schedule_version);
             }
         }
         else {
@@ -247,6 +251,8 @@ class Duty extends CI_Controller {
                 $data['selected_unit'] =  $s_unit;
                 $data['selected_from'] = $from;
                 $data['selected_to'] = $to;
+
+                $data['required_duty'] = $this->duty_model->get_required_duties($duty, $this->schedule_version);
             }
         }
 
@@ -324,11 +330,38 @@ class Duty extends CI_Controller {
         $this->session->set_flashdata('message', 'Successfully deleted : '.$unit.' on '.$schedule.' '.$date);
         redirect("/duty/review", 'refresh');
     }
+
     public function delete_unit_duty($unit, $date, $schedule, $duty_version)
     {
         $this->db->delete('duty_attendance', array('unit' => $unit, 'attendance_date' => $date, 'schedule' => $schedule, 'duty_version' => $duty_version));
         $this->session->set_flashdata('alert_type', 'success');
         $this->session->set_flashdata('message', 'Successfully deleted : '.$unit.' on '.$schedule.' '.$date);
         redirect("/duty/unit_review", 'refresh');
+    }
+
+    function get_tardiness()
+    {
+        $data = [];
+
+        if ($_POST){
+            $this->load->model('duty_model');
+
+            $selected_from = date('Y-01-01');
+            $d = new DateTime( date('Y-m-d') );
+            $selected_to = $d->format( 'Y-m-t' );
+            $unit = $this->input->post('unit');
+
+            $tardiness = $this->duty_model->get_graph_tardiness($unit, $selected_from, $selected_to);
+            array_push($data,['Months','Number of Tardiness']);
+
+            foreach($tardiness as $key => $value){
+                array_push($data,[$value->month,(int)$value->tardiness_count]);
+            }
+
+            echo json_encode($data);
+            exit();
+        }
+        echo json_encode($data);
+        exit();
     }
 }

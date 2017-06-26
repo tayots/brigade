@@ -19,6 +19,32 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             $(e.target).removeData('bs.modal');
         });
     </script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        // Load the Visualization API and the piechart package.
+        google.charts.load('current', {'packages':['corechart','bar']});
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(drawTardiness);
+
+        function drawTardiness() {
+            var jsonData = $.ajax({
+                type: 'POST',
+                url: "<?php echo base_url() . 'index.php/duty/get_tardiness' ?>",
+                dataType: "json",
+                async: false,
+                data: {
+                    'unit': $('#unit').val()
+                }
+            }).responseText;
+
+            // Create our data table out of JSON data loaded from server.
+            var data = new google.visualization.arrayToDataTable(JSON.parse(jsonData));
+            var chart = new google.visualization.AreaChart(document.getElementById('unit_tardiness'));
+            chart.draw(data, {width: 1000, height: 150, colors: ['red']});
+        }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -73,12 +99,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <th>Unit</th>
                     <th>Date/Time</th>
                     <th>Remarks</th>
+                    <th>Status</th>
                     <th>Using Schedule</th>
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                    <?php $total = 0; $total_duty=0;$total_add=0; foreach($duty_list as $value) { ?>
+                    <?php $total = 0; $total_duty=0;$total_add=0; $late_cnt=0;
+                        foreach($duty_list as $value) { ?>
                         <tr>
                             <td><?php echo $total+=1;?></td>
                             <td><?php echo $value->unit;?></td>
@@ -87,6 +115,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <?php if ($value->remarks == 'DUTY') { echo '<strong>'.$value->remarks.'</strong>'; $total_duty += 1;}
                                         else { echo '<span style="color:grey">'.$value->remarks.'</span>'; $total_add+=1;}?>
                             </td>
+                            <td><?php
+                                if ($value->time_in > '09:30 PM') { echo '<span style="color:red">Late!</span>'; $late_cnt+=1;}
+                                else echo '<span style="color:green">OK</span>';?></td>
                             <td><?php echo $value->version_name;?></td>
                             <td>
                                 <a href="<?=base_url();?>index.php/duty/delete_unit_duty/<?=$value->unit;?>/<?=$value->attendance_date;?>/<?=$value->schedule;?>/<?=$value->duty_version;?>" onclick="return messagePrompt()"><span class="glyphicon glyphicon-remove"></span></a> |
@@ -95,8 +126,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </td>
                         </tr>
                     <?php }?>
+                    <?php if ($selected_unit != ""):?>
+                    <tr style="background-color: white;">
+                        <td colspan="7">
+                            <div class="col-lg-12">
+                                <strong>Tardiness of <?=date("Y");?>:</strong>
+                                <div id="unit_tardiness">Loading...</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php endif;?>
                     <tr>
-                        <td colspan="6"><strong>Total:</strong> <?=$total;?> | <strong>DUTY:</strong> <?=$total_duty;?> | <strong>ADD:</strong> <?=$total_add;?> </td>
+                        <td colspan="7"><strong>Total Rendered:</strong> <?=$total;?> | <strong>DUTY:</strong> <?=$total_duty;?>/<?=$required_duty;?> | <strong>ADD:</strong> <?=$total_add;?> | <span style="color:red">Absences**: <?=$required_duty-$total_duty;?></span>,  <span style="color:red">Lates: <?=$late_cnt;?></span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="7"><span style="font-style: italic;color:grey;font-size:12px;">** Absences may be due to selected date range that is not being rendered by them yet. <br>
+                                ** Recent duties might not yet been recorded vs. the required duties. <br>
+                                Please mind the date when querying. </span></td>
                     </tr>
                 </tbody>
             </table>

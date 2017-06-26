@@ -18,6 +18,13 @@ class Duty_model extends CI_Model {
         parent::__construct();
     }
 
+    public function get_active_duty_version(){
+        $this->db->where('status','active');
+        $query = $this->db->get($this->duty_version);
+        $ret = $query->row();
+        return $ret->id;
+    }
+
     public function check_unit_exist($unit_number) {
         $this->db->where('unit',$unit_number);
         $query = $this->db->get($this->personnel);
@@ -225,6 +232,50 @@ class Duty_model extends CI_Model {
                             GROUP BY da.unit,ds.schedule IS NULL) j ON j.unit = d.unit
             group by d.unit
             order by $sortby";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
+    function get_required_duties($data, $version)
+    {
+        $begin = new DateTime( $data['select_from'] );
+        $end = new DateTime( $data['select_to'] );
+        $end->modify("+ 1 day");
+        $total_count = 0;
+
+        $interval = new DateInterval('P1D');
+        $daterange = new DatePeriod($begin, $interval ,$end);
+        $arrayDay = [];
+        foreach($daterange as $date){
+            $arrayDay[$date->format("l")] = $date->format("l");
+        }
+        $days = implode("','", $arrayDay);
+        $query = "SELECT * FROM $this->duty_schedule WHERE unit = '".$data['unit']."'
+                AND version = $version
+                AND schedule IN ('$days')";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        if ($query->num_rows() > 0){
+            foreach($query->result() as $row){
+                foreach($daterange as $date){
+                    if ($row->schedule ==$date->format("l")) $total_count+=1;
+                }
+            }
+            return $total_count;
+        }
+        else return 0;
+    }
+
+    public function get_graph_tardiness($unit, $from, $to)
+    {
+
+        $query = "SELECT DATE_FORMAT(attendance_date, '%b-%Y') as 'month', count(*) as 'tardiness_count'
+            FROM ".$this->duty_attendance."
+            WHERE attendance_date >= '$from' AND attendance_date <= '$to'
+            AND time_in > '09:30 PM'
+            AND unit = '$unit'
+            GROUP BY month ORDER BY attendance_date";
         $query = $this->db->query($query);
         //var_dump($this->db->last_query());
         return $query->result();

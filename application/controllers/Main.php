@@ -319,17 +319,32 @@ class Main extends CI_Controller {
     {
         $this->load->model('duty_model');
 
-        $data['selected_from'] = date('Y-m-01');
+        $data['select_from'] = date('Y-m-01');
         $d = new DateTime( date('Y-m-d') );
-        $data['selected_to'] = $d->format( 'Y-m-t' );
+        $data['select_to'] = $d->format( 'Y-m-t' );
         $data['sort_by'] = 0; //default by Unit
-
+        $ab = 0;
         if ($_POST){
-            $data['selected_from'] = $this->input->post('select_from');
-            $data['selected_to'] = $this->input->post('select_to');
+            $data['select_from'] = $this->input->post('select_from');
+            $data['select_to'] = $this->input->post('select_to');
             $data['sort_by'] = $this->input->post('sort_by');
 
-            $data['duties'] = $this->duty_model->get_duties_summary($data['selected_from'], $data['selected_to'], $data['sort_by']);
+            $result = $this->duty_model->get_duties_summary($data['select_from'], $data['select_to'], $data['sort_by']);
+            $version = $this->duty_model->get_active_duty_version();
+
+            foreach($result as $key => $value){
+                $data['unit'] = $value->unit;
+                $result[$key]->total_required = $this->duty_model->get_required_duties($data, $version);
+
+                if ($value->total_required != 0){
+                    $ab = number_format((($value->total_required-$value->total_duty)/$value->total_required)*100,0);
+                    if ((int)$ab > 75) $ab = '<span style="color:red">'.$ab.'%</span>';
+                    else $ab = $ab.'%';
+                    $result[$key]->total_absences = $value->total_required-$value->total_duty.' ('.$ab.')';
+                }
+                else $result[$key]->total_absences = '0 (0%)';
+            }
+            $data['duties'] = $result;
         }
 
         $this->load->view('duty_reports', $data);
