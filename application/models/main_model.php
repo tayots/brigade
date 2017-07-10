@@ -273,4 +273,14 @@ class Main_model extends CI_Model {
         return $this->db->count_all_results();
     }
 
+    function get_monthly_fire_count($from, $to)
+    {
+        $query = "SELECT DATE_FORMAT(attendance_date,'%M %Y') as month, COUNT(*) as total,unit
+            FROM ".$this->fire_attendance."
+            where attendance_date >= '$from' AND attendance_date <= '$to'
+            GROUP BY month,unit ORDER BY unit,attendance_date";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+
 }

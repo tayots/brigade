@@ -95,12 +95,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="col-lg-6">
         <fieldset>
             <legend>Reports:</legend>
-            <a href="<?= base_url();?>index.php/main/monthly_reports" class="btn btn-info"><span class="glyphicon glyphicon-file"></span> Monthly Report Table</a>
-            <a href="<?= base_url();?>index.php/main/top_reports" class="btn btn-info"><span class="glyphicon glyphicon-th-large"></span> Show Top Reports</a>
-            <a href="<?= base_url();?>index.php/main/fire_reports" class="btn btn-danger"><span class="glyphicon glyphicon-info-sign"></span> Show Fire Reports</a>
+            <a href="<?= base_url();?>index.php/main/monthly_reports" class="btn btn-info"><span class="glyphicon glyphicon-file"></span> Summary Report</a>
+            <a href="<?= base_url();?>index.php/main/monthly_fire_reports" class="btn btn-danger"><span class="glyphicon glyphicon-fire"></span> Monthly Fire Reports</a>
         </fieldset>
         <div>&nbsp;</div>
         <a href="<?= base_url();?>index.php/main/duty_reports" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Duty Reports</a>
+        <a href="<?= base_url();?>index.php/main/top_reports" class="btn btn-info"><span class="glyphicon glyphicon-th-large"></span> Show Top Reports</a>
+        <a href="<?= base_url();?>index.php/main/fire_reports" class="btn btn-danger"><span class="glyphicon glyphicon-info-sign"></span> Show Fire Reports</a>
+
         </fieldset>
     </div>
 </div>
