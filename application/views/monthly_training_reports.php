@@ -13,8 +13,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div>&nbsp;</div>
     <div class="col-lg-11">
         <fieldset>
-            <legend><span class="glyphicon glyphicon-fire" style="color:red;"></span> Monthly <span style="color:red;">Fire</span> Reports</legend>
-            <form class="form-horizontal" role="form" action='<?= base_url();?>index.php/main/monthly_fire_reports' method="post">
+            <legend><span class="glyphicon glyphicon-cog" style="color:lawngreen;"></span> Monthly <span style="color:lawngreen;">Training</span>  Reports</legend>
+            <form class="form-horizontal" role="form" action='<?= base_url();?>index.php/main/monthly_training_reports' method="post">
                 <div class="form-group">
                     <div class="col-lg-2">
                         <label for="title" class="control-label">Select Date:</label>
@@ -32,7 +32,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <button type="submit" class="btn btn-success" >Search</button>
                         </div>
                         <div class="btn-group">
-                            <a href="<?= base_url();?>index.php/main/monthly_fire_reports" class="btn btn-default" >Clear</a>
+                            <a href="<?= base_url();?>index.php/main/monthly_training_reports" class="btn btn-default" >Clear</a>
                         </div>
                         <div class="btn-group">
                             <a href="<?= base_url();?>index.php/main" class="btn btn-info" >Home</a>
@@ -54,16 +54,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if(isset($fire_data)){?>
+                    <?php if(isset($training_data)){?>
                         <?php if(isset($month_list)){
                             foreach($unit_list as $u){ $total = 0;
                                 echo '<tr>';
                                 echo '<td>'.$u->unit.'</td>';
                                 foreach($month_list as $m){
-                                    if (isset($fire_data[$u->unit])){
-                                        if (isset($fire_data[$u->unit][$m])) {
-                                            $total +=$fire_data[$u->unit][$m];
-                                            echo '<td>'.$fire_data[$u->unit][$m].'</td>';
+                                    if (isset($training_data[$u->unit])){
+                                        if (isset($training_data[$u->unit][$m])) {
+                                            $total +=$training_data[$u->unit][$m];
+                                            echo '<td>'.$training_data[$u->unit][$m].'</td>';
                                         }
                                         else echo '<td>0</td>';
                                     }

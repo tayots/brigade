@@ -388,15 +388,162 @@ class Main extends CI_Controller {
             }
 
             $data['month_list']= $month_list;
-            $fire_data = $this->main_model->get_monthly_fire_count($selected_from, $selected_to);
+            $result = $this->main_model->get_monthly_fire_count($selected_from, $selected_to);
             $sort_data = array();
-            foreach ($fire_data as $key => $val) {
+            foreach ($result as $key => $val) {
                 $sort_data[$val->unit][$val->month] = $val->total;
             }
             $data['fire_data'] = $sort_data;
         }
 
         $this->load->view('monthly_fire_reports', $data);
+    }
+
+    function monthly_training_reports($action=NULL)
+    {
+        $this->load->model('personnel_model');
+
+        $data['unit_list'] = $this->personnel_model->get_user_list();
+        $final = array();
+        $data['monthly'] = array();
+        $data['summary'] = '';
+        $counter = 0;
+        $data['selected_from'] = date('Y-m-01');
+        $d = new DateTime( date('Y-m-d') );
+        $data['selected_to'] = $d->format( 'Y-m-t' );
+        $temp = [];
+
+        $data['fire_summary'] = 0;
+
+        if ($_POST){
+            $d = new DateTime( $this->input->post('select_from') );
+            $selected_from = $d->format( 'Y-m' );
+            $e = new DateTime( $this->input->post('select_to') );
+            $selected_to = $e->format( 'Y-m' );
+
+            $data['selected_from'] = $this->input->post('select_from');
+            $data['selected_to'] = $this->input->post('select_to');
+
+            //Get month interval from selected dates
+            $date1 = new DateTime($this->input->post('select_from'));
+            $date2 = new DateTime($this->input->post('select_to'));
+            $diff = date_diff($date1, $date2);
+            $interval = new DateInterval('P1M');
+            $month_list = [$d->format( 'F Y' )]; //first month
+            for ($x=0; $x<$diff->m; $x++) {
+                $interval = new DateInterval('P1M');
+                $d->add($interval);
+                array_push($month_list, $d->format('F Y'));
+            }
+
+            $data['month_list']= $month_list;
+            $result = $this->main_model->get_monthly_training_count($selected_from, $selected_to);
+            $sort_data = array();
+            foreach ($result as $key => $val) {
+                $sort_data[$val->unit][$val->month] = $val->total;
+            }
+            $data['training_data'] = $sort_data;
+        }
+
+        $this->load->view('monthly_training_reports', $data);
+    }
+
+    function monthly_meeting_reports($action=NULL)
+    {
+        $this->load->model('personnel_model');
+
+        $data['unit_list'] = $this->personnel_model->get_user_list();
+        $final = array();
+        $data['monthly'] = array();
+        $data['summary'] = '';
+        $counter = 0;
+        $data['selected_from'] = date('Y-m-01');
+        $d = new DateTime( date('Y-m-d') );
+        $data['selected_to'] = $d->format( 'Y-m-t' );
+        $temp = [];
+
+        $data['fire_summary'] = 0;
+
+        if ($_POST){
+            $d = new DateTime( $this->input->post('select_from') );
+            $selected_from = $d->format( 'Y-m' );
+            $e = new DateTime( $this->input->post('select_to') );
+            $selected_to = $e->format( 'Y-m' );
+
+            $data['selected_from'] = $this->input->post('select_from');
+            $data['selected_to'] = $this->input->post('select_to');
+
+            //Get month interval from selected dates
+            $date1 = new DateTime($this->input->post('select_from'));
+            $date2 = new DateTime($this->input->post('select_to'));
+            $diff = date_diff($date1, $date2);
+            $interval = new DateInterval('P1M');
+            $month_list = [$d->format( 'F Y' )]; //first month
+            for ($x=0; $x<$diff->m; $x++) {
+                $interval = new DateInterval('P1M');
+                $d->add($interval);
+                array_push($month_list, $d->format('F Y'));
+            }
+
+            $data['month_list']= $month_list;
+            $result = $this->main_model->get_monthly_meeting_count($selected_from, $selected_to);
+            $sort_data = array();
+            foreach ($result as $key => $val) {
+                $sort_data[$val->unit][$val->month] = $val->total;
+            }
+            $data['meeting_data'] = $sort_data;
+        }
+
+        $this->load->view('monthly_meeting_reports', $data);
+    }
+
+    function monthly_special_reports($action=NULL)
+    {
+        $this->load->model('personnel_model');
+
+        $data['unit_list'] = $this->personnel_model->get_user_list();
+        $final = array();
+        $data['monthly'] = array();
+        $data['summary'] = '';
+        $counter = 0;
+        $data['selected_from'] = date('Y-m-01');
+        $d = new DateTime( date('Y-m-d') );
+        $data['selected_to'] = $d->format( 'Y-m-t' );
+        $temp = [];
+
+        $data['fire_summary'] = 0;
+
+        if ($_POST){
+            $d = new DateTime( $this->input->post('select_from') );
+            $selected_from = $d->format( 'Y-m' );
+            $e = new DateTime( $this->input->post('select_to') );
+            $selected_to = $e->format( 'Y-m' );
+
+            $data['selected_from'] = $this->input->post('select_from');
+            $data['selected_to'] = $this->input->post('select_to');
+
+            //Get month interval from selected dates
+            $date1 = new DateTime($this->input->post('select_from'));
+            $date2 = new DateTime($this->input->post('select_to'));
+            $diff = date_diff($date1, $date2);
+            $interval = new DateInterval('P1M');
+            $month_list = [$d->format( 'F Y' )]; //first month
+            for ($x=0; $x<$diff->m; $x++) {
+                $interval = new DateInterval('P1M');
+                $d->add($interval);
+                array_push($month_list, $d->format('F Y'));
+            }
+
+            $data['month_list']= $month_list;
+            $result = $this->main_model->get_monthly_special_count($selected_from, $selected_to);
+            $sort_data = array();
+            foreach ($result as $key => $val) {
+                $sort_data[$val->unit][$val->month] = $val->total;
+            }
+            $data['meeting_data'] = $sort_data;
+        }
+
+        $this->load->view('monthly_special_reports', $data);
     }
 
 }

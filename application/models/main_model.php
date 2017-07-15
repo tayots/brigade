@@ -14,6 +14,9 @@ class Main_model extends CI_Model {
     private $duty_schedule = 'duty_schedule';
     private $duty_attendance = 'duty_attendance';
     private $training = 'training';
+    private $training_attendance = 'training_attendance';
+    private $meeting_attendance = 'meeting_attendance';
+    private $special_activity_attendance = 'special_activity_attendance';
 
     public function __construct()
     {
@@ -277,6 +280,36 @@ class Main_model extends CI_Model {
     {
         $query = "SELECT DATE_FORMAT(attendance_date,'%M %Y') as month, COUNT(*) as total,unit
             FROM ".$this->fire_attendance."
+            where attendance_date >= '$from' AND attendance_date <= '$to'
+            GROUP BY month,unit ORDER BY unit,attendance_date";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+
+    function get_monthly_training_count($from, $to)
+    {
+        $query = "SELECT DATE_FORMAT(attendance_date,'%M %Y') as month, COUNT(*) as total,unit
+            FROM ".$this->training_attendance."
+            where attendance_date >= '$from' AND attendance_date <= '$to'
+            GROUP BY month,unit ORDER BY unit,attendance_date";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+
+    function get_monthly_meeting_count($from, $to)
+    {
+        $query = "SELECT DATE_FORMAT(attendance_date,'%M %Y') as month, COUNT(*) as total,unit
+            FROM ".$this->meeting_attendance."
+            where attendance_date >= '$from' AND attendance_date <= '$to'
+            GROUP BY month,unit ORDER BY unit,attendance_date";
+        $query = $this->db->query($query);
+        return $query->result();
+    }
+
+    function get_monthly_special_count($from, $to)
+    {
+        $query = "SELECT DATE_FORMAT(attendance_date,'%M %Y') as month, COUNT(*) as total,unit
+            FROM ".$this->special_activity_attendance."
             where attendance_date >= '$from' AND attendance_date <= '$to'
             GROUP BY month,unit ORDER BY unit,attendance_date";
         $query = $this->db->query($query);
