@@ -368,25 +368,25 @@ class Main extends CI_Controller {
 
         if ($_POST){
             $d = new DateTime( $this->input->post('select_from') );
-            $selected_from = $d->format( 'Y-m' );
+            $selected_from = $d->format( 'Y-m-d' );
             $e = new DateTime( $this->input->post('select_to') );
-            $selected_to = $e->format( 'Y-m' );
+            $selected_to = $e->format( 'Y-m-d' );
 
             $data['selected_from'] = $this->input->post('select_from');
             $data['selected_to'] = $this->input->post('select_to');
 
             //Get month interval from selected dates
-            $date1 = new DateTime($this->input->post('select_from'));
-            $date2 = new DateTime($this->input->post('select_to'));
+            $date1 = new DateTime($this->input->post('select_from')." 00:00:00");
+            $date2 = new DateTime($this->input->post('select_to')." 23:59:59");
             $diff = date_diff($date1, $date2);
-            $interval = new DateInterval('P1M');
+            $interval = new DateInterval('P1M'); 
             $month_list = [$d->format( 'F Y' )]; //first month
-            for ($x=0; $x<$diff->m; $x++) {
+			
+            for ($x=0; $x<($diff->m)-1; $x++) { echo $x;
                 $interval = new DateInterval('P1M');
                 $d->add($interval);
                 array_push($month_list, $d->format('F Y'));
             }
-
             $data['month_list']= $month_list;
             $result = $this->main_model->get_monthly_fire_count($selected_from, $selected_to);
             $sort_data = array();
@@ -430,7 +430,7 @@ class Main extends CI_Controller {
             $diff = date_diff($date1, $date2);
             $interval = new DateInterval('P1M');
             $month_list = [$d->format( 'F Y' )]; //first month
-            for ($x=0; $x<$diff->m; $x++) {
+            for ($x=0; $x<($diff->m)-1; $x++) {
                 $interval = new DateInterval('P1M');
                 $d->add($interval);
                 array_push($month_list, $d->format('F Y'));
@@ -479,7 +479,7 @@ class Main extends CI_Controller {
             $diff = date_diff($date1, $date2);
             $interval = new DateInterval('P1M');
             $month_list = [$d->format( 'F Y' )]; //first month
-            for ($x=0; $x<$diff->m; $x++) {
+            for ($x=0; $x<($diff->m)-1; $x++) {
                 $interval = new DateInterval('P1M');
                 $d->add($interval);
                 array_push($month_list, $d->format('F Y'));
@@ -528,7 +528,7 @@ class Main extends CI_Controller {
             $diff = date_diff($date1, $date2);
             $interval = new DateInterval('P1M');
             $month_list = [$d->format( 'F Y' )]; //first month
-            for ($x=0; $x<$diff->m; $x++) {
+            for ($x=0; $x<($diff->m)-1; $x++) {
                 $interval = new DateInterval('P1M');
                 $d->add($interval);
                 array_push($month_list, $d->format('F Y'));

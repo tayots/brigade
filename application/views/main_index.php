@@ -57,7 +57,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <body>
 <div class="container">
     <?php include 'base.inc'; ?>
-    <div>&nbsp;</div>
+    <div style="height: 8px;">&nbsp;</div>
     <div class="col-lg-6">
         <fieldset>
             <legend>General Options:</legend>
@@ -77,7 +77,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div>&nbsp;</div>
         <div>&nbsp;</div>
     </div>
-    <div class="col-lg-6">
+    <div class="col-lg-6" style="height: 150px;">
         <fieldset>
             <legend>Datas:</legend>
             <a href="<?= base_url();?>index.php/duty/review" class="btn btn-primary"><span class="glyphicon glyphicon-list"></span> Duties Data</a>
@@ -133,7 +133,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div style="margin-left:20px;"><span style="color: red;">Lowest : <?php if (isset($lowest_training[0]->total)) echo $lowest_training[0]->total; else echo '--';?></span></div>
     </div>
 </div>
-<div style="clear: both">&nbsp;</div>
-<div style="text-align: center;font-size:10px;">All rights reserved. Copyright &copy; Jeremy Ling &nbsp;</div>
+
+<div style="text-align: right;font-size:12px;">All rights reserved. &copy; Copyright 2020 | <a href = "https://mail.google.com/mail/?view=cm&fs=1&to=jeremyling84@gmail.com" target="new">Jeremy Ling</a> | v2.0.0 &nbsp; </div>
 </body>
 </html>
