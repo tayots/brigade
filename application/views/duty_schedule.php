@@ -47,7 +47,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="firstName" class="col-lg-3 control-label">Unit No.*</label>
+                    <label for="firstName" class="col-lg-3 control-label">Effective: *</label>
                     <div class="col-lg-4">
                         <select class="form-control" name="select_duty_version" id="select_duty_version">
                             <option value="">--Select--</option>

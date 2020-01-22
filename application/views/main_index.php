@@ -6,8 +6,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link href="<?= base_url();?>bootstrap/css/bootstrap.css" rel="stylesheet">
     <script src="<?= base_url();?>bootstrap/js/jquery-3.2.1.min.js"></script>
     <script src="<?= base_url();?>bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?= base_url();?>bootstrap/js/chars-loader.js"></script>
     <!--Load the AJAX API-->
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
 
         // Load the Visualization API and the piechart package.

@@ -136,7 +136,7 @@ class Main extends CI_Controller {
             {"id":"","label":"Count","pattern":"","type":"number"}
           ],
         "rows": [
-            '.$data.'
+            '.rtrim($data,",").'
           ]
         }';
         echo $whatever;
