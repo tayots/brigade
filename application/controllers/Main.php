@@ -260,7 +260,7 @@ class Main extends CI_Controller {
                     {"id":"","label":"Fires Responded","pattern":"","type":"number"}
                   ],
                 "rows": [
-                    '.$data.'
+                    '.rtrim($data,",").'
                   ]
                 }';
             echo $whatever;
@@ -286,7 +286,7 @@ class Main extends CI_Controller {
                     {"id":"","label":"No Discharge","pattern":"","type":"number"}
                   ],
                 "rows": [
-                    '.$data.'
+                    '.rtrim($data,",").'
                   ]
                 }';
             echo $whatever;
