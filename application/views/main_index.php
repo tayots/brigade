@@ -64,6 +64,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <a href="<?= base_url();?>index.php/personnel" onclick="return need_password();" class="btn btn-success"><span class="glyphicon glyphicon-lock"></span> Personnel</a>
             <a href="<?= base_url();?>index.php/duty/schedule" onclick="return need_password();" class="btn btn-primary"><span class="glyphicon glyphicon-lock"></span> Plot Duty Schedule</a>
             <a href="<?= base_url();?>index.php/fire/data" class="btn btn-danger"><span class="glyphicon glyphicon-fire"></span> Fire Data</a>
+            <a href="<?= base_url();?>index.php/personnel/record" class="btn btn-warning"><span class="glyphicon glyphicon-fire"></span> 201 Files</a>
         </fieldset>
         <div>&nbsp;</div><fieldset>
             <legend>Log Attendance:</legend>
