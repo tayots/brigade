@@ -77,7 +77,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <?php foreach ($monthly as $key => $n) { $total = 0;?>
                         <tr>
                             <td><?php echo $n->unit; ?></td>
-                            <?php  if (count($n) > 0) {?>
+                            <?php if (count((array)$n) > 0) {?>
                                 <td><?=$n->duty; $total += $n->duty; $t_duty += $n->duty; ?></td>
                                 <td><?=$n->fire; $total += $n->fire; $t_fire += $n->fire; ?></td>
                                 <td><?=$n->training; $total += $n->training; $t_training += $n->training; ?></td>
