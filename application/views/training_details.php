@@ -70,6 +70,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <span><?php echo $value->recorder;?></span>
                         </div>
                     </div>
+                    
+                    <div class="container">
+                        <div class="col-lg-2">
+                            <label for="title" class="control-label">Files Activities:</label>
+                        </div>
+                        <div class="col-lg-6">
+                            <?php if (isset($training_attachments)) {  $total = 0;?>
+                                <?php foreach ($training_attachments as $key => $value3) { $total += 1;?>
+                                    <tr>
+                                        <td><a target="_blank" title="<?php echo $value3->file_name;?>" href="<?php echo base_url($value3->file_path.'/'.$value3->file_name);?>"><img width="150px" src="<?php echo base_url($value3->file_path.'/'.$value3->file_name);?>" /></a>&nbsp;</td>
+                                    </tr>
+                                <?php } ?>
+                            <?php }?>
+                            (Total of <strong><?=$total;?></strong>)
+                        </div>
+                    </div>
                 </div>
             </div>
             <?php } ?>

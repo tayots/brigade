@@ -23,14 +23,15 @@ class Training extends CI_Controller {
         $this->load->helper('form');
         $this->load->helper('url');
         $this->load->model('training_model');
-        $this->load->library('form_validation');
+        $this->load->library('form_validation'); 
+     
     }
 
     public function attendance()
     {
         $data['current_date'] = date('Y-m-d');
 
-        if ($_POST) {
+        if ($_POST) { 
             $this->form_validation->set_rules('date_of_training', 'date_of_training', 'required');
             $this->form_validation->set_rules('activity', 'activity', 'required');
             $this->form_validation->set_rules('venue', 'venue', 'required');
@@ -53,7 +54,7 @@ class Training extends CI_Controller {
                     'recorder' => $this->input->post('recorder'),
                     'remarks' => $this->input->post('remarks'),
                 );
-
+                    
                 $flag_exist = true;
                 if ($_POST['member_counter'] > 0) {
                     for ($x=0; $x<$_POST['member_counter']; $x++){
@@ -85,7 +86,29 @@ class Training extends CI_Controller {
                                     $training_id = $this->training_model->save_training($data);
                                     //save members
                                     $this->training_model->save_members($training_id, $_POST);
+                                    
+                                    // save file activities                                    
+                                    $config['upload_path'] = './uploads/sunday_training/'.$training_id.'/';
+                                    $config['allowed_types'] = 'gif|jpg|png|docx|jpeg|pdf';
+                                    $config['max_size']     = 0;
+                                    $config['max_width']     = 0;
+                                    $config['max_height']     = 0;
 
+                                    file_exists($config['upload_path']) OR mkdir($config['upload_path'], 0755, TRUE);
+                                    $this->load->library('upload', $config);
+                                    $this->upload->initialize($config);
+                                    for ($x=0; $x<$_POST['file_counter']; $x++){  
+                                        if ( $this->upload->do_upload('file'.$x) ) {
+                                            $filearray = $this->upload->data();
+                                            $data = array(
+                                                'training_id' => $training_id,
+                                                'file_name' => $filearray['file_name'],
+                                                'file_path' => $config['upload_path']
+                                            );
+                                            $this->training_model->save_files($data);
+                                        }
+                                    }
+                                    
                                     $this->session->set_flashdata('alert_type', 'success');
                                     $this->session->set_flashdata('message', 'Successfully Saved Activity on '.$this->input->post('date_of_training').' with Total members attended: '.$this->input->post('member_counter'));
                                     redirect('training/attendance', 'refresh');
@@ -152,6 +175,7 @@ class Training extends CI_Controller {
     {
         $data['training_data'] = $this->training_model->get_training_data($training_id);
         $data['training_attendance'] = $this->training_model->get_training_attendance($training_id);
+        $data['training_attachments'] = $this->training_model->get_training_attachments($training_id);
         $this->load->view('training_details', $data);
     }
 

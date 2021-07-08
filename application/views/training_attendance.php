@@ -16,6 +16,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
         $(document).ready(function(){
             var i=getlatestAddr();
+            var h=getlatestFile();
 
             $("#add_row").click(function(){
                 //check duplicate
@@ -61,6 +62,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 return a;
             }
 
+            function getlatestFile(){
+                var a = 0;
+                for (var x=0; x<=parseInt($('#file_counter').val()); x++) {
+                    if (document.getElementById('filer'+x)) {
+                        a = x;
+                    }
+                }
+                return a;
+            }
+
             $('#checkfirst').click(function(){
                 if (confirmMessage())
                     document.getElementById("training_attendance_form").submit();
@@ -69,17 +80,39 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             function confirmMessage(){
                 var t = 'Training Date: '+$('#date_of_training').val();
                 var m = 'Members Attended: ';
+                
+                if (document.getElementById('file0').value !== '')
+                    var n = 'Attachments: '+getlatestFile();
+                else
+                    var n = 'No attachment(s)';
+
                 for (var x=0; x<getlatestAddr(); x++) {
                     if (document.getElementById('addr'+x) !== 'undefined') {
                         m += $('#member'+x).val()+', ';
                     }
                 }
 
-                if (confirm('Are you sure you want to save the ff data? \n\n'+t+'\n'+m+' ( Total:'+x+' )\n\nKindly check if everything is correct.\nOtherwise, click \'Ok\' to procceed.')){
+                if (confirm('Are you sure you want to save the ff data? \n\n'+t+'\n'+m+' ( Total:'+x+' )'+'\n'+n+'\n\nKindly check if everything is correct.\nOtherwise, click \'Ok\' to procceed.')){
                     return true
                 }
                 else return false
             }
+
+            $("#add_row_filer").click(function(){
+                $('#filer'+h).html("<td>"+ (h+1) +"</td><td><input type='file' id='file"+h+"' name='file"+h+"' class='form-control'\></td>");
+
+                $('#img_logic').append('<tr id="filer'+(h+1)+'"></tr>');
+                $('#filer'+h).focus();
+                $('#file_counter').val(h+1);
+                h++;
+            });
+            $("#delete_row_filer").click(function(){
+                if(h>1){
+                    $("#filer"+(h-1)).html('');
+                    $('#file_counter').val(h-1);
+                    h--;
+                }
+            });
 
         });
     </script>
@@ -96,7 +129,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="col-lg-12"><div class="alert alert-<?php echo $this->session->flashdata('alert_type'); ?>"><?php echo $this->session->flashdata('message'); ?></div></div>
                 </div>
             <?php }?>
-            <form class="form-horizontal" role="form" id="training_attendance_form" action='<?= base_url();?>index.php/training/attendance' method="post">
+            <form class="form-horizontal" role="form" id="training_attendance_form" action='<?= base_url();?>index.php/training/attendance' method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="firstName" class="col-lg-3 control-label">Date of Training:*</label>
                     <div class="col-lg-3">
@@ -142,7 +175,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </td>
                                 <td>
                                     <input tabindex="0" type="text" id='member0' name='member0'  placeholder='Unit Number' class="form-control" maxlength="3" onkeypress='add_new_row(event)'/>
-                                </td>
+                                </td>                                
                             </tr>
                             <tr id='addr1'></tr>
                             </tbody>
@@ -161,6 +194,42 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <label for="firstName" class="col-lg-3 control-label">Remarks of Activity:*</label>
                     <div class="col-lg-5">
                         <textarea name="remarks" id="remarks" cols="45" rows="5"><?=$this->input->post('remarks');?></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="firstName" class="col-lg-3 control-label">Upload File for Activity:*</label>
+                    <div class="col-lg-8">
+                        <input type="hidden" name="file_counter" id="file_counter" value="<?php if (isset($_POST['file_counter'])) echo $_POST['file_counter']; else echo 1;?>">
+                        <table class="table table-bordered table-hover" id="img_logic">
+                            <?php if (isset($_POST['file_counter'])) {?>
+                                <tbody>
+                                <?php for($x=0; $x<$_POST['file_counter']; $x++){?>
+                                    <tr id='filer<?=$x;?>'>
+                                        <td>
+                                            <?=$x+1?>
+                                        </td>
+                                        <td>
+                                            <input type="file" id="file<?=$x;?>" name="file<?=$x;?>" class="form-control"/>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                <tr id='filer<?=$x?>'></tr>
+                                </tbody>
+                            <?php } else { ?>
+                            <tbody>
+                            <tr id='filer0'>
+                                <td>
+                                    1
+                                </td>
+                                <td>
+                                    <input type="file" id="file0" name="file0" class="form-control"/>
+                                </td>
+                            </tr>
+                            <tr id='filer1'></tr>
+                            </tbody>
+                            <?php } ?>
+                        </table>
+                        <a href="javascript:void(0);" id="add_row_filer" class="btn btn-default pull-left" tabindex="0"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add More Image</a><a id='delete_row_filer' class="pull-right btn btn-default"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Delete Image</a>
                     </div>
                 </div>
                 <div class="form-group">

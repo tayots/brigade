@@ -9,6 +9,7 @@
 class Training_model extends CI_Model {
 
     private $training = 'training';
+    private $training_attachment = 'training_attachments';
     private $training_attendance = 'training_attendance';
     private $personnel = 'personnel';
 
@@ -62,6 +63,12 @@ class Training_model extends CI_Model {
 
         return $this->db->insert_batch($this->training_attendance, $data);
     }
+    
+    public function save_files($training_files)
+    {
+        $this->db->insert($this->training_attachment, $training_files);
+        return $this->db->insert_id();
+    }
 
     public function get_training_list_range($from_date, $to_date)
     {
@@ -87,6 +94,13 @@ class Training_model extends CI_Model {
     {
         $this->db->where('training_id', $training_id);
         $query = $this->db->get($this->training_attendance);
+        return $query->result();
+    }
+    
+    function get_training_attachments($training_id)
+    {
+        $this->db->where('training_id', $training_id);
+        $query = $this->db->get($this->training_attachment);
         return $query->result();
     }
 
