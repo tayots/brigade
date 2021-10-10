@@ -32,13 +32,13 @@ class Duty extends CI_Controller {
     {
         $schedule = ($this->input->post('schedule'));
         $unit_number= ($this->input->post('unit'));
-        $data = '';
+        $data = array();
         $sched_data = array();
         $data['select_schedule'] = 'Monday';
         $data['selected_version'] = '';
         $data['select_duty_version'] = '';
         $data['version'] = $this->duty_model->get_duty_versions();
-
+        
         if ($_POST){
             //means that user is asking to display the duty schedule
             if (isset($_POST['duty_version'])) {
@@ -363,5 +363,67 @@ class Duty extends CI_Controller {
         }
         echo json_encode($data);
         exit();
+    }
+
+    function cadet_attendance() {
+        $data['selected_title'] = '';
+        $data['current_date'] = date('Y-m-d');
+        $data['selected_version'] = '';
+        $data['selected_unit'] = '';
+        $data['cadet_version'] = $this->duty_model->get_cadet_versions();
+        $data['cadet_name'] = $this->duty_model->get_cadet_names();
+
+        if ($_POST) {
+            $this->form_validation->set_rules('date_of_duty', 'date_of_duty', 'required');
+            $this->form_validation->set_rules('time_r_hour', 'time_r_hour', 'required|numeric|min_length[2]|max_length[2]');
+            $this->form_validation->set_rules('time_r_min', 'time_r_min', 'required|numeric|min_length[2]|max_length[2]');
+            $this->form_validation->set_rules('time_r_period', 'time_r_period', 'required');
+            $this->form_validation->set_rules('time_c_hour', 'time_c_hour', 'required|numeric|min_length[2]|max_length[2]');
+            $this->form_validation->set_rules('time_c_min', 'time_c_min', 'required|numeric|min_length[2]|max_length[2]');
+            $this->form_validation->set_rules('time_c_period', 'time_c_period', 'required');
+            $this->form_validation->set_rules('unit', 'unit', 'required');
+            $this->form_validation->set_rules('cadet_version', 'cadet_version', 'required');
+            $array_index = array_search($this->input->post('unit'),array_column($data['cadet_name'],'unit'));
+            $duty = array(
+                'attendance_date' => $this->input->post('date_of_duty'),
+                'time_in' => $this->input->post('time_r_hour').':'.$this->input->post('time_r_min').' '.$this->input->post('time_r_period'),
+                'time_out' => $this->input->post('time_c_hour').':'.$this->input->post('time_c_min').' '.$this->input->post('time_c_period'),
+                'schedule' => date('l',strtotime($this->input->post('date_of_duty'))),
+                'unit' => strtoupper($this->input->post('unit')),
+                'cadet_version' => $this->input->post('cadet_version')
+            );
+
+            if ($this->form_validation->run() == false){
+                $this->session->set_flashdata('alert_type', 'danger');
+                $this->session->set_flashdata('message', 'Error saving. Please input required field.');
+            }
+            else {
+                //check for duplicate
+                if ($this->duty_model->check_cadet_data($duty) == true){
+                    $this->session->set_flashdata('alert_type', 'danger');
+                    $this->session->set_flashdata('message', 'You already have logged same date as before! Please check date and unit no.');
+                }
+                else {
+                    $dutyRes = $this->duty_model->add_cadet_attendance($duty);
+                    $_POST['time_r_hour'] = '';
+                    $_POST['time_r_min'] = '';
+                    $_POST['time_r_period'] = 'PM';
+                    
+                    $unit_name = $data['cadet_name'][$array_index]->unit.' - '.$data['cadet_name'][$array_index]->first_name.' '.$data['cadet_name'][$array_index]->last_name;
+                    $this->session->set_flashdata('alert_type', 'success');
+                    $this->session->set_flashdata('message', 'Successfully Saved ! ------> '.date('M d, Y - l ',strtotime($duty['attendance_date'])).' ('.$duty['time_in'].' TO '.$duty['time_out'].') of '.$unit_name);
+                }
+                
+            }
+
+            $data['duties'] = $this->duty_model->get_cadet_details($this->input->post('date_of_duty'));            
+            $data['current_date'] = $this->input->post('date_of_duty');
+            $data['selected_version'] = $this->input->post('cadet_version');
+            $data['selected_unit'] = $this->input->post('unit');
+        }
+        else             
+        $data['duties'] = $this->duty_model->get_cadet_details($data['current_date']);
+
+        $this->load->view('cadet_attendance', $data);
     }
 }

@@ -13,6 +13,10 @@ class Duty_model extends CI_Model {
     private $duty_version = 'duty_version';
     private $personnel = 'personnel';
 
+    private $cadet_table = 'cadet';
+    private $cadet_version = 'cadet_version';
+    private $cadet_attendance = 'cadet_attendance';
+
     public function __construct()
     {
         parent::__construct();
@@ -52,9 +56,29 @@ class Duty_model extends CI_Model {
         }
     }
 
+    public function check_cadet_data($duty)
+    {
+        $this->db->where('attendance_date',$duty['attendance_date']);
+        $this->db->where('unit',$duty['unit']);
+        $this->db->where('cadet_version',$duty['cadet_version']);
+        $this->db->where('schedule',$duty['schedule']);
+        $query = $this->db->get($this->cadet_attendance);
+        if ($query->num_rows() > 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     public function add_duty_attendance($duty)
     {
         return $this->db->insert($this->duty_attendance, $duty);
+    }
+    
+    public function add_cadet_attendance($duty)
+    {
+        return $this->db->insert($this->cadet_attendance, $duty);
     }
 
     public function get_duties($day)
@@ -70,8 +94,27 @@ class Duty_model extends CI_Model {
 
     public function get_duty_versions()
     {
+        $query = $this->db->get($this->duty_version);
+        //print_r($this->db->last_query());
+        return $query->result();
+    }
+
+    public function get_cadet_versions()
+    {
         $this->db->select('*');
-        $this->db->from($this->duty_version);
+        $this->db->from($this->cadet_version);
+        $this->db->where('status','active');
+        $query = $this->db->get();
+        //print_r($this->db->last_query());
+        return $query->result();
+    }
+
+    public function get_cadet_names()
+    {
+        $this->db->select('*');
+        $this->db->from($this->cadet_table);
+        $this->db->where('status','active');
+        $this->db->order_by('unit');
         $query = $this->db->get();
         //print_r($this->db->last_query());
         return $query->result();
@@ -237,6 +280,41 @@ class Duty_model extends CI_Model {
         return $query->result();
     }
 
+    function get_cadet_summary($from, $to, $sort, $version)
+    {
+        if ($sort == 1) $sortby =' total_duties DESC';
+        elseif ($sort == 2) $sortby =' total_duties ASC';
+        else $sortby = ' c.unit ASC';
+
+        $query = "SELECT 
+            distinct c.unit,
+            CONCAT(first_name, ' ', last_name) as full_name,
+            count(c.unit) as total_duties 
+            FROM {$this->cadet_table} c 
+            LEFT OUTER JOIN {$this->cadet_attendance} a ON c.unit = a.unit 
+            WHERE a.cadet_version = {$version}
+            AND ( a.`attendance_date` >= '$from'
+            AND a.`attendance_date` <= '$to' )
+            GROUP BY c.unit
+            order by {$sortby}";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
+    function get_cadet_group_count($from, $to, $version)
+    {
+        $query = "select count(*) as total_duties from (SELECT attendance_date as total_duties 
+            FROM {$this->cadet_attendance} c 
+            WHERE c.cadet_version = {$version}
+            AND ( c.`attendance_date` >= '$from'
+            AND c.`attendance_date` <= '$to' )
+            GROUP BY attendance_date) as subquery";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
     function get_required_duties($data, $version)
     {
         $begin = new DateTime( $data['select_from'] );
@@ -290,6 +368,21 @@ class Duty_model extends CI_Model {
                 LEFT JOIN `duty_schedule` ds
                 ON ds.unit = da.unit AND ds.schedule = da.schedule and ds.version = da.duty_version
                 LEFT JOIN `duty_version` dv ON dv.id = da.duty_version
+                WHERE da.`attendance_date` >= '".$date_."'
+                AND da.`attendance_date` <= '".$date_."'
+                ORDER BY da.`attendance_date`,da.time_in ASC";
+        $query = $this->db->query($query);
+        //var_dump($this->db->last_query());
+        return $query->result();
+    }
+
+    public function get_cadet_details($date_)
+    {
+        $query = "SELECT da.*,
+                da.schedule as 'remarks',
+                dv.name as 'version_name'
+                FROM `cadet_attendance` da
+                LEFT JOIN `cadet_version` dv ON dv.id = da.cadet_version
                 WHERE da.`attendance_date` >= '".$date_."'
                 AND da.`attendance_date` <= '".$date_."'
                 ORDER BY da.`attendance_date`,da.time_in ASC";

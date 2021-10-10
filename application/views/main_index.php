@@ -74,6 +74,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div>&nbsp;</div>
             <a href="<?= base_url();?>index.php/special/attendance" class="btn btn-info"><span class="glyphicon glyphicon-star"></span> Log Special Activity</a>
             <a href="<?= base_url();?>index.php/meeting/attendance" class="btn btn-primary"><span class="glyphicon glyphicon-book"></span> Log GM Meeting</a>
+            <a href="<?= base_url();?>index.php/duty/cadet_attendance" class="btn btn-warning"><span class="glyphicon glyphicon-user"></span> Log Cadets</a>
         <div>&nbsp;</div>
         <div>&nbsp;</div>
     </div>
@@ -107,7 +108,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <a href="<?= base_url();?>index.php/main/duty_reports" class="btn btn-primary"><span class="glyphicon glyphicon-user"></span> Duty Reports</a>
         <a href="<?= base_url();?>index.php/main/top_reports" class="btn btn-info"><span class="glyphicon glyphicon-th-large"></span> Show Top Reports</a>
         <a href="<?= base_url();?>index.php/main/fire_reports" class="btn btn-danger"><span class="glyphicon glyphicon-info-sign"></span> Show Fire Reports</a>
-
+        <div>&nbsp;</div>
+        <a href="<?= base_url();?>index.php/main/cadet_reports" class="btn btn-warning"><span class="glyphicon glyphicon-user"></span> Cadet Reports</a>
         </fieldset>
     </div>
 </div>

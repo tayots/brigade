@@ -350,6 +350,41 @@ class Main extends CI_Controller {
         $this->load->view('duty_reports', $data);
     }
 
+    public function cadet_reports()
+    {
+        $this->load->model('duty_model');
+
+        $data['select_from'] = date('Y-m-01');
+        $d = new DateTime( date('Y-m-d') );
+        $data['select_to'] = $d->format( 'Y-m-t' );
+        $data['sort_by'] = 0; //default by Unit
+        $data['selected_version'] = '--1';
+        $data['cadet_version'] = $this->duty_model->get_cadet_versions(); //active
+
+        $ab = 0;
+        if ($_POST){
+            $data['select_from'] = $this->input->post('select_from');
+            $data['select_to'] = $this->input->post('select_to');
+            $data['sort_by'] = $this->input->post('sort_by');
+            $version = $this->input->post('cadet_version');
+
+            if ($version != '')
+            {
+                $result = $this->duty_model->get_cadet_summary($data['select_from'], $data['select_to'], $data['sort_by'], $version);            
+                $total_duties = $this->duty_model->get_cadet_group_count($data['select_from'], $data['select_to'], $version);
+                $total=0;
+                foreach ($total_duties as $k => $val){
+                    $total += $val->total_duties;
+                }
+                $data['duties'] = $result;
+                $data['total_duties'] = $total;
+                $data['selected_version'] = $version;
+            }
+        }
+
+        $this->load->view('cadet_reports', $data);
+    }
+
     function monthly_fire_reports($action=NULL)
     {
         $this->load->model('personnel_model');
