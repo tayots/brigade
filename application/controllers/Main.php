@@ -360,6 +360,7 @@ class Main extends CI_Controller {
         $data['sort_by'] = 0; //default by Unit
         $data['selected_version'] = '--1';
         $data['cadet_version'] = $this->duty_model->get_cadet_versions(); //active
+        $data['total_duties'] = 0;
 
         $ab = 0;
         if ($_POST){
